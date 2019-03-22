@@ -29,7 +29,7 @@ CMainFrame::CMainFrame(const wxString &title, wxSize init_size = wxDefaultSize):
     m_lpToolBar->EnableTool(wxID_SAVE, false);
     m_lpToolBar->AddTool(wxID_UNDO, _("Backward"), wxBITMAP(BACKWARD_BMP), wxBITMAP(BACKWARD_DISABLE_BMP), wxITEM_NORMAL, _("To Last Move"));
     m_lpToolBar->AddTool(wxID_REDO, _("Forward"), wxBITMAP(FORWARD_BMP), wxBITMAP(FORWARD_DISABLE_BMP), wxITEM_NORMAL, _("To Next Move"));
-    m_lpToolBar->AddTool(ID_LEELA_ZERO, _(""), wxBITMAP(RUN_BMP), _("Run Leela Zero Engine"), wxITEM_NORMAL);
+    m_lpToolBar->AddTool(ID_LEELA_ZERO, _(""), wxBITMAP(RUN_BMP), wxBITMAP(RUN_DISABLE_BMP), wxITEM_NORMAL, _("Run Leela Zero Engine"));
     m_lpToolBar->AddTool(ID_BLACK_DOG, _(""), wxBITMAP(BLACK_DOG_BMP), wxBITMAP(BLACK_DOG_DISABLE_BMP), wxITEM_CHECK, _("AI Plays Black"));
     m_lpToolBar->EnableTool(ID_BLACK_DOG, false);
     m_lpToolBar->AddTool(ID_WHITE_DOG, _(""), wxBITMAP(WHITE_DOG_BMP), wxBITMAP(WHITE_DOG_DISABLE_BMP), wxITEM_CHECK, _("AI Plays White"));
@@ -201,6 +201,7 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
             m_lpLZProcess->m_bAlive = false;
             m_lpEditMenu->Enable(ID_LEELA_ZERO, false);
             m_lpToolBar->EnableTool(ID_LEELA_ZERO, false);
+			m_lpCanvas->m_fnRefreshAnalyze();
             m_lpCanvas->m_fnDisableEngineRelatedTool();
             m_lpCanvas->m_bWaiting = false;
             m_ProcessExitType = PET_STOP;
@@ -401,6 +402,7 @@ void CMainFrame::OnAnalyze(wxCommandEvent &event)
     else
     {
         m_lpCanvas->m_fnNotify();
+		m_lpCanvas->m_fnRefreshAnalyze();
     }
 }
 
@@ -440,6 +442,10 @@ long CMainFrame::m_fnOpenLZProcess()
             m_lpCanvas->m_fnSetThinkingTime();
         }
     }
+	else
+	{
+		m_lpLZProcess->m_bAlive = false;
+	}
     return lProcessId;
 }
 
@@ -448,6 +454,7 @@ void CMainFrame::OnLZProcessExit(wxProcessEvent &event)
     m_lpCanvas->m_lpOutputStream = 0;
     m_lpEditMenu->SetLabel(ID_LEELA_ZERO, _("Run Engine"));
     m_lpToolBar->SetToolNormalBitmap(ID_LEELA_ZERO, wxBITMAP(RUN_BMP));
+	m_lpToolBar->SetToolDisabledBitmap(ID_LEELA_ZERO, wxBITMAP(RUN_DISABLE_BMP));
     m_lpToolBar->SetToolShortHelp(ID_LEELA_ZERO, _("Run Leela Zero Engine"));
     m_lpEditMenu->Enable(ID_LEELA_ZERO, true);
     m_lpToolBar->EnableTool(ID_LEELA_ZERO, true);
