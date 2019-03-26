@@ -12,7 +12,6 @@ public:
     bool m_bKeepLoop, m_bRefresh;
     CGameBase::BoardPoint *m_lpbpAnalyzing;
     CGameBase::ExtendMove *m_lpemNew, *m_lpemLast;
-    std::vector<CGameBase::BasePosition> m_vecbpAnalyzing;
 protected:
     enum DATA_TYPE
     {

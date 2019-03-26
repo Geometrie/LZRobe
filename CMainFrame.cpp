@@ -49,8 +49,8 @@ CMainFrame::CMainFrame(const wxString &title, wxSize init_size = wxDefaultSize):
     m_lpToolBar->Realize();
     SetToolBar(m_lpToolBar);
     m_lpCanvas = new CCanvas(this);
-    m_lpCanvas->m_lpToolBar = m_lpToolBar;
-    m_lpCanvas->m_lpEditMenu = m_lpEditMenu;
+    m_lpCanvas->m_GameStatusManager.m_lpToolBar = m_lpToolBar;
+    m_lpCanvas->m_GameStatusManager.m_lpEditMenu = m_lpEditMenu;
     m_lpLZProcess = new CLZProcess(this, wxID_ANY);
     m_ProcessExitType = PET_COLLAPSE;
     std::ifstream ifs;
@@ -76,9 +76,9 @@ void CMainFrame::OnNew(wxCommandEvent &event)
     wxMessageDialog MD(this, _("Detect your previous game records.\nWould you like to discard them?"), _("Warning"), wxOK|wxCANCEL);
     if (MD.ShowModal() == wxID_OK)
     {
-        if (m_lpCanvas->m_GameManager.m_iStepPos > 0)
+        if (m_lpCanvas->m_GameBoardManager.m_iStepPos > 0)
         {
-            m_lpCanvas->m_GameManager.OnClearGameRecord();
+            m_lpCanvas->m_GameBoardManager.OnClearGameRecord();
         }
         if (m_lpLZProcess->m_bAlive && m_lpCanvas->m_lpOutputStream != NULL)
         {
@@ -97,11 +97,11 @@ void CMainFrame::OnOpen(wxCommandEvent &event)
     if (OpenFileDialog.ShowModal() == wxID_OK)
     {
         bRead = true;
-        if (m_lpCanvas->m_GameManager.m_vecRecords.size () > 0)
+        if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size () > 0)
         {
             if (MD.ShowModal() == wxID_OK)
             {
-                m_lpCanvas->m_GameManager.OnClearGameRecord();
+                m_lpCanvas->m_GameBoardManager.OnClearGameRecord();
                 if (m_lpLZProcess->m_bAlive)
                 {
                     if (m_lpCanvas->m_lpOutputStream != NULL)
@@ -118,7 +118,7 @@ void CMainFrame::OnOpen(wxCommandEvent &event)
         if (bRead)
         {
             ifs.open(OpenFileDialog.GetPath().char_str());
-            m_lpCanvas->m_GameManager.OnReadSgf(ifs);
+            m_lpCanvas->m_GameBoardManager.OnReadSgf(ifs);
             ifs.close();
             Refresh();
             if (m_lpLZProcess->m_bAlive)
@@ -190,7 +190,7 @@ void CMainFrame::OnSelectWeight(wxCommandEvent &event)
 void CMainFrame::OnLeelaZero(wxCommandEvent &event)
 {
     wxTextEntryDialog TED(this, _("Extra parameters"), _("Set Extra parameters"), wxEmptyString, wxOK | wxCANCEL);
-    wxMessageDialog MD(this, _("Are you sure to close leela zero engine?"));
+    wxMessageDialog MD(this, _("Are you sure to close leela zero engine?"), _("Warning"), wxOK | wxCANCEL);
     wxFileDialog OpenEigineDialog(this, _(""), _(""), _(""), _("Leela Zero Engine (*.exe)|*.exe"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     wxFileDialog OpenWeightDialog(this, _(""), _(""), _(""), _("Weight File(*.gz)|*.gz|Network File(*.txt)|*.txt"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     bool bApplicable;
@@ -199,11 +199,8 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
         if (MD.ShowModal() == wxID_OK)
         {
             m_lpLZProcess->m_bAlive = false;
-            m_lpEditMenu->Enable(ID_LEELA_ZERO, false);
-            m_lpToolBar->EnableTool(ID_LEELA_ZERO, false);
+			m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
 			m_lpCanvas->m_fnRefreshAnalyze();
-            m_lpCanvas->m_fnDisableEngineRelatedTool();
-            m_lpCanvas->m_bWaiting = false;
             m_ProcessExitType = PET_STOP;
             if (m_lpCanvas->m_lpOutputStream != NULL)
             {
@@ -255,12 +252,13 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
                 wxTextEntryDialog TED(this, _("Extra parameters"), _("Set Extra parameters"), wxEmptyString, wxOK | wxCANCEL);
                 if (TED.ShowModal() == wxID_OK)
                 {
-                    m_lpEditMenu->Enable(ID_LEELA_ZERO, false);
-                    m_lpToolBar->EnableTool(ID_LEELA_ZERO, false);
+					m_wxstrExtraPara = TED.GetValue();
+					m_lpCanvas->m_GameStatusManager.m_fnTryToOpenEngine();
                     if(m_fnOpenLZProcess() == 0)
                     {
-                        m_lpEditMenu->Enable(ID_LEELA_ZERO, true);
-                        m_lpToolBar->EnableTool(ID_LEELA_ZERO, true);
+						m_lpCanvas->m_GameStatusManager.m_fnEngineConfirmed();
+						m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
+						m_lpCanvas->m_GameStatusManager.m_fnEngineClosed();
                     }
                 }
             }
@@ -274,6 +272,7 @@ void CMainFrame::OnScore(wxCommandEvent &event)
     m_lpCanvas->m_fnInquireResult();
 }
 
+
 void CMainFrame::OnBlackDog(wxCommandEvent &event)
 {
     bool bBlackDog, bEditable;
@@ -281,12 +280,12 @@ void CMainFrame::OnBlackDog(wxCommandEvent &event)
     if (bBlackDog)
     {
         bEditable = true;
-        if (m_lpCanvas->m_GameManager.m_iStepPos < int(m_lpCanvas->m_GameManager.m_vecRecords.size()))
+        if (m_lpCanvas->m_GameBoardManager.m_iStepPos < int(m_lpCanvas->m_GameBoardManager.m_vecRecords.size()))
         {
             wxMessageDialog MD(this, _("Are you sure to discard the previous variation?"), _("Warning"), wxOK | wxCANCEL);
             if (MD.ShowModal() == wxID_OK)
             {
-                m_lpCanvas->m_GameManager.OnModifyGameRecord();
+                m_lpCanvas->m_GameBoardManager.OnModifyGameRecord();
             }
             else
             {
@@ -296,31 +295,21 @@ void CMainFrame::OnBlackDog(wxCommandEvent &event)
         }
         if (bEditable)
         {
-            if (m_lpToolBar->GetToolState(ID_ANALYZE))
-            {
-                m_lpToolBar->ToggleTool(ID_ANALYZE, false);
-            }
+			m_lpCanvas->m_GameStatusManager.m_fnSetBlackDog();
             if (m_lpTimeSpinCtrl->GetValue() != m_lpCanvas->m_iThinkingTime)
             {
                 m_lpCanvas->m_iThinkingTime = m_lpTimeSpinCtrl->GetValue();
                 m_lpCanvas->m_fnSetThinkingTime();
             }
-            if (m_lpCanvas->m_GameManager.m_scTurnColor == CGameBase::SC_BLACK)
+            if (m_lpCanvas->m_GameBoardManager.m_scTurnColor == SC_BLACK)
             {
                 m_lpCanvas->m_fnInquireMove();
             }
-            m_lpEditMenu->Enable(wxID_UNDO, false);
-            m_lpEditMenu->Enable(wxID_REDO, false);
-            m_lpToolBar->EnableTool(wxID_UNDO, false);
-            m_lpToolBar->EnableTool(wxID_REDO, false);
         }
     }
-    else if (!m_lpToolBar->GetToolState(ID_WHITE_DOG))
+    else
     {
-        m_lpEditMenu->Enable(wxID_UNDO, true);
-        m_lpEditMenu->Enable(wxID_REDO, true);
-        m_lpToolBar->EnableTool(wxID_UNDO, true);
-        m_lpToolBar->EnableTool(wxID_REDO, true);
+		m_lpCanvas->m_GameStatusManager.m_fnSetBlackDog();
     }
 }
 
@@ -331,12 +320,12 @@ void CMainFrame::OnWhiteDog(wxCommandEvent &event)
     if (bWhiteDog)
     {
         bEditable = true;
-        if (m_lpCanvas->m_GameManager.m_iStepPos < int(m_lpCanvas->m_GameManager.m_vecRecords.size()))
+        if (m_lpCanvas->m_GameBoardManager.m_iStepPos < int(m_lpCanvas->m_GameBoardManager.m_vecRecords.size()))
         {
             wxMessageDialog MD(this, _("Are you sure to discard the previous variation?"), _("Warning"), wxOK | wxCANCEL);
             if (MD.ShowModal() == wxID_OK)
             {
-                m_lpCanvas->m_GameManager.OnModifyGameRecord();
+                m_lpCanvas->m_GameBoardManager.OnModifyGameRecord();
             }
             else
             {
@@ -346,16 +335,13 @@ void CMainFrame::OnWhiteDog(wxCommandEvent &event)
         }
         if (bEditable)
         {
-            if (m_lpToolBar->GetToolState(ID_ANALYZE))
-            {
-                m_lpToolBar->ToggleTool(ID_ANALYZE, false);
-            }
+			m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
             if (m_lpTimeSpinCtrl->GetValue() != m_lpCanvas->m_iThinkingTime)
             {
                 m_lpCanvas->m_iThinkingTime = m_lpTimeSpinCtrl->GetValue();
                 m_lpCanvas->m_fnSetThinkingTime();
             }
-            if (m_lpCanvas->m_GameManager.m_scTurnColor == CGameBase::SC_WHITE)
+            if (m_lpCanvas->m_GameBoardManager.m_scTurnColor == SC_WHITE)
             {
                 m_lpCanvas->m_fnInquireMove();
             }
@@ -365,37 +351,17 @@ void CMainFrame::OnWhiteDog(wxCommandEvent &event)
             m_lpToolBar->EnableTool(wxID_REDO, false);
         }
     }
-    else if(!m_lpToolBar->GetToolState(ID_BLACK_DOG))
-    {
-        m_lpEditMenu->Enable(wxID_UNDO, true);
-        m_lpEditMenu->Enable(wxID_REDO, true);
-        m_lpToolBar->EnableTool(wxID_UNDO, true);
-        m_lpToolBar->EnableTool(wxID_REDO, true);
-    }
+	else
+	{
+		m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
+	}
 }
 
 void CMainFrame::OnAnalyze(wxCommandEvent &event)
 {
-    bool bBlackDog, bWhiteDog;
+	m_lpCanvas->m_GameStatusManager.m_fnSetAnalyze();
     if (m_lpToolBar->GetToolState(ID_ANALYZE))
     {
-        bBlackDog = m_lpToolBar->GetToolState(ID_BLACK_DOG);
-        bWhiteDog = m_lpToolBar->GetToolState(ID_WHITE_DOG);
-        if (bBlackDog)
-        {
-            m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
-        }
-        if (bWhiteDog)
-        {
-            m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
-        }
-        if (bBlackDog || bWhiteDog)
-        {
-            m_lpEditMenu->Enable(wxID_UNDO, true);
-            m_lpEditMenu->Enable(wxID_REDO, true);
-            m_lpToolBar->EnableTool(wxID_UNDO, true);
-            m_lpToolBar->EnableTool(wxID_REDO, true);
-        }
         m_lpCanvas->m_iAnalyzeInterval = m_lpIntervalSpinCtrl->GetValue();
         m_lpCanvas->m_fnInquireAnalyze();
     }
@@ -428,7 +394,7 @@ long CMainFrame::m_fnOpenLZProcess()
         m_lpLZReceiver->m_lpInputStream = m_lpLZProcess->GetInputStream();
         m_lpLZReceiver->Run();
         m_lpCanvas->m_lpOutputStream = m_lpLZProcess->GetOutputStream();
-        if (m_lpCanvas->m_GameManager.m_iStepPos > 0)
+        if (m_lpCanvas->m_GameBoardManager.m_iStepPos > 0)
         {
             if (m_lpCanvas->m_lpOutputStream != 0)
             {
@@ -436,7 +402,6 @@ long CMainFrame::m_fnOpenLZProcess()
             }
         }
         m_lpCanvas->m_iThinkingTime = m_lpTimeSpinCtrl->GetValue();
-        m_lpCanvas->m_bWaiting = true;
         if (m_lpCanvas->m_iThinkingTime > 0)
         {
             m_lpCanvas->m_fnSetThinkingTime();
@@ -452,15 +417,19 @@ long CMainFrame::m_fnOpenLZProcess()
 void CMainFrame::OnLZProcessExit(wxProcessEvent &event)
 {
     m_lpCanvas->m_lpOutputStream = 0;
-    m_lpEditMenu->SetLabel(ID_LEELA_ZERO, _("Run Engine"));
-    m_lpToolBar->SetToolNormalBitmap(ID_LEELA_ZERO, wxBITMAP(RUN_BMP));
-	m_lpToolBar->SetToolDisabledBitmap(ID_LEELA_ZERO, wxBITMAP(RUN_DISABLE_BMP));
-    m_lpToolBar->SetToolShortHelp(ID_LEELA_ZERO, _("Run Leela Zero Engine"));
-    m_lpEditMenu->Enable(ID_LEELA_ZERO, true);
-    m_lpToolBar->EnableTool(ID_LEELA_ZERO, true);
-    m_lpCanvas->m_fnDisableEngineRelatedTool();
+    m_lpCanvas->m_GameStatusManager.m_fnEngineClosed();
+	if (m_lpCanvas->m_GameStatusManager.m_esCurrentEngine == ES_WAITING_OPEN)
+	{
+		m_ProcessExitType = PET_FAILURE;
+	}
     switch (m_ProcessExitType)
     {
+	case PET_FAILURE:
+		m_lpCanvas->m_GameStatusManager.m_fnEngineConfirmed();
+		m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
+		m_lpCanvas->m_GameStatusManager.m_fnEngineClosed();
+        m_ProcessExitType = PET_COLLAPSE;
+		break;
     case PET_STOP:
         m_lpLZReceiver->m_bKeepLoop = false;
         delete m_lpLZProcess;
@@ -495,7 +464,7 @@ void CMainFrame::OnExit(wxCommandEvent &event)
     }
     if (m_lpLZProcess->m_bAlive)
     {
-        m_lpCanvas->m_fnDisableEngineRelatedTool();
+        m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
         m_ProcessExitType = PET_QUIT;
         m_lpLZReceiver->m_bKeepLoop = false;
         m_lpCanvas->m_lpOutputStream->Write((void*)"quit\n", 5);
@@ -522,7 +491,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
     }
     if (m_lpLZProcess->m_bAlive)
     {
-        m_lpCanvas->m_fnDisableEngineRelatedTool();
+		m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
         m_ProcessExitType = PET_QUIT;
         m_lpLZReceiver->m_bKeepLoop = false;
         m_lpCanvas->m_lpOutputStream->Write((void*)"quit\n", 5);
@@ -550,6 +519,7 @@ EVT_MENU(wxID_UNDO, CMainFrame::OnBackward)
 EVT_TOOL(wxID_UNDO, CMainFrame::OnBackward)
 EVT_MENU(wxID_REDO, CMainFrame::OnForward)
 EVT_TOOL(wxID_REDO, CMainFrame::OnForward)
+EVT_MENU(ID_FINAL_SCORE, CMainFrame::OnScore)
 EVT_TOOL(ID_FINAL_SCORE, CMainFrame::OnScore)
 EVT_TOOL(ID_BLACK_DOG, CMainFrame::OnBlackDog)
 EVT_TOOL(ID_WHITE_DOG, CMainFrame::OnWhiteDog)
@@ -557,5 +527,4 @@ EVT_TOOL(ID_ANALYZE, CMainFrame::OnAnalyze)
 EVT_END_PROCESS(wxID_ANY, CMainFrame::OnLZProcessExit)
 EVT_MENU(wxID_EXIT, CMainFrame::OnExit)
 EVT_CLOSE(CMainFrame::OnClose)
-//EVT_TIMER(wxID_ANY, CMainFrame::OnTimer)
 END_EVENT_TABLE()

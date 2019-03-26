@@ -2,14 +2,14 @@
 #define CGAMEBASE_H
 #include <string.h>
 #include <vector>
+enum StoneColor
+{
+    SC_NULL = 0,
+    SC_BLACK,
+    SC_WHITE,
+};
 namespace CGameBase
 {
-    enum StoneColor
-    {
-        SC_NULL = 0,
-        SC_BLACK,
-        SC_WHITE,
-    };
     struct BasePosition
     {
         int x, y;
@@ -117,7 +117,7 @@ namespace CGameBase
             }
             if (bLegal)
             {
-                len = strlen(move_info);
+                len = int(strlen(move_info));
                 for (i = 2; i < len - 1; ++i)
                 {
                     if (move_info[i] != ' ')
@@ -175,6 +175,7 @@ namespace CGameBase
             win_rate = -1;
             order = -1;
             mark = 0;
+			pv_len = 0;
         }
         int mark;
         StoneColor stone_color;
@@ -182,7 +183,9 @@ namespace CGameBase
         int win_rate;
         int prior;
         int order;
-        std::vector<BasePosition> pv;
+        //std::vector<BasePosition> pv;
+		BasePosition pv[32];
+		int pv_len;
     };
 };
 

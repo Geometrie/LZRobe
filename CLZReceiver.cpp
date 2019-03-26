@@ -39,13 +39,9 @@ wxThread::ExitCode CLZReceiver::Entry()
                     m_lpCanvas->m_fnRefreshStep(m_lpemLast);
                     m_lpemLast = NULL;
                 }
-                if (m_vecbpAnalyzing.size() > 0)
+                if (m_lpCanvas->m_GameBoardManager.m_vecAnalyzingStones.size() > 0)
                 {
-                    for (iterAnalyzing = m_vecbpAnalyzing.begin(); iterAnalyzing != m_vecbpAnalyzing.end(); ++iterAnalyzing)
-                    {
-                        m_lpCanvas->m_fnRefreshPoint(&(*iterAnalyzing));
-                    }
-                    m_vecbpAnalyzing.clear();
+					m_lpCanvas->m_fnRefreshBoardRange(0, 0, 18, 18);
                 }
             }
             m_bRefresh = false;
@@ -173,9 +169,6 @@ CLZReceiver::DATA_TYPE CLZReceiver::m_fnClassifyCommand(char *lpstrCommand)
 
 void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
 {
-    bool bBlackDog, bWhiteDog;
-    bBlackDog = m_lpCanvas->m_lpToolBar->GetToolState(ID_BLACK_DOG);
-    bWhiteDog = m_lpCanvas->m_lpToolBar->GetToolState(ID_WHITE_DOG);
     CGameBase::BasePosition bpNewMove;
     DATA_TYPE dtDataType;
     bpNewMove.x = bpNewMove.y = -1;
@@ -186,25 +179,25 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         switch (m_dtStatus)
         {
         case DT_VISITS:
-            if (m_lpCanvas->m_GameManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == CGameBase::SC_NULL)
+            if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == SC_NULL)
             {
                 m_lpbpAnalyzing->visits = atoi(lpstrMessage);
             }
             break;
         case DT_WINRATE:
-            if (m_lpCanvas->m_GameManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == CGameBase::SC_NULL)
+            if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == SC_NULL)
             {
                 m_lpbpAnalyzing->win_rate = atoi(lpstrMessage);
             }
             break;
         case DT_PRIOR:
-            if (m_lpCanvas->m_GameManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == CGameBase::SC_NULL)
+            if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == SC_NULL)
             {
                 m_lpbpAnalyzing->prior = atoi(lpstrMessage);
             }
             break;
         case DT_ORDER:
-            if (m_lpCanvas->m_GameManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == CGameBase::SC_NULL)
+            if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == SC_NULL)
             {
                 m_lpbpAnalyzing->order = atoi(lpstrMessage);
             }
@@ -221,20 +214,20 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         switch (m_dtStatus)
         {
         case DT_EQUAL:
-            if (m_lpCanvas->m_GameManager.OnAddMove(bpNewMove.x, bpNewMove.y))
+            if (m_lpCanvas->m_GameBoardManager.OnAddMove(bpNewMove.x, bpNewMove.y))
             {
-                m_lpemNew = &(m_lpCanvas->m_GameManager.m_vecRecords[m_lpCanvas->m_GameManager.m_iStepPos - 1]);
-                if (m_lpCanvas->m_GameManager.m_iStepPos > 1)
+                m_lpemNew = &(m_lpCanvas->m_GameBoardManager.m_vecRecords[m_lpCanvas->m_GameBoardManager.m_iStepPos - 1]);
+                if (m_lpCanvas->m_GameBoardManager.m_iStepPos > 1)
                 {
-                    m_lpemLast = &(m_lpCanvas->m_GameManager.m_vecRecords[m_lpCanvas->m_GameManager.m_iStepPos - 2]);
+                    m_lpemLast = &(m_lpCanvas->m_GameBoardManager.m_vecRecords[m_lpCanvas->m_GameBoardManager.m_iStepPos - 2]);
                 }
-                if (m_lpCanvas->m_GameManager.m_bAlive)
+                if (m_lpCanvas->m_GameBoardManager.m_bAlive)
                 {
-                    if ((bBlackDog && m_lpCanvas->m_GameManager.m_scTurnColor == CGameBase::SC_BLACK) || (bWhiteDog && m_lpCanvas->m_GameManager.m_scTurnColor == CGameBase::SC_WHITE))
+                    if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))//((bBlackDog && m_lpCanvas->m_GameBoardManager.m_scTurnColor == SC_BLACK) || (bWhiteDog && m_lpCanvas->m_GameBoardManager.m_scTurnColor == SC_WHITE))
                     {
                         m_lpCanvas->m_fnInquireMove();
                     }
-                    else if (m_lpCanvas->m_lpToolBar->GetToolState(ID_ANALYZE))
+                    else if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
                     {
                         m_lpCanvas->m_fnInquireAnalyze();
                     }
@@ -247,13 +240,27 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
             }
             break;
         case DT_MOVE:
-            m_lpbpAnalyzing = m_lpCanvas->m_GameManager.m_fnPoint(bpNewMove.x, bpNewMove.y);
-            m_vecbpAnalyzing.push_back(bpNewMove);
+			if (bpNewMove.x >= 0 && bpNewMove.x < 19 && bpNewMove.y >= 0 && bpNewMove.y < 19)
+			{
+				m_lpbpAnalyzing = m_lpCanvas->m_GameBoardManager.m_fnPoint(bpNewMove.x, bpNewMove.y);
+				if (m_lpbpAnalyzing->visits == 0)
+				{
+					m_lpCanvas->m_GameBoardManager.m_vecAnalyzingStones.push_back(m_lpbpAnalyzing);
+				}
+			}
+			else
+			{
+				m_lpbpAnalyzing = NULL;
+			}
             break;
         case DT_PV:
-            if (m_lpCanvas->m_GameManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == CGameBase::SC_NULL)
+            if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == SC_NULL)
             {
-                m_lpbpAnalyzing->pv.push_back(bpNewMove);
+				if (m_lpbpAnalyzing->pv_len < 32)
+				{
+					m_lpbpAnalyzing->pv[m_lpbpAnalyzing->pv_len] = bpNewMove;
+					++(m_lpbpAnalyzing->pv_len);
+				}
             }
             m_bRefresh = true;
             break;
@@ -262,13 +269,13 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         }
         break;
     case DT_RESIGN:
-        if (bBlackDog)
+        if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(SC_BLACK))
         {
-            m_lpCanvas->m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
+            m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
         }
-        if (bWhiteDog)
+        if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(SC_WHITE))
         {
-            m_lpCanvas->m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
+            m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
         }
         m_lpCanvas->m_fnShowResignResult();
         break;
@@ -276,21 +283,12 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         m_lpCanvas->m_fnShowCountResult(lpstrMessage);
         break;
     case DT_PV:
-        m_lpbpAnalyzing->pv.clear();
+		m_lpbpAnalyzing->pv_len = 0;
         m_dtStatus = dtDataType;
         break;
     case DT_EQUAL:
-        m_lpCanvas->m_GameManager.m_bAcceptAnalyze = true;
-        if (m_lpCanvas->m_bWaiting)
-        {
-            m_lpCanvas->m_lpEditMenu->SetLabel(ID_LEELA_ZERO, _("Stop Engine"));
-            m_lpCanvas->m_lpToolBar->SetToolNormalBitmap(ID_LEELA_ZERO, wxBITMAP(STOP_BMP));
-			m_lpCanvas->m_lpToolBar->SetToolDisabledBitmap(ID_LEELA_ZERO, wxBITMAP(STOP_DISABLE_BMP));
-            m_lpCanvas->m_lpToolBar->SetToolShortHelp(ID_LEELA_ZERO, _("Stop Leela Zero Engine"));
-            m_lpCanvas->m_lpEditMenu->Enable(ID_LEELA_ZERO, true);
-            m_lpCanvas->m_lpToolBar->EnableTool(ID_LEELA_ZERO, true);
-            m_lpCanvas->m_fnEnableEngineRelatedTool();
-        }
+        m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze = true;
+		m_lpCanvas->m_GameStatusManager.m_fnEngineConfirmed();
         m_dtStatus = dtDataType;
         break;
     default:

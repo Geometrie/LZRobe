@@ -7,6 +7,7 @@
 #include <wx/textdlg.h>
 #include <fstream>
 #include "CLZReceiver.h"
+#include "CLZProcess.h"
 class CMainFrame: public wxFrame
 {
 public:
@@ -20,7 +21,6 @@ public:
     wxString m_wxstrEnginePath, m_wxstrWeightPath, m_wxstrExtraPara;
     PROCESS_EXIT_TYPE m_ProcessExitType;
     bool m_bPathChanged;
-    //wxTimer m_Timer;
 private:
     void OnNew(wxCommandEvent &event);
     void OnOpen(wxCommandEvent &event);
