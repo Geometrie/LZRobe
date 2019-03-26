@@ -36,6 +36,10 @@ If you want to change the engine or the weight file during the game, you can sto
 
 Then the newly started engin will load the game records automatically. Even if the Leela Zero collapsed, LZRobe will restart it and load the game records with a few second to keep this game.
 
+The left button of mouse is used to put stones on the gameboard. The right button of mouse is used to cancel a move.
+
+But if you decide to put new stones at different position after canceled several moves, the previous variation will not be kept.
+
 The button with dogs' heads are used to play again computer. The color of the background under the dogs' heads indicates the stone color that the computer plays.
 
 If you push both of the two buttons with dogs' heads, you will see the computer plays agains itself.
@@ -51,6 +55,8 @@ The button with a question mark is used to analyze the game record. The analyze 
 The frequnecy can be set with the spinbox on the right of the interval label. The unit of the refresh interval is centisecond.
 
 For example, if you set the number as 50, the analyze result will refresh twice in one second.
+
+If you put the mouse at the analyzing point, the following steps will automatically be shown, where the letters indicates the consequence.
 
 The button with an abcus is used to calculate the result of the game. Since the dead stones may not be removed from the gameboard, the result is not exactly the true result.
 
