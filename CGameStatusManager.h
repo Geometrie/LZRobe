@@ -1,8 +1,10 @@
 #ifndef CGAMESTATUSMANAGER_H
 #define CGAMESTATUSMANAGER_H
-#include "CGameBoardManager.h"
 #include <wx/toolbar.h>
 #include <wx/menu.h>
+#include <wx/statusbr.h>
+#include "CLZInquirer.h"
+#include "International.h"
 enum
 {
 	ID_SELECT_ENGINE = 1000,
@@ -31,6 +33,7 @@ public:
 	EngineStatus m_esCurrentEngine;
 	wxToolBar *m_lpToolBar;
 	wxMenu *m_lpEditMenu;
+	wxStatusBar *m_lpStatusBar;
 	void m_fnTryToOpenEngine();
 	void m_fnEngineConfirmed();
 	void m_fnTryToCloseEngine();

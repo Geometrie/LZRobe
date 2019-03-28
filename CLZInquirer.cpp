@@ -2,6 +2,7 @@
 CLZInquirer::CLZInquirer()
 {
 	m_lpOutputStream = 0;
+	m_bAcceptChange = true;
 }
 
 
@@ -40,6 +41,7 @@ void CLZInquirer::m_fnInquireMove()
 		default:
 			break;
 		}
+		m_bAcceptChange = false;
 		m_lpOutputStream->Write(lpstrCommand, strlen(lpstrCommand));
 	}
 }

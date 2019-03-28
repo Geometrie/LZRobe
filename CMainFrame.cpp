@@ -1,58 +1,96 @@
 #include "CMainFrame.h"
-CMainFrame::CMainFrame(const wxString &title, wxSize init_size = wxDefaultSize): wxFrame(0, wxID_ANY, title, wxDefaultPosition, init_size)//, m_Timer(this, wxID_ANY)
+
+void CMainFrame::m_fnSetupMenu()
 {
     wxMenuBar *lpMenuBar;
-    wxStaticText *lpStaticText;
     m_lpFileMenu = new wxMenu(_(""));
-    m_lpFileMenu->Append(wxID_NEW, _("&New"), _("New Game"), wxITEM_NORMAL);
-    m_lpFileMenu->Append(wxID_OPEN, _("&Open"), _("Open SGF File"), wxITEM_NORMAL);
-    m_lpFileMenu->Append(wxID_SAVE, _("&Save"), _("Save To File"), wxITEM_NORMAL);
-    m_lpFileMenu->Append(wxID_EXIT, _("&Exit"), _("Exit Programe"), wxITEM_NORMAL);
+    m_lpFileMenu->Append(wxID_NEW, _(STR_NEW), _(""), wxITEM_NORMAL);
+    m_lpFileMenu->Append(wxID_OPEN, _(STR_OPEN), _(""), wxITEM_NORMAL);
+    m_lpFileMenu->Append(wxID_SAVE, _(STR_SAVE), _(""), wxITEM_NORMAL);
+    m_lpFileMenu->Append(wxID_EXIT, _(STR_EXIT), _(""), wxITEM_NORMAL);
     m_lpEditMenu = new wxMenu(_(""));
-    m_lpEditMenu->Append(wxID_UNDO, _("&Backward"), _("To Last Move"), wxITEM_NORMAL);
-    m_lpEditMenu->Append(wxID_REDO, _("&Forward"), _("To Next Move"), wxITEM_NORMAL);
-    m_lpEditMenu->Append(ID_SELECT_ENGINE, _("Select &Engine"), _("Select Engine"), wxITEM_NORMAL);
-    m_lpEditMenu->Append(ID_SELECT_WEIGHT, _("Select &Weight"), _("Select Weight"), wxITEM_NORMAL);
-    m_lpEditMenu->Append(ID_LEELA_ZERO, _("&Run Engine"), _("Run Leela Zero Engine"), wxITEM_NORMAL);
-    m_lpEditMenu->Append(ID_FINAL_SCORE, _("Re&sult"), _("Show Result"), wxITEM_NORMAL);
+    m_lpEditMenu->Append(wxID_UNDO, _(STR_BACKWARD), _(""), wxITEM_NORMAL);
+    m_lpEditMenu->Append(wxID_REDO, _(STR_FORWARD), _(""), wxITEM_NORMAL);
+    m_lpEditMenu->Append(ID_SELECT_ENGINE, _(STR_SELECT_ENGINE), _(""), wxITEM_NORMAL);
+    m_lpEditMenu->Append(ID_SELECT_WEIGHT, _(STR_SELECT_WEIGHT), _(""), wxITEM_NORMAL);
+    m_lpEditMenu->Append(ID_LEELA_ZERO, _(STR_RUN_ENGINE), _(""), wxITEM_NORMAL);
+    m_lpEditMenu->Append(ID_FINAL_SCORE, _(STR_RESULT), _(""), wxITEM_NORMAL);
     m_lpViewMenu = new wxMenu(_(""));
-    m_lpViewMenu->Append(ID_SHOW_STEP, _("Step"), _("Show Step"), wxITEM_CHECK);
+    m_lpViewMenu->Append(ID_SHOW_STEP, _(STR_STEP), _(""), wxITEM_CHECK);
+	m_lpViewMenu->Append(wxID_SELECT_COLOR, _(STR_SET_GAMEBOARD_COLOR), _(""), wxITEM_NORMAL);
+	m_lpHelpMenu = new wxMenu(_(""));
+	m_lpHelpMenu->Append(wxID_HELP_CONTEXT, _(STR_MANUAL), _(""), wxITEM_NORMAL);
+	m_lpHelpMenu->Append(wxID_ABOUT, _(STR_ABOUT), _(""), wxITEM_NORMAL);
     lpMenuBar = new wxMenuBar();
-    lpMenuBar->Append(m_lpFileMenu, "&File");
-    lpMenuBar->Append(m_lpEditMenu, "&Edit");
-    lpMenuBar->Append(m_lpViewMenu, "&View");
+    lpMenuBar->Append(m_lpFileMenu, STR_FILE);
+    lpMenuBar->Append(m_lpEditMenu, STR_EDIT);
+    lpMenuBar->Append(m_lpViewMenu, STR_VIEW);
+	lpMenuBar->Append(m_lpHelpMenu, STR_HELP);
     SetMenuBar(lpMenuBar);
+}
+
+void CMainFrame::m_fnSetupToolBar()
+{
+    wxStaticText *lpStaticText;
     m_lpToolBar = new wxToolBar(this, wxID_ANY);
-    m_lpToolBar->AddTool(wxID_NEW, _(""), wxBITMAP(NEW_BMP), _("New Game"));
-    m_lpToolBar->AddTool(wxID_OPEN, _(""), wxBITMAP(OPEN_BMP), _("Open SGF File"));
-    m_lpToolBar->AddTool(wxID_SAVE, _(""), wxBITMAP(SAVE_BMP), wxBITMAP(SAVE_DISABLE_BMP), wxITEM_NORMAL, _("Save SGF File"));
+    m_lpToolBar->AddTool(wxID_NEW, _(""), wxBITMAP(NEW_BMP), _(STR_NEW));
+    m_lpToolBar->AddTool(wxID_OPEN, _(""), wxBITMAP(OPEN_BMP), _(STR_OPEN));
+    m_lpToolBar->AddTool(wxID_SAVE, _(""), wxBITMAP(SAVE_BMP), wxBITMAP(SAVE_DISABLE_BMP), wxITEM_NORMAL, _(STR_SAVE));
     m_lpToolBar->EnableTool(wxID_SAVE, false);
-    m_lpToolBar->AddTool(wxID_UNDO, _("Backward"), wxBITMAP(BACKWARD_BMP), wxBITMAP(BACKWARD_DISABLE_BMP), wxITEM_NORMAL, _("To Last Move"));
-    m_lpToolBar->AddTool(wxID_REDO, _("Forward"), wxBITMAP(FORWARD_BMP), wxBITMAP(FORWARD_DISABLE_BMP), wxITEM_NORMAL, _("To Next Move"));
-    m_lpToolBar->AddTool(ID_LEELA_ZERO, _(""), wxBITMAP(RUN_BMP), wxBITMAP(RUN_DISABLE_BMP), wxITEM_NORMAL, _("Run Leela Zero Engine"));
-    m_lpToolBar->AddTool(ID_BLACK_DOG, _(""), wxBITMAP(BLACK_DOG_BMP), wxBITMAP(BLACK_DOG_DISABLE_BMP), wxITEM_CHECK, _("AI Plays Black"));
+    m_lpToolBar->AddTool(wxID_UNDO, _(""), wxBITMAP(BACKWARD_BMP), wxBITMAP(BACKWARD_DISABLE_BMP), wxITEM_NORMAL, _(STR_BACKWARD));
+    m_lpToolBar->AddTool(wxID_REDO, _(""), wxBITMAP(FORWARD_BMP), wxBITMAP(FORWARD_DISABLE_BMP), wxITEM_NORMAL, _(STR_FORWARD));
+    m_lpToolBar->AddTool(ID_LEELA_ZERO, _(""), wxBITMAP(RUN_BMP), wxBITMAP(RUN_DISABLE_BMP), wxITEM_NORMAL, _(STR_RUN_ENGINE));
+	m_lpToolBar->AddSeparator();
+    m_lpToolBar->AddTool(ID_BLACK_DOG, _(""), wxBITMAP(BLACK_DOG_BMP), wxBITMAP(BLACK_DOG_DISABLE_BMP), wxITEM_CHECK, _(STR_BLACK_DOG));
     m_lpToolBar->EnableTool(ID_BLACK_DOG, false);
-    m_lpToolBar->AddTool(ID_WHITE_DOG, _(""), wxBITMAP(WHITE_DOG_BMP), wxBITMAP(WHITE_DOG_DISABLE_BMP), wxITEM_CHECK, _("AI Plays White"));
+    m_lpToolBar->AddTool(ID_WHITE_DOG, _(""), wxBITMAP(WHITE_DOG_BMP), wxBITMAP(WHITE_DOG_DISABLE_BMP), wxITEM_CHECK, _(STR_WHITE_DOG));
     m_lpToolBar->EnableTool(ID_WHITE_DOG, false);
-    lpStaticText = new wxStaticText(m_lpToolBar, wxID_ANY, _("Time"));
+    lpStaticText = new wxStaticText(m_lpToolBar, wxID_ANY, _(STR_TIME));
     m_lpToolBar->AddControl(lpStaticText, _(""));
     m_lpTimeSpinCtrl = new wxSpinCtrl(m_lpToolBar, wxID_ANY, _(""), wxDefaultPosition, wxSize(40, 25), wxSP_ARROW_KEYS, 1, 60, 5);
     m_lpToolBar->AddControl(m_lpTimeSpinCtrl);
-    m_lpToolBar->AddTool(ID_ANALYZE, _(""), wxBITMAP(ANALYZE_BMP), wxBITMAP(ANALYZE_DISABLE_BMP), wxITEM_CHECK, _("Show Analyze"));
+	m_lpToolBar->AddSeparator();
+    m_lpToolBar->AddTool(ID_ANALYZE, _(""), wxBITMAP(ANALYZE_BMP), wxBITMAP(ANALYZE_DISABLE_BMP), wxITEM_CHECK, _(STR_SHOW_ANALYZE));
     m_lpToolBar->EnableTool(ID_ANALYZE, false);
-    lpStaticText = new wxStaticText(m_lpToolBar, wxID_ANY, _("Interval"));
+	m_lpToolBar->AddSeparator();
+    lpStaticText = new wxStaticText(m_lpToolBar, wxID_ANY, _(STR_INTERVAL));
     m_lpToolBar->AddControl(lpStaticText, _(""));
     m_lpIntervalSpinCtrl = new wxSpinCtrl(m_lpToolBar, wxID_ANY, _(""), wxDefaultPosition, wxSize(50, 25), wxSP_ARROW_KEYS, 10, 250, 50);
     m_lpToolBar->AddControl(m_lpIntervalSpinCtrl, _(""));
-    m_lpToolBar->AddTool(ID_FINAL_SCORE, _("Score"), wxBITMAP(SCORE_BMP), wxBITMAP(SCORE_DISABLE_BMP), wxITEM_NORMAL, _("Show Result"));
+	m_lpToolBar->AddSeparator();
+	lpStaticText = new wxStaticText(m_lpToolBar, wxID_ANY, _(STR_ROUTE_LENGTH));
+	m_lpToolBar->AddControl(lpStaticText, _(""));
+	m_lpAnalyzeSlider = new wxSlider(m_lpToolBar, wxID_ANY, 16, 2, 50, wxDefaultPosition, wxSize(144, 25), wxSL_VALUE_LABEL);
+	m_lpToolBar->AddControl(m_lpAnalyzeSlider, _(""));
+	m_lpToolBar->AddSeparator();
+    m_lpToolBar->AddTool(ID_FINAL_SCORE, _(""), wxBITMAP(SCORE_BMP), wxBITMAP(SCORE_DISABLE_BMP), wxITEM_NORMAL, _(STR_RESULT));
     m_lpToolBar->EnableTool(ID_FINAL_SCORE, false);
     m_lpToolBar->Realize();
     SetToolBar(m_lpToolBar);
+}
+
+void CMainFrame::m_fnSetupStatusBar()
+{
+	m_lpStatusBar = new wxStatusBar(this);
+	SetStatusBar(m_lpStatusBar);
+	m_lpStatusBar->SetStatusText(_(STR_NO_ENGINE));
+}
+
+void CMainFrame::m_fnCreateCanvas()
+{
     m_lpCanvas = new CCanvas(this);
     m_lpCanvas->m_GameStatusManager.m_lpToolBar = m_lpToolBar;
     m_lpCanvas->m_GameStatusManager.m_lpEditMenu = m_lpEditMenu;
-    m_lpLZProcess = new CLZProcess(this, wxID_ANY);
-    m_ProcessExitType = PET_COLLAPSE;
+    m_lpCanvas->m_iThinkingTime = m_lpTimeSpinCtrl->GetValue();
+    m_lpCanvas->m_iAnalyzeInterval = m_lpIntervalSpinCtrl->GetValue();
+	m_lpCanvas->m_lpAnalyzeSlider = m_lpAnalyzeSlider;
+	m_lpCanvas->m_GameStatusManager.m_lpStatusBar = m_lpStatusBar;
+	m_lpCanvas->m_bmpOriginalBlackStone = wxBITMAP(BLACK_STONE_BMP);
+	m_lpCanvas->m_bmpOriginalWhiteStone = wxBITMAP(WHITE_STONE_BMP);
+}
+
+void CMainFrame::m_fnPrepareEngine()
+{
     std::ifstream ifs;
     char buffer[4096] = {'\0'};
     ifs.open("config.txt");
@@ -61,19 +99,23 @@ CMainFrame::CMainFrame(const wxString &title, wxSize init_size = wxDefaultSize):
     ifs >> buffer;
     m_wxstrWeightPath = wxString(buffer);
     ifs.close();
-    if (m_wxstrEnginePath.length() == 0 || m_wxstrWeightPath.length() == 0)
-    {
-        wxMessageDialog MD(this, _("Detect your engine or weight set is unsettled or incomplete!\nPlease set their paths before you start the engine!"), _("warning!"));
-        MD.ShowModal();
-    }
     m_bPathChanged = false;
-    m_lpCanvas->m_iThinkingTime = m_lpTimeSpinCtrl->GetValue();
-    m_lpCanvas->m_iAnalyzeInterval = m_lpIntervalSpinCtrl->GetValue();
+    m_ProcessExitType = PET_COLLAPSE;
+    m_lpLZProcess = new CLZProcess(this, wxID_ANY);
+}
+
+CMainFrame::CMainFrame(const wxString &title, wxSize init_size = wxDefaultSize): wxFrame(0, wxID_ANY, title, wxDefaultPosition, init_size)//, m_Timer(this, wxID_ANY)
+{
+	m_fnSetupMenu();
+	m_fnSetupToolBar();
+	m_fnSetupStatusBar();
+	m_fnCreateCanvas();
+	m_fnPrepareEngine();
 }
 
 void CMainFrame::OnNew(wxCommandEvent &event)
 {
-    wxMessageDialog MD(this, _("Detect your previous game records.\nWould you like to discard them?"), _("Warning"), wxOK|wxCANCEL);
+    wxMessageDialog MD(this, _(STR_DISCARD_RECORD_INQUIRY), _(STR_WARNING), wxOK|wxCANCEL);
     if (MD.ShowModal() == wxID_OK)
     {
         if (m_lpCanvas->m_GameBoardManager.m_iStepPos > 0)
@@ -91,7 +133,7 @@ void CMainFrame::OnNew(wxCommandEvent &event)
 void CMainFrame::OnOpen(wxCommandEvent &event)
 {
     wxFileDialog OpenFileDialog(this, _(""), _(""), _(""), _("Smart Game File (*.sgf)|*.sgf"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
-    wxMessageDialog MD(this, _("Detect your previous game records.\nWould you like to discard them?"), _("Warning"), wxOK|wxCANCEL);
+    wxMessageDialog MD(this, _(STR_DISCARD_RECORD_INQUIRY), _(STR_WARNING), wxOK|wxCANCEL);
     std::ifstream ifs;
     bool bRead;
     if (OpenFileDialog.ShowModal() == wxID_OK)
@@ -149,6 +191,19 @@ void CMainFrame::OnShowStep(wxCommandEvent &event)
     Refresh();
 }
 
+void CMainFrame::OnSetGameboardColor(wxCommandEvent &event)
+{
+	wxColourData wxclrdata;
+	wxclrdata.SetColour(m_lpCanvas->m_brGameBoard.GetColour());
+	wxColourDialog CD(this, &wxclrdata);
+	if (CD.ShowModal() == wxID_OK)
+	{
+		wxclrdata = CD.GetColourData();
+		m_lpCanvas->m_brGameBoard.SetColour(wxclrdata.GetColour());
+		Refresh();
+	}
+}
+
 void CMainFrame::OnBackward(wxCommandEvent &event)
 {
     m_lpCanvas->m_fnBackward();
@@ -189,8 +244,8 @@ void CMainFrame::OnSelectWeight(wxCommandEvent &event)
 
 void CMainFrame::OnLeelaZero(wxCommandEvent &event)
 {
-    wxTextEntryDialog TED(this, _("Extra parameters"), _("Set Extra parameters"), wxEmptyString, wxOK | wxCANCEL);
-    wxMessageDialog MD(this, _("Are you sure to close leela zero engine?"), _("Warning"), wxOK | wxCANCEL);
+	wxTextEntryDialog TED(this, _(STR_WARNING), _(STR_EXTRA_PARAMETERS), wxEmptyString, wxOK | wxCANCEL);
+    wxMessageDialog MD(this, _(STR_CLOSE_ENGINE_INQUIRY), _(STR_WARNING), wxOK | wxCANCEL);
     wxFileDialog OpenEigineDialog(this, _(""), _(""), _(""), _("Leela Zero Engine (*.exe)|*.exe"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     wxFileDialog OpenWeightDialog(this, _(""), _(""), _(""), _("Weight File(*.gz)|*.gz|Network File(*.txt)|*.txt"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     bool bApplicable;
@@ -249,7 +304,6 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
             }
             if(bApplicable)
             {
-                wxTextEntryDialog TED(this, _("Extra parameters"), _("Set Extra parameters"), wxEmptyString, wxOK | wxCANCEL);
                 if (TED.ShowModal() == wxID_OK)
                 {
 					m_wxstrExtraPara = TED.GetValue();
@@ -282,7 +336,7 @@ void CMainFrame::OnBlackDog(wxCommandEvent &event)
         bEditable = true;
         if (m_lpCanvas->m_GameBoardManager.m_iStepPos < int(m_lpCanvas->m_GameBoardManager.m_vecRecords.size()))
         {
-            wxMessageDialog MD(this, _("Are you sure to discard the previous variation?"), _("Warning"), wxOK | wxCANCEL);
+            wxMessageDialog MD(this, _(STR_CHANGE_RECORD_INQUIRY), _(STR_WARNING), wxOK | wxCANCEL);
             if (MD.ShowModal() == wxID_OK)
             {
                 m_lpCanvas->m_GameBoardManager.OnModifyGameRecord();
@@ -307,10 +361,7 @@ void CMainFrame::OnBlackDog(wxCommandEvent &event)
             }
         }
     }
-    else
-    {
-		m_lpCanvas->m_GameStatusManager.m_fnSetBlackDog();
-    }
+	m_lpCanvas->m_GameStatusManager.m_fnSetBlackDog();
 }
 
 void CMainFrame::OnWhiteDog(wxCommandEvent &event)
@@ -322,7 +373,7 @@ void CMainFrame::OnWhiteDog(wxCommandEvent &event)
         bEditable = true;
         if (m_lpCanvas->m_GameBoardManager.m_iStepPos < int(m_lpCanvas->m_GameBoardManager.m_vecRecords.size()))
         {
-            wxMessageDialog MD(this, _("Are you sure to discard the previous variation?"), _("Warning"), wxOK | wxCANCEL);
+            wxMessageDialog MD(this, _(STR_CHANGE_RECORD_INQUIRY), _(STR_WARNING), wxOK | wxCANCEL);
             if (MD.ShowModal() == wxID_OK)
             {
                 m_lpCanvas->m_GameBoardManager.OnModifyGameRecord();
@@ -351,10 +402,7 @@ void CMainFrame::OnWhiteDog(wxCommandEvent &event)
             m_lpToolBar->EnableTool(wxID_REDO, false);
         }
     }
-	else
-	{
-		m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
-	}
+	m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
 }
 
 void CMainFrame::OnAnalyze(wxCommandEvent &event)
@@ -362,14 +410,27 @@ void CMainFrame::OnAnalyze(wxCommandEvent &event)
 	m_lpCanvas->m_GameStatusManager.m_fnSetAnalyze();
     if (m_lpToolBar->GetToolState(ID_ANALYZE))
     {
-        m_lpCanvas->m_iAnalyzeInterval = m_lpIntervalSpinCtrl->GetValue();
-        m_lpCanvas->m_fnInquireAnalyze();
+		m_lpCanvas->m_iAnalyzeInterval = m_lpIntervalSpinCtrl->GetValue();
+		m_lpCanvas->m_GameStatusManager.m_fnSetAnalyze();
+		m_lpCanvas->m_fnInquireAnalyze();
     }
     else
     {
         m_lpCanvas->m_fnNotify();
 		m_lpCanvas->m_fnRefreshAnalyze();
     }
+}
+
+void CMainFrame::OnManual(wxCommandEvent &event)
+{
+	CManualDialog MD(this, _(STR_MANUAL), _(STR_DIRECTION), _(STR_CLOSE));
+	MD.ShowModal();
+}
+
+void CMainFrame::OnAbout(wxCommandEvent &event)
+{
+	wxMessageDialog MD(this, _(STR_VERSION), _(STR_ABOUT));
+	MD.ShowModal();
 }
 
 long CMainFrame::m_fnOpenLZProcess()
@@ -428,6 +489,8 @@ void CMainFrame::OnLZProcessExit(wxProcessEvent &event)
 		m_lpCanvas->m_GameStatusManager.m_fnEngineConfirmed();
 		m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
 		m_lpCanvas->m_GameStatusManager.m_fnEngineClosed();
+        delete m_lpLZProcess;
+        m_lpLZProcess = new CLZProcess(this, wxID_ANY);
         m_ProcessExitType = PET_COLLAPSE;
 		break;
     case PET_STOP:
@@ -438,6 +501,10 @@ void CMainFrame::OnLZProcessExit(wxProcessEvent &event)
         break;
     case PET_COLLAPSE:
         m_lpLZReceiver->m_bKeepLoop = false;
+		m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
+		m_lpCanvas->m_GameStatusManager.m_fnEngineClosed();
+		m_lpCanvas->m_GameStatusManager.m_fnTryToOpenEngine();
+		m_lpStatusBar->SetStatusText(_(STR_RESTART_ENGINE));
         delete m_lpLZProcess;
         m_lpLZProcess = new CLZProcess(this, wxID_ANY);
         m_fnOpenLZProcess();
@@ -453,7 +520,7 @@ void CMainFrame::OnExit(wxCommandEvent &event)
 {
     if (m_bPathChanged)
     {
-        wxMessageDialog MD(this, _("The engine or weight path have been changed!\nWould you like to save the new path?"), _("Warning!"), wxOK|wxCANCEL);
+        wxMessageDialog MD(this, _(STR_CHANGE_PATH), _(STR_WARNING), wxOK|wxCANCEL);
         if (MD.ShowModal()== wxID_OK)
         {
             std::ofstream ofs;
@@ -480,7 +547,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 {
     if (m_bPathChanged)
     {
-        wxMessageDialog MD(this, _("The engine or weight path have been changed!\nWould you like to save the new path?"), _("Warning!"), wxOK|wxCANCEL);
+        wxMessageDialog MD(this, _(STR_CHANGE_PATH), _(STR_WARNING), wxOK|wxCANCEL);
         if (MD.ShowModal()== wxID_OK)
         {
             std::ofstream ofs;
@@ -512,6 +579,7 @@ EVT_TOOL(wxID_OPEN, CMainFrame::OnOpen)
 EVT_MENU(wxID_SAVE, CMainFrame::OnSave)
 EVT_TOOL(wxID_SAVE, CMainFrame::OnSave)
 EVT_TOOL(ID_SHOW_STEP, CMainFrame::OnShowStep)
+EVT_TOOL(wxID_SELECT_COLOR, CMainFrame::OnSetGameboardColor)
 EVT_MENU(ID_SELECT_ENGINE, CMainFrame::OnSelectEngine)
 EVT_MENU(ID_SELECT_WEIGHT, CMainFrame::OnSelectWeight)
 EVT_MENU(ID_LEELA_ZERO, CMainFrame::OnLeelaZero)
@@ -524,6 +592,8 @@ EVT_TOOL(ID_FINAL_SCORE, CMainFrame::OnScore)
 EVT_TOOL(ID_BLACK_DOG, CMainFrame::OnBlackDog)
 EVT_TOOL(ID_WHITE_DOG, CMainFrame::OnWhiteDog)
 EVT_TOOL(ID_ANALYZE, CMainFrame::OnAnalyze)
+EVT_MENU(wxID_HELP_CONTEXT, CMainFrame::OnManual)
+EVT_MENU(wxID_ABOUT, CMainFrame::OnAbout)
 EVT_END_PROCESS(wxID_ANY, CMainFrame::OnLZProcessExit)
 EVT_MENU(wxID_EXIT, CMainFrame::OnExit)
 EVT_CLOSE(CMainFrame::OnClose)

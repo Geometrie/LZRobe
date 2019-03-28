@@ -7,8 +7,11 @@
 #include <wx/dcclient.h>
 #include <wx/dcbuffer.h>
 #include <wx/msgdlg.h>
-#include "CLZInquirer.h"
-
+#include <wx/slider.h>
+#include "CGameStatusManager.h"
+#ifndef min
+#define min(a, b) (((a) < (b))?(a):(b))
+#endif
 struct CCoverRange
 {
 	int iMinX, iMinY, iMaxX, iMaxY;
@@ -47,11 +50,13 @@ public:
 	CGameStatusManager m_GameStatusManager;
 	bool m_bShowStep;
 	int m_iWidth, m_iHeight, m_iGridSize, m_iLeft, m_iRight, m_iTop, m_iBottom, m_iRemainedSpace;
+	wxSlider *m_lpAnalyzeSlider;
 	wxFont m_fntPass, m_fntStep, m_fntAnalyze;
 	wxColor m_clrLightRed, m_clrLightYellow, m_clrLightBlue, m_clrLightGreen;
-	wxBrush m_brLightRed, m_brLightYellow, m_brLightBlue, m_brLightGreen;
-	wxPen m_pnThickRed, m_pnThickGreen;
+	wxBrush m_brLightRed, m_brLightYellow, m_brLightBlue, m_brLightGreen, m_brGameBoard;
+	wxPen m_pnThickRed, m_pnThickGreen, m_pnBlackLinePen, m_pnWhiteLinePen;
 	wxPoint m_lpRecentMoveLogo[6];
+	wxBitmap m_bmpOriginalBlackStone, m_bmpOriginalWhiteStone, m_bmpScaledBlackStone, m_bmpScaledWhiteStone;
 	virtual void OnSize(wxSizeEvent &event);
 	void m_fnAppendGameRecord();
 	void m_fnRefreshAnalyze();

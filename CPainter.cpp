@@ -1,6 +1,6 @@
 #include "CPainter.h"
 
-CPainter::CPainter(wxWindow *lpParent): wxScrolledWindow(lpParent),
+CPainter::CPainter(wxWindow *lpParent) : wxScrolledWindow(lpParent),
 m_fntPass(wxSize(70, 70), wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL),
 m_fntStep(wxSize(70, 70), wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL),
 m_fntAnalyze(wxSize(70, 70), wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL),
@@ -9,14 +9,16 @@ m_clrLightGreen(127, 255, 127),
 m_clrLightRed(255, 127, 127),
 m_clrLightYellow(255, 255, 127),
 m_pnThickRed(*wxRED, 3),
-m_pnThickGreen(*wxGREEN, 3)
+m_pnThickGreen(*wxGREEN, 3),
+m_pnBlackLinePen(*wxBLACK_PEN),
+m_pnWhiteLinePen(*wxWHITE_PEN)
 {
 	m_brLightBlue = wxBrush(m_clrLightBlue);
 	m_brLightGreen = wxBrush(m_clrLightGreen);
 	m_brLightRed = wxBrush(m_clrLightRed);
 	m_brLightYellow = wxBrush(m_clrLightYellow);
+	m_brGameBoard = wxBrush(wxColor(192, 220, 192));
 }
-
 
 void CPainter::m_fnAppendGameRecord()
 {
@@ -42,7 +44,7 @@ void CPainter::m_fnBackward()
 {
 	CGameBase::ExtendMove *lpemBack;
 	char *lpstrCommand = (char*)"undo\n";
-	if (m_GameBoardManager.OnBackMove())
+	if (m_bAcceptChange && m_GameBoardManager.OnBackMove())
 	{
 		m_fnRefreshAnalyze();
 		lpemBack = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos]);
@@ -61,7 +63,7 @@ void CPainter::m_fnBackward()
 void CPainter::m_fnForward()
 {
 	CGameBase::ExtendMove *lpemNew;
-	if (m_GameBoardManager.OnRedoMove())
+	if (m_bAcceptChange && m_GameBoardManager.OnRedoMove())
 	{
 		m_fnRefreshAnalyze();
 		lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
@@ -116,13 +118,13 @@ void CPainter::m_fnChangePosition(int x, int y)
 	{
 		if (m_GameBoardManager.OnTestMove(x, y))
 		{
-			wxMessageDialog MD(this, _("Are you sure to discard the previous variation?"), _("Warning"), wxOK | wxCANCEL);
+			wxMessageDialog MD(this, _(STR_CHANGE_RECORD_INQUIRY), _(STR_WARNING), wxOK | wxCANCEL);
 			if (MD.ShowModal() == wxID_OK)
 			{
 				m_GameBoardManager.OnModifyGameRecord();
 				if (m_GameBoardManager.OnAddMove(x, y))
 				{
-					m_fnRefreshAnalyze(); //m_GameBoardManager.OnClearAnalyze();
+					m_fnRefreshAnalyze();
 					lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
 					m_fnRefreshStep(lpemNew);
 					m_fnSendMoveInfo(&(*(m_GameBoardManager.m_vecRecords.rbegin())));
@@ -153,12 +155,11 @@ void CPainter::m_fnRefreshStep(CGameBase::ExtendMove *lpemStep)
 	if (lpemStep->x >= 0 && lpemStep->x < 19 && lpemStep->y >= 0 && lpemStep->y < 19)
 	{
 		rngStone.m_fnRefresh(lpemStep->x, lpemStep->y);
-		//RefreshRect(wxRect(m_iLeft + lpemStep->x * m_iGridSize - m_iGridSize / 2, m_iTop + lpemStep->y * m_iGridSize - m_iGridSize / 2, m_iGridSize, m_iGridSize));
 		if (lpemStep->vecRemoved.size() > 0)
 		{
 			for (iterRemove = lpemStep->vecRemoved.begin(); iterRemove != lpemStep->vecRemoved.end(); ++iterRemove)
 			{
-				rngStone.m_fnRefresh(iterRemove->x, iterRemove->y);//m_fnRefreshPoint(&(*iterRemove));
+				rngStone.m_fnRefresh(iterRemove->x, iterRemove->y);
 			}
 		}
 		m_fnRefreshBoardRange(&rngStone);
@@ -175,6 +176,7 @@ void CPainter::OnSize(wxSizeEvent &event)
 {
 	int i;
 	double dblAngle;
+	wxImage imagBlackStone, imagWhiteStone, imagBlackMask, imagWhiteMask;
 	GetSize(&m_iWidth, &m_iHeight);
 	m_iRemainedSpace = m_iWidth - m_iHeight;
 	m_iGridSize = m_iHeight / 20;
@@ -188,24 +190,37 @@ void CPainter::OnSize(wxSizeEvent &event)
 		m_lpRecentMoveLogo[i] = wxPoint(int(m_iGridSize * sin(dblAngle) / 2 + 0.5), int(m_iGridSize * cos(dblAngle) / 2 + 0.5));
 		m_lpRecentMoveLogo[i + 3] = wxPoint(-m_lpRecentMoveLogo[i].x, -m_lpRecentMoveLogo[i].y);
 	}
+	m_pnBlackLinePen.SetWidth(m_iGridSize / 16);
+	m_pnWhiteLinePen.SetWidth(m_iGridSize / 16);
 	m_fntPass.SetPixelSize(wxSize(m_iGridSize * 4, m_iGridSize * 8));
 	m_fntAnalyze.SetPixelSize(wxSize(m_iGridSize / 6, m_iGridSize / 2));
-	m_fntStep.SetPixelSize(wxSize(m_iGridSize / 4, m_iGridSize * 2 / 3));
+	m_fntStep.SetPixelSize(wxSize(m_iGridSize * 1 / 4, m_iGridSize * 5 / 8));
+	imagBlackStone = m_bmpOriginalBlackStone.ConvertToImage();
+	imagWhiteStone = m_bmpOriginalWhiteStone.ConvertToImage();
+	imagBlackStone.Rescale(m_iGridSize, m_iGridSize);
+	imagWhiteStone.Rescale(m_iGridSize, m_iGridSize);
+	imagBlackStone.SetMaskColour(255, 255, 255);
+	imagWhiteStone.SetMaskColour(255, 255, 255);
+	m_bmpScaledBlackStone = wxBitmap(imagBlackStone);
+	m_bmpScaledWhiteStone = wxBitmap(imagWhiteStone);
 	Refresh();
 }
 
 void CPainter::m_fnDrawPass(wxBufferedDC &dc)
 {
 	CGameBase::ExtendMove *lpemRecentMove;
+	wxString wxstrPass = _("pass");
+	wxSize szStringSize;
 	if (m_GameBoardManager.m_iStepPos > 0)
 	{
 		lpemRecentMove = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
 		if (lpemRecentMove->x == -1 && lpemRecentMove->y == -1)
 		{
 			dc.SetFont(m_fntPass);
+			szStringSize = dc.GetTextExtent(wxstrPass);
 			dc.SetTextBackground(*wxWHITE);
 			dc.SetTextForeground(*wxLIGHT_GREY);
-			dc.DrawText(_("pass"), m_iLeft + m_iGridSize / 2, m_iTop + m_iGridSize * 13 / 4);
+			dc.DrawText(wxstrPass, (m_iLeft + m_iRight - szStringSize.x) / 2, (m_iTop + m_iBottom) / 2 - szStringSize.y * 2 / 3);
 		}
 	}
 }
@@ -214,8 +229,10 @@ void CPainter::m_fnDrawPass(wxBufferedDC &dc)
 void CPainter::m_fnDrawGameBoard(wxBufferedDC &dc)
 {
 	int i;
-	dc.SetPen(*wxBLACK_PEN);
-	dc.SetBrush(*wxBLACK_BRUSH);
+	dc.SetPen(*wxTRANSPARENT_PEN);
+	dc.SetBrush(m_brGameBoard);
+	dc.DrawRectangle(m_iLeft - m_iGridSize, m_iTop - m_iGridSize, m_iRight - m_iLeft + m_iGridSize * 2, m_iBottom - m_iTop + m_iGridSize * 2);
+	dc.SetPen(m_pnBlackLinePen);
 	for (i = 0; i < 19; ++i)
 	{
 		dc.DrawLine(m_iLeft + i * m_iGridSize, m_iTop, m_iLeft + i * m_iGridSize, m_iBottom);
@@ -224,6 +241,7 @@ void CPainter::m_fnDrawGameBoard(wxBufferedDC &dc)
 	{
 		dc.DrawLine(m_iLeft, m_iTop + i * m_iGridSize, m_iRight, m_iTop + i * m_iGridSize);
 	}
+	dc.SetBrush(*wxBLACK_BRUSH);
 	for (i = 0; i < 9; ++i)
 	{
 		dc.DrawCircle(m_iLeft + m_iGridSize * ((i % 3) * 6 + 3), m_iTop + m_iGridSize * ((i / 3) * 6 + 3), m_iGridSize / 6);
@@ -276,15 +294,17 @@ void CPainter::m_fnDrawStones(wxBufferedDC &dc)
 			i = (*iterVisitor) - m_GameBoardManager.m_lpGameBoard;
 			if ((*iterVisitor)->stone_color == SC_BLACK)
 			{
-				dc.SetPen(*wxBLACK_PEN);
-				dc.SetBrush(*wxBLACK_BRUSH);
-				dc.DrawCircle(m_iLeft + m_iGridSize * (i / 19), m_iTop + m_iGridSize * (i % 19), m_iGridSize / 2);
+				dc.DrawBitmap(m_bmpScaledBlackStone, m_iLeft + m_iGridSize * (i / 19) - m_iGridSize / 2, m_iTop + m_iGridSize * (i % 19) - m_iGridSize / 2, true);
+				//dc.SetPen(*wxBLACK_PEN);
+				//dc.SetBrush(*wxBLACK_BRUSH);
+				//dc.DrawCircle(m_iLeft + m_iGridSize * (i / 19), m_iTop + m_iGridSize * (i % 19), m_iGridSize / 2);
 			}
 			else if ((*iterVisitor)->stone_color == SC_WHITE)
 			{
-				dc.SetPen(*wxBLACK_PEN);
-				dc.SetBrush(*wxWHITE_BRUSH);
-				dc.DrawCircle(m_iLeft + m_iGridSize * (i / 19), m_iTop + m_iGridSize * (i % 19), m_iGridSize / 2);
+				dc.DrawBitmap(m_bmpScaledWhiteStone, m_iLeft + m_iGridSize * (i / 19) - m_iGridSize / 2, m_iTop + m_iGridSize * (i % 19) - m_iGridSize / 2, true);
+				//dc.SetPen(*wxBLACK_PEN);
+				//dc.SetBrush(*wxWHITE_BRUSH);
+				//dc.DrawCircle(m_iLeft + m_iGridSize * (i / 19), m_iTop + m_iGridSize * (i % 19), m_iGridSize / 2);
 			}
 		}
 	}
@@ -294,6 +314,8 @@ void CPainter::m_fnDrawStones(wxBufferedDC &dc)
 void CPainter::m_fnDrawRecentMove(wxBufferedDC &dc)
 {
 	CGameBase::ExtendMove *lpemRecentMove;
+	wxString wxstrIndex;
+	wxSize szStringSize;
 	if (m_GameBoardManager.m_iStepPos > 0)
 	{
 		lpemRecentMove = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
@@ -313,28 +335,19 @@ void CPainter::m_fnDrawRecentMove(wxBufferedDC &dc)
 					dc.SetTextBackground(*wxWHITE);
 					dc.SetTextForeground(*wxBLACK);
 				}
-				if (m_GameBoardManager.m_iStepPos >= 1 && m_GameBoardManager.m_iStepPos < 10)
-				{
-					dc.DrawText(wxString::Format(wxString("%d"), m_GameBoardManager.m_iStepPos), m_iLeft + lpemRecentMove->x * m_iGridSize - m_iGridSize / 6, m_iTop + lpemRecentMove->y * m_iGridSize - m_iGridSize / 3);
-				}
-				else if (m_GameBoardManager.m_iStepPos >= 10 && m_GameBoardManager.m_iStepPos < 100)
-				{
-					dc.DrawText(wxString::Format(wxString("%d"), m_GameBoardManager.m_iStepPos), m_iLeft + lpemRecentMove->x * m_iGridSize - m_iGridSize / 3, m_iTop + lpemRecentMove->y * m_iGridSize - m_iGridSize / 3);
-				}
-				else
-				{
-					dc.DrawText(wxString::Format(wxString("%d"), m_GameBoardManager.m_iStepPos), m_iLeft + lpemRecentMove->x * m_iGridSize - m_iGridSize / 2, m_iTop + lpemRecentMove->y * m_iGridSize - m_iGridSize / 3);
-				}
+				wxstrIndex = wxString::Format(wxString("%d"), m_GameBoardManager.m_iStepPos);
+				szStringSize = dc.GetTextExtent(wxstrIndex);
+				dc.DrawText(wxstrIndex, m_iLeft + lpemRecentMove->x * m_iGridSize - szStringSize.x / 2, m_iTop + lpemRecentMove->y * m_iGridSize - szStringSize.y / 2);
 			}
 			else
 			{
 				if (lpemRecentMove->stone_color == SC_BLACK)
 				{
-					dc.SetPen(*wxWHITE_PEN);
+					dc.SetPen(m_pnWhiteLinePen);
 				}
 				else if (lpemRecentMove->stone_color == SC_WHITE)
 				{
-					dc.SetPen(*wxBLACK_PEN);
+					dc.SetPen(m_pnBlackLinePen);
 				}
 				dc.DrawPolygon(3, m_lpRecentMoveLogo, m_iLeft + lpemRecentMove->x * m_iGridSize, m_iTop + lpemRecentMove->y * m_iGridSize);
 				dc.DrawPolygon(3, m_lpRecentMoveLogo + 3, m_iLeft + lpemRecentMove->x * m_iGridSize, m_iTop + lpemRecentMove->y * m_iGridSize);
@@ -345,42 +358,55 @@ void CPainter::m_fnDrawRecentMove(wxBufferedDC &dc)
 
 void CPainter::m_fnDrawAnalyze(wxBufferedDC &dc, int x, int y)
 {
-	int iMaxVisit, i;
+	int iMaxVisit, i, nRouteLen;
 	CGameBase::BoardPoint *lpbpLearningPoint;
 	StoneColor scTest;
-	CGameBase::BasePosition *lpbpTest;//std::vector<CGameBase::BasePosition>::iterator iterTestVisitor;
+	CGameBase::BasePosition *lpbpTest;
 	std::vector<CGameBase::BoardPoint*>::iterator iterBoardVisitor;
 	CGameBase::BoardPoint *lpbpDraw;
+	wxString wxstrMark;
+	wxSize szStringSize;
 	if (x >= 0 && x < 19 && y >= 0 && y < 19 && m_GameBoardManager.m_fnPoint(x, y)->visits > 0)
 	{
 		lpbpLearningPoint = m_GameBoardManager.m_fnPoint(x, y);
-		if (lpbpLearningPoint->pv_len > 0)//(lpBoardPoint->pv.size() > 1)
+		if (lpbpLearningPoint->pv_len > 0)
 		{
+			nRouteLen = min(lpbpLearningPoint->pv_len, m_lpAnalyzeSlider->GetValue());
 			dc.SetFont(m_fntStep);
 			scTest = m_GameBoardManager.m_scTurnColor;
 			lpbpTest = lpbpLearningPoint->pv;
-			for (i = 0; i < lpbpLearningPoint->pv_len; ++i)//(iterTestVisitor = lpBoardPoint->pv.begin(); iterTestVisitor != lpBoardPoint->pv.end(); ++iterTestVisitor)
+			for (i = 0; i < nRouteLen; ++i)
 			{
-				if (lpbpTest->x >= 0 && lpbpTest->x < 19 && lpbpTest->y >= 0 && lpbpTest->y < 19)//(iterTestVisitor->x >= 0 && iterTestVisitor->x < 19 && iterTestVisitor->y >= 0 && iterTestVisitor->y <= 19)
+				if (lpbpTest->x >= 0 && lpbpTest->x < 19 && lpbpTest->y >= 0 && lpbpTest->y < 19)
 				{
+					if (i < 26)
+					{
+						wxstrMark = wxString::Format(wxString("%c"), (i + 'a'));
+					}
+					else
+					{
+						wxstrMark = wxString::Format(wxString("%c"), (i + 'A'));
+					}
+					szStringSize = dc.GetTextExtent(wxstrMark);
 					if (scTest == SC_BLACK)
 					{
-						dc.SetPen(*wxBLACK_PEN);
-						dc.SetBrush(*wxBLACK_BRUSH);
-						dc.DrawCircle(m_iLeft + m_iGridSize * (lpbpTest->x), m_iTop + m_iGridSize * (lpbpTest->y), m_iGridSize / 2);//dc.DrawCircle(m_iLeft + m_iGridSize * (iterTestVisitor->x), m_iTop + m_iGridSize * (iterTestVisitor->y), m_iGridSize / 2);
+						dc.DrawBitmap(m_bmpScaledBlackStone, m_iLeft + m_iGridSize * (lpbpTest->x) - m_iGridSize / 2, m_iTop + m_iGridSize * (lpbpTest->y) - m_iGridSize / 2, true);
+						//dc.SetPen(*wxBLACK_PEN);
+						//dc.SetBrush(*wxBLACK_BRUSH);
+						//dc.DrawCircle(m_iLeft + m_iGridSize * (lpbpTest->x), m_iTop + m_iGridSize * (lpbpTest->y), m_iGridSize / 2);
 						dc.SetTextBackground(*wxBLACK);
 						dc.SetTextForeground(*wxWHITE);
-						dc.DrawText(wxString::Format(wxString("%c"), (i + 'a')), m_iLeft + lpbpTest->x * m_iGridSize - m_iGridSize / 6, m_iTop + lpbpTest->y * m_iGridSize - m_iGridSize / 3);
 					}
 					if (scTest == SC_WHITE)
 					{
-						dc.SetPen(*wxBLACK_PEN);
-						dc.SetBrush(*wxWHITE_BRUSH);
-						dc.DrawCircle(m_iLeft + m_iGridSize * (lpbpTest->x), m_iTop + m_iGridSize * (lpbpTest->y), m_iGridSize / 2);//dc.DrawCircle(m_iLeft + m_iGridSize * (iterTestVisitor->x), m_iTop + m_iGridSize * (iterTestVisitor->y), m_iGridSize / 2);
+						//dc.SetPen(*wxBLACK_PEN);
+						//dc.SetBrush(*wxWHITE_BRUSH);
+						//dc.DrawCircle(m_iLeft + m_iGridSize * (lpbpTest->x), m_iTop + m_iGridSize * (lpbpTest->y), m_iGridSize / 2);
+						dc.DrawBitmap(m_bmpScaledWhiteStone, m_iLeft + m_iGridSize * (lpbpTest->x) - m_iGridSize / 2, m_iTop + m_iGridSize * (lpbpTest->y) - m_iGridSize / 2, true);
 						dc.SetTextBackground(*wxWHITE);
 						dc.SetTextForeground(*wxBLACK);
-						dc.DrawText(wxString::Format(wxString("%c"), (i + 'a')), m_iLeft + lpbpTest->x * m_iGridSize - m_iGridSize / 6, m_iTop + lpbpTest->y * m_iGridSize - m_iGridSize / 3);
 					}
+					dc.DrawText(wxstrMark, m_iLeft + lpbpTest->x * m_iGridSize - szStringSize.x / 2, m_iTop + lpbpTest->y * m_iGridSize - szStringSize.y / 2);
 				}
 				++lpbpTest;
 				scTest = CGoRuleKeeper::opposite_color(scTest);
@@ -432,23 +458,28 @@ void CPainter::m_fnDrawAnalyze(wxBufferedDC &dc, int x, int y)
 					}
 					dc.SetPen(*wxTRANSPARENT_PEN);
 					dc.DrawCircle(m_iLeft + m_iGridSize * x, m_iTop + m_iGridSize * y, m_iGridSize / 2);
-					dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->win_rate), m_iLeft + m_iGridSize * x - m_iGridSize * 3 / 8, m_iTop + m_iGridSize * y - m_iGridSize / 2);
-					if (lpbpDraw->visits >= 1 && lpbpDraw->visits < 10)
-					{
-						dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize / 8, m_iTop + m_iGridSize * y);
-					}
-					else if (lpbpDraw->visits >= 10 && lpbpDraw->visits < 100)
-					{
-						dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize / 4, m_iTop + m_iGridSize * y);
-					}
-					else if (lpbpDraw->visits >= 100 && lpbpDraw->visits < 1000)
-					{
-						dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize * 3 / 8, m_iTop + m_iGridSize * y);
-					}
-					else
-					{
-						dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize / 2, m_iTop + m_iGridSize * y);
-					}
+					wxstrMark = wxString::Format(wxString("%d.%d"), lpbpDraw->win_rate / 100, lpbpDraw->win_rate % 100);
+					szStringSize = dc.GetTextExtent(wxstrMark);
+					dc.DrawText(wxstrMark, m_iLeft + m_iGridSize * x - szStringSize.x / 2, m_iTop + m_iGridSize * y - szStringSize.y * 5 / 6);//dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->win_rate), m_iLeft + m_iGridSize * x - m_iGridSize * 3 / 8, m_iTop + m_iGridSize * y - m_iGridSize / 2);
+					wxstrMark = wxString::Format(wxString("%d"), lpbpDraw->visits);
+					szStringSize = dc.GetTextExtent(wxstrMark);
+					dc.DrawText(wxstrMark, m_iLeft + m_iGridSize * x - szStringSize.x / 2, m_iTop + m_iGridSize * y - szStringSize.y / 6);
+					//if (lpbpDraw->visits >= 1 && lpbpDraw->visits < 10)
+					//{
+					//	dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize / 8, m_iTop + m_iGridSize * y);
+					//}
+					//else if (lpbpDraw->visits >= 10 && lpbpDraw->visits < 100)
+					//{
+					//	dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize / 4, m_iTop + m_iGridSize * y);
+					//}
+					//else if (lpbpDraw->visits >= 100 && lpbpDraw->visits < 1000)
+					//{
+					//	dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize * 3 / 8, m_iTop + m_iGridSize * y);
+					//}
+					//else
+					//{
+					//	dc.DrawText(wxString::Format(wxString("%d"), lpbpDraw->visits), m_iLeft + m_iGridSize * x - m_iGridSize / 2, m_iTop + m_iGridSize * y);
+					//}
 				}
 			}
 		}

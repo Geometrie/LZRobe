@@ -214,30 +214,31 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         switch (m_dtStatus)
         {
         case DT_EQUAL:
-            if (m_lpCanvas->m_GameBoardManager.OnAddMove(bpNewMove.x, bpNewMove.y))
-            {
-                m_lpemNew = &(m_lpCanvas->m_GameBoardManager.m_vecRecords[m_lpCanvas->m_GameBoardManager.m_iStepPos - 1]);
-                if (m_lpCanvas->m_GameBoardManager.m_iStepPos > 1)
-                {
-                    m_lpemLast = &(m_lpCanvas->m_GameBoardManager.m_vecRecords[m_lpCanvas->m_GameBoardManager.m_iStepPos - 2]);
-                }
-                if (m_lpCanvas->m_GameBoardManager.m_bAlive)
-                {
-                    if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))//((bBlackDog && m_lpCanvas->m_GameBoardManager.m_scTurnColor == SC_BLACK) || (bWhiteDog && m_lpCanvas->m_GameBoardManager.m_scTurnColor == SC_WHITE))
-                    {
-                        m_lpCanvas->m_fnInquireMove();
-                    }
-                    else if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
-                    {
-                        m_lpCanvas->m_fnInquireAnalyze();
-                    }
-                }
-                else
-                {
-                    m_lpCanvas->m_fnInquireResult();
-                }
-                m_bRefresh = true;
-            }
+			if (m_lpCanvas->m_GameBoardManager.OnAddMove(bpNewMove.x, bpNewMove.y))
+			{
+				m_lpemNew = &(m_lpCanvas->m_GameBoardManager.m_vecRecords[m_lpCanvas->m_GameBoardManager.m_iStepPos - 1]);
+				if (m_lpCanvas->m_GameBoardManager.m_iStepPos > 1)
+				{
+					m_lpemLast = &(m_lpCanvas->m_GameBoardManager.m_vecRecords[m_lpCanvas->m_GameBoardManager.m_iStepPos - 2]);
+				}
+				if (m_lpCanvas->m_GameBoardManager.m_bAlive)
+				{
+					if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))
+					{
+						m_lpCanvas->m_fnInquireMove();
+					}
+					else if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
+					{
+						m_lpCanvas->m_fnInquireAnalyze();
+					}
+				}
+				else
+				{
+					m_lpCanvas->m_fnInquireResult();
+				}
+				m_bRefresh = true;
+			}
+			m_lpCanvas->m_bAcceptChange = true;
             break;
         case DT_MOVE:
 			if (bpNewMove.x >= 0 && bpNewMove.x < 19 && bpNewMove.y >= 0 && bpNewMove.y < 19)
@@ -256,7 +257,7 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         case DT_PV:
             if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing->stone_color == SC_NULL)
             {
-				if (m_lpbpAnalyzing->pv_len < 32)
+				if (m_lpbpAnalyzing->pv_len < 64)
 				{
 					m_lpbpAnalyzing->pv[m_lpbpAnalyzing->pv_len] = bpNewMove;
 					++(m_lpbpAnalyzing->pv_len);

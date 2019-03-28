@@ -1,5 +1,4 @@
 #include "CCanvas.h"
-#define min(a, b) ((a) < (b))?(a):(b)
 CCanvas::CCanvas(wxWindow *lpParent): CPainter(lpParent)
 {
     m_bShowStep = false;
@@ -12,22 +11,22 @@ void CCanvas::m_fnShowResignResult()
     switch (m_GameBoardManager.m_scTurnColor)
     {
     case SC_BLACK:
-        wxstrResult = wxString("Black has resigned, white win!");
+        wxstrResult = wxString(STR_BLACK_RESIGN);
         break;
     case SC_WHITE:
-        wxstrResult = wxString("White has resigned, black win!");
+        wxstrResult = wxString(STR_WHITE_RESIGN);
         break;
     default:
         wxstrResult = wxEmptyString;
         break;
     }
-    wxMessageDialog MD(this, wxstrResult, _("Game Result"));
+    wxMessageDialog MD(this, wxstrResult, _(STR_GAME_RESULT));
     MD.ShowModal();
 }
 
 void CCanvas::m_fnShowCountResult(char *lpstrMessage)
 {
-    wxMessageDialog MD(this, wxString(lpstrMessage, strlen(lpstrMessage)), _("Game Result"));
+    wxMessageDialog MD(this, wxString(lpstrMessage, strlen(lpstrMessage)), _(STR_GAME_RESULT));
     MD.ShowModal();
 }
 
@@ -35,7 +34,7 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
 {
     long xMouse, yMouse;
     int x, y;
-    if (m_GameStatusManager.m_fnUserAuthorized(m_GameBoardManager.m_scTurnColor))
+    if (m_bAcceptChange && m_GameStatusManager.m_fnUserAuthorized(m_GameBoardManager.m_scTurnColor))
     {
         event.GetPosition(&xMouse, &yMouse);
         x = (xMouse - m_iLeft + m_iGridSize / 2) / m_iGridSize;
@@ -80,8 +79,8 @@ void CCanvas::OnPaint(wxPaintEvent&event)
     wxBufferedDC dc(&pdc);
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
-	m_fnDrawPass(dc);
 	m_fnDrawGameBoard(dc);
+	m_fnDrawPass(dc);
 	m_fnDrawMoveTurn(dc);
 	m_fnDrawStones(dc);
 	m_fnDrawRecentMove(dc);

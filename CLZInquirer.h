@@ -1,11 +1,14 @@
 #ifndef CLZINQUIRER_H
 #define CLZINQUIRER_H
-#include "CGameStatusManager.h"
+#include <wx/string.h>
+#include <wx/stream.h>
+#include "CGameBoardManager.h"
 class CLZInquirer
 {
 public:
 	wxOutputStream *m_lpOutputStream;
 	int m_iThinkingTime, m_iAnalyzeInterval;
+	bool m_bAcceptChange;
 	CGameBoardManager m_GameBoardManager;
 	CLZInquirer();
 	void m_fnSetThinkingTime();

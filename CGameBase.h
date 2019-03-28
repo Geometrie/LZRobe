@@ -184,7 +184,7 @@ namespace CGameBase
         int prior;
         int order;
         //std::vector<BasePosition> pv;
-		BasePosition pv[32];
+		BasePosition pv[64];
 		int pv_len;
     };
 };
