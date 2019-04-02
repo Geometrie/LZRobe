@@ -101,19 +101,13 @@ void CPainter::m_fnSetSize()
 
 bool CPainter::m_fnChangePosition(int x, int y)
 {
-	CGameBase::ExtendMove *lpemNew;
 	bool bChanged = false;
 	if (m_GameBoardManager.m_iStepPos == int(m_GameBoardManager.m_vecRecords.size()))
 	{
 		if (m_GameBoardManager.OnAddMove(x, y))
 		{
 			m_fnRefreshAnalyze();
-			lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
 			m_fnSendMoveInfo(&(*(m_GameBoardManager.m_vecRecords.rbegin())));
-			if (m_GameBoardManager.m_iStepPos > 1)
-			{
-				lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 2]);
-			}
 			if (m_GameBoardManager.m_bAlive)
 			{
 				if (m_GameStatusManager.m_fnInquireAI(m_GameBoardManager.m_scTurnColor))
@@ -173,7 +167,6 @@ bool CPainter::m_fnChangePosition(int x, int y)
 				if (m_GameBoardManager.OnAddMove(x, y))
 				{
 					m_fnRefreshAnalyze();
-					lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
 					m_fnSendMoveInfo(&(*(m_GameBoardManager.m_vecRecords.rbegin())));
 					if (m_GameStatusManager.m_fnAnalyzing())
 					{
@@ -379,6 +372,8 @@ void CPainter::m_fnDrawProcess(wxBufferedDC &dc)
 			case SC_WHITE:
 				dc.SetBrush(*wxWHITE_BRUSH);
 				break;
+            default:
+                break;
 			}
 			if (i == m_GameBoardManager.m_iStepPos - 1)
 			{

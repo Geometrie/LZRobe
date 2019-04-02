@@ -143,10 +143,8 @@ void CMainFrame::OnOpen(wxCommandEvent &event)
     wxFileDialog OpenFileDialog(this, _(""), _(""), _(""), _("Smart Game File (*.sgf)|*.sgf"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     wxMessageDialog MD(this, _(STR_DISCARD_RECORD_INQUIRY), _(STR_WARNING), wxOK|wxCANCEL);
     std::ifstream ifs;
-    bool bRead;
     if (OpenFileDialog.ShowModal() == wxID_OK)
     {
-        bRead = true;
         if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size () == 0 || MD.ShowModal() == wxID_OK)
         {
             if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size() > 0)
