@@ -2,106 +2,106 @@
 #define INTERNATIONAL_H
 #define LANGUAGE_CHINESE_SIMPLIFIED
 #ifdef LANGUAGE_CHINESE_SIMPLIFIED
-#define STR_NEW "ÐÂ¶Ô¾Ö"
-#define STR_OPEN "´ò¿ª"
-#define STR_SAVE "±£´æ"
-#define STR_EXIT "ÍË³ö"
-#define STR_BACKWARD "³·Ïû"
-#define STR_FORWARD "ÖØ×ö"
-#define STR_SELECT_ENGINE "Ñ¡ÔñÒýÇæ"
-#define STR_SELECT_WEIGHT "Ñ¡ÔñÈ¨ÖØ"
-#define STR_EXTRA_PARA "¸½¼Ó²ÎÊý"
-#define STR_RUN_ENGINE "Æô¶¯ÒýÇæ"
-#define STR_CLOSE_ENGINE "¹Ø±ÕÒýÇæ"
-#define STR_RESULT "¼ÆËãÊ¤¸º"
-#define STR_STEP "ÏÔÊ¾Æå²½ÐòºÅ"
-#define	STR_SET_GAMEBOARD_COLOR "ÉèÖÃÆåÅÌÑÕÉ«"
-#define STR_MANUAL "Ê¹ÓÃËµÃ÷"
-#define STR_ABOUT "¹ØÓÚLZRobe"
-#define STR_FILE "ÎÄ¼þ"
-#define STR_EDIT "±à¼­"
-#define STR_VIEW "ÊÓÍ¼"
-#define STR_HELP "°ïÖú"
-#define STR_BLACK_DOG "AIÖ´ºÚ"
-#define STR_WHITE_DOG "AIÖ´°×"
-#define STR_TIME "Ë¼¿¼Ê±¼ä"
-#define STR_SHOW_ANALYZE "ÏÔÊ¾·ÖÎö"
-#define STR_TERMINATED_GAME "¶Ô¾ÖÒÑ¾­½áÊø£¬ÐèÒªÖØÐÂ¼ÓÔØ²ÅÄÜÏÔÊ¾·ÖÎö£¬È·¶¨ÖØÐÂ¼ÓÔØÃ´£¿"
-#define STR_INTERVAL "Ë¢ÐÂ¼ä¸ô"
-#define STR_ROUTE_LENGTH "Ô¤²â³¤¶È"
-#define STR_NO_ENGINE "ÒýÇæÎ´ÔËÐÐ"
-#define STR_WARNING "ÌáÊ¾"
-#define STR_CHANGE_RECORD_INQUIRY "È·¶¨¶ªÆúÇ°ÃæµÄ±ä»¯Ã´£¿"
-#define STR_GAME_RESULT "¶Ô¾Ö½á¹û"
-#define STR_BLACK_RESIGN "ºÚÈÏÊä£¬°×ÖÐÅÌÊ¤"
-#define STR_WHITE_RESIGN "°×ÈÏÊä£¬ºÚÖÐÅÌÊ¤"
-#define STR_DISCARD_RECORD_INQUIRY "¼ì²âµ½¶Ô¾ÖÐÅÏ¢£¬È·¶¨Òª¶ªÆúÃ´£¿"
-#define STR_EXTRA_PARAMETERS "ÊäÈëÆäËü²ÎÊý"
-#define STR_CLOSE_ENGINE_INQUIRY "È·¶¨¹Ø±ÕÒýÇæÃ´£¿"
-#define STR_CHANGE_PATH "¼ì²âµ½ÄãÐÞ¸ÄÁËÒýÇæ»òÕßÈ¨ÖØµÄÂ·¾¶£¬ÊÇ·ñ±£´æ£¿"
-#define STR_RESTART_ENGINE "ÒýÇæ±ÀÀ££¬ÕýÔÚÖØÆô"
-#define STR_ENGINE_OPENING "ÒýÇæÕýÔÚÆô¶¯£¬ÇëÄÍÐÄµÈ´ý"
-#define STR_ENGINE_AVAILABLE "ÒýÇæÒÑÆô¶¯"
-#define STR_ENGINE_CLOSING "ÒýÇæÕýÔÚ¹Ø±Õ"
-#define STR_SELFPLAY "ÒýÇæÕýÔÚ×ÔÎÒ¶Ô¾Ö"
-#define STR_ANALYZING "¾ÖÊÆ·ÖÎöÖÐ"
-#define STR_VERSION "µ±Ç°°æ±¾£º1.01"
-#define STR_CLOSE "¹Ø±Õ"
-#define STR_MOVE_TURN "×Å×ÓÈ¨"
-#define STR_PRISONERS "Ìá×Ó"
-#define STR_PASS "·ÅÆúÒ»ÊÖ"
-#define STR_RESIGN "ÈÏÊä"
-#define STR_GAME_PROCESS "¶Ô¾Ö½ø³Ì"
-#define STR_DIRECTION "»¶Ó­ÊÔÓÃLZRobe£¡ÕâÊÇÒ»¸öÎªÈË¹¤ÖÇÄÜÎ§ÆåÈí¼þLeelaZeroÌá¹©Í¼ÐÎ½çÃæµÄ³ÌÐò¡£\n\n\
-Èç¹ûÄãÏëÁË½â¹ØÓÚLeelaZero¸ü¶àµÄÐÅÏ¢£¬Çë·ÃÎÊÏÂÃæµÄÍøÖ·£º\n\n\
+#define STR_NEW "æ–°å¯¹å±€"
+#define STR_OPEN "æ‰“å¼€"
+#define STR_SAVE "ä¿å­˜"
+#define STR_EXIT "é€€å‡º"
+#define STR_BACKWARD "æ’¤æ¶ˆ"
+#define STR_FORWARD "é‡åš"
+#define STR_SELECT_ENGINE "é€‰æ‹©å¼•æ“Ž"
+#define STR_SELECT_WEIGHT "é€‰æ‹©æƒé‡"
+#define STR_EXTRA_PARA "é™„åŠ å‚æ•°"
+#define STR_RUN_ENGINE "å¯åŠ¨å¼•æ“Ž"
+#define STR_CLOSE_ENGINE "å…³é—­å¼•æ“Ž"
+#define STR_RESULT "è®¡ç®—èƒœè´Ÿ"
+#define STR_STEP "æ˜¾ç¤ºæ£‹æ­¥åºå·"
+#define	STR_SET_GAMEBOARD_COLOR "è®¾ç½®æ£‹ç›˜é¢œè‰²"
+#define STR_MANUAL "ä½¿ç”¨è¯´æ˜Ž"
+#define STR_ABOUT "å…³äºŽLZRobe"
+#define STR_FILE "æ–‡ä»¶"
+#define STR_EDIT "ç¼–è¾‘"
+#define STR_VIEW "è§†å›¾"
+#define STR_HELP "å¸®åŠ©"
+#define STR_BLACK_DOG "AIæ‰§é»‘"
+#define STR_WHITE_DOG "AIæ‰§ç™½"
+#define STR_TIME "æ€è€ƒæ—¶é—´"
+#define STR_SHOW_ANALYZE "æ˜¾ç¤ºåˆ†æž"
+#define STR_TERMINATED_GAME "å¯¹å±€å·²ç»ç»“æŸï¼Œéœ€è¦é‡æ–°åŠ è½½æ‰èƒ½æ˜¾ç¤ºåˆ†æžï¼Œç¡®å®šé‡æ–°åŠ è½½ä¹ˆï¼Ÿ"
+#define STR_INTERVAL "åˆ·æ–°é—´éš”"
+#define STR_ROUTE_LENGTH "é¢„æµ‹é•¿åº¦"
+#define STR_NO_ENGINE "å¼•æ“Žæœªè¿è¡Œ"
+#define STR_WARNING "æç¤º"
+#define STR_CHANGE_RECORD_INQUIRY "ç¡®å®šä¸¢å¼ƒå‰é¢çš„å˜åŒ–ä¹ˆï¼Ÿ"
+#define STR_GAME_RESULT "å¯¹å±€ç»“æžœ"
+#define STR_BLACK_RESIGN "é»‘è®¤è¾“ï¼Œç™½ä¸­ç›˜èƒœ"
+#define STR_WHITE_RESIGN "ç™½è®¤è¾“ï¼Œé»‘ä¸­ç›˜èƒœ"
+#define STR_DISCARD_RECORD_INQUIRY "æ£€æµ‹åˆ°å¯¹å±€ä¿¡æ¯ï¼Œç¡®å®šè¦ä¸¢å¼ƒä¹ˆï¼Ÿ"
+#define STR_EXTRA_PARAMETERS "è¾“å…¥å…¶å®ƒå‚æ•°"
+#define STR_CLOSE_ENGINE_INQUIRY "ç¡®å®šå…³é—­å¼•æ“Žä¹ˆï¼Ÿ"
+#define STR_CHANGE_PATH "æ£€æµ‹åˆ°ä½ ä¿®æ”¹äº†å¼•æ“Žæˆ–è€…æƒé‡çš„è·¯å¾„ï¼Œæ˜¯å¦ä¿å­˜ï¼Ÿ"
+#define STR_RESTART_ENGINE "å¼•æ“Žå´©æºƒï¼Œæ­£åœ¨é‡å¯"
+#define STR_ENGINE_OPENING "å¼•æ“Žæ­£åœ¨å¯åŠ¨ï¼Œè¯·è€å¿ƒç­‰å¾…"
+#define STR_ENGINE_AVAILABLE "å¼•æ“Žå·²å¯åŠ¨"
+#define STR_ENGINE_CLOSING "å¼•æ“Žæ­£åœ¨å…³é—­"
+#define STR_SELFPLAY "å¼•æ“Žæ­£åœ¨è‡ªæˆ‘å¯¹å±€"
+#define STR_ANALYZING "å±€åŠ¿åˆ†æžä¸­"
+#define STR_VERSION "å½“å‰ç‰ˆæœ¬ï¼š1.01"
+#define STR_CLOSE "å…³é—­"
+#define STR_MOVE_TURN "ç€å­æƒ"
+#define STR_PRISONERS "æå­"
+#define STR_PASS "æ”¾å¼ƒä¸€æ‰‹"
+#define STR_RESIGN "è®¤è¾“"
+#define STR_GAME_PROCESS "å¯¹å±€è¿›ç¨‹"
+#define STR_DIRECTION "æ¬¢è¿Žè¯•ç”¨LZRobeï¼è¿™æ˜¯ä¸€ä¸ªä¸ºäººå·¥æ™ºèƒ½å›´æ£‹è½¯ä»¶LeelaZeroæä¾›å›¾å½¢ç•Œé¢çš„ç¨‹åºã€‚\n\n\
+å¦‚æžœä½ æƒ³äº†è§£å…³äºŽLeelaZeroæ›´å¤šçš„ä¿¡æ¯ï¼Œè¯·è®¿é—®ä¸‹é¢çš„ç½‘å€ï¼š\n\n\
 zero.sjeng.org\n\n\
-LZRobe¿ÉÒÔ°ïÖúÄãÓëLeelaZero¶ÔÕ½£¬»òÕß·ÖÎöÆåÆ×À´Ìá¸ßÄãµÄË®Æ½¡£\n\n\
-Õâ¸ö³ÌÐòÊÇ»ùÓÚC++ÓïÑÔÐ´µÄ£¬²¢Ê¹ÓÃÁËÒ»¸ö½ÐwxWidgetsµÄÍ¼ÐÎ½çÃæ¿â\n\n\
-ËùÒÔÈç¹ûÄãÏë±àÒëÕâ¸ö³ÌÐò£¬ÄãÐèÒªÏÈÏÂÔØ²¢ÅäÖÃwxWidgets¿â£¬Çëä¯ÀÀÏÂÔÚµÄÍøÖ·£º\n\n\
+LZRobeå¯ä»¥å¸®åŠ©ä½ ä¸ŽLeelaZeroå¯¹æˆ˜ï¼Œæˆ–è€…åˆ†æžæ£‹è°±æ¥æé«˜ä½ çš„æ°´å¹³ã€‚\n\n\
+è¿™ä¸ªç¨‹åºæ˜¯åŸºäºŽC++è¯­è¨€å†™çš„ï¼Œå¹¶ä½¿ç”¨äº†ä¸€ä¸ªå«wxWidgetsçš„å›¾å½¢ç•Œé¢åº“\n\n\
+æ‰€ä»¥å¦‚æžœä½ æƒ³ç¼–è¯‘è¿™ä¸ªç¨‹åºï¼Œä½ éœ€è¦å…ˆä¸‹è½½å¹¶é…ç½®wxWidgetsåº“ï¼Œè¯·æµè§ˆä¸‹åœ¨çš„ç½‘å€ï¼š\n\n\
 www.wxwidgets.org\n\n\
-Ê¹ÓÃVisual Studio»òÕßCode::Blocks±àÒëÕâ¸ö³ÌÐò²¢²»À§ÄÑ¡£\n\n\
-Èç¹ûÄãÏëÊÔ×Å±àÒëÕâ¸ö³ÌÐò£¬Ê×ÏÈÒª½¨Á¢Ò»¸ö»ùÓÚWin32Í¼ÐÎÓÃ»§½çÃæµÄÏîÏîÄ¿£¬È»ºó°Ñ.hÎÄ¼þ¡¢.cppÎÄ¼þ£¬Ò»¸ö.rcÎÄ¼þ£¬Ò»¸ö.icoÎÄ¼þºÍ.bmpÎÄ¼þ°üº¬½øÈ¥¡£\n\n\
-¼ÇµÃÔÚ¹¤³ÌÉèÖÃÖÐ°ÑwxWidgetsµÄ°üº¬ÎÄ¼þºÍ¿âÎÄ¼þµÄÂ·¾¶¼Ó½øÈ¥¡£\n\n\
-Code::BlocksÖ§³Ö´´½¨Ò»¸öwxWidgetsÏîÄ¿£¬×Ô¶¯°üº¬wxWidgetsµÄÏà¹ØÂ·¾¶£¬ÕâÑùÒ²Ðí¿ÉÒÔ¼ò»¯±àÒëÁ÷³Ì¡£\n\n\
-ÔÚÄã³É¹¦±àÒëºÃ³ÌÐòÒÔºó£¬¸æËßÄãÈçºÎÓÃÕâ¸ö³ÌÐò¡£\n\n\
-Õâ¸ö³ÌÐòµÄÍ¼±êÊÇÒ»¸ö¹·µÄÍ·Ïñ£¬ÒòÎªÎ§ÆåµÄÓ¢ÎÄ¡°Go¡±µÄ·¢ÒôÀàËÆÓÚÖÐÎÄÀïµÄ¡°¹·¡±¡£\n\n\
-ÔÚÄã´ò¿ªÕâ¸ö³ÌÐòÒÔºó£¬Äã»á¿´µ½²Ëµ¥À¸ÏÂÃæÓÐÒ»¸ö¹¤¾ßÀ¸£¬ËùÓÐµÄ¹¦ÄÜ¶¼¿ÉÒÔÔÚ¹¤¾ßÀ¸ÖÐÕÒµ½¡£\n\n\
-ÆåÅÌ×ó²àÏÔÊ¾ÁËÂä×ÓÒ»·½ºÍÌá×ÓÊýÁ¿£¬ÓÒ²àÓÐ·ÅÆúÒ»²½ºÍÈÏÊäµÄÑ¡µã¡£Ö÷´°¿ÚÏÂ·½µÄ×´Ì¬À¸»áÏÔÊ¾ÒýÇæµÄ×´Ì¬¡£\n\n\
-Êó±ê×ó¼üÓÃÀ´·ÅÆå×Ó£¬Êó±êÓÒ¼üÓÃÀ´»ÚÆå£¬¼üÅÌÓÒÏÂµÄ¶Ô¾ÖÁ÷³Ì¿ÉÒÔÓÃÀ´Ìø×ªµ½ÈÎÒâÆå²½¡£\n\n\
-¶Ô¾ÖÁ÷³Ì°´ÕÕ´Ó×óµ½ÓÒµÄË³ÐòÉßÐÎÅÅÁÐ£¬Ã¿Ò»ÁÐÓÐ25ÊÖÆå£¬ÏëÌø×ªµ½¶ÔÓ¦µÄÆå²½£¬Ê¹ÓÃÊó±ê×ó¼üµãÏàÓ¦µÄÎ»ÖÃ¼´¿É¡£\n\n\
-ÎªÁË±ÜÃâ³öÏÖÃüÁîÔú¶Ñµ¼ÖÂLeelaZero±ÀÀ£µÄÇé¿ö£¬ÔÚÒýÇæ¿ªÆôµÈ´ýµÄÊ±¼äÄÚ£¬»ÚÆåºÍÌø×ªÆå²½ÊÇ²»ÔÊÐíµÄ£¬µ«¿ÉÒÔÂä×Ó¡£\n\n\
-Õâ¸ö³ÌÐò²»Ö§³Ö¶à·ÖÖ§ÆåÆ×£¬Èç¹ûÄãÒªÐÂ¿ª¶Ô¾Ö»òÕß´ò¿ª¶Ô¾ÖÎÄ¼þ£¬³ÌÐòÖÐµÄÆåÆ×»á±»¶ªÆú¡£\n\n\
-Èç¹ûÄãÏë±£´æÆåÆ×£¬ÒýÇæ±ØÐë´ò¿ª£¬¶øÇÒ²Ëµ¥»òÕß¹¤¾ßÀ¸ÖÐµÄ±£´æ¹¦ÄÜÖ»»á´æµ±Ç°ÆåÅÌÉÏµÄÆå²½¡£\n\n\
-ËùÒÔÈç¹ûÄã²»Ïë¶ªÊ§¶Ô¾ÖÐÅÏ¢£¬Çë×ßµ½¶Ô¾Ö×îºóÒ»²½ÔÙ±£´æÆåÆ×¡£\n\n\
-¹¤¾ßÀ¸ÀïÓÐÒ»¸öÔËÐÐ°´Å¥£¬¿ÉÒÔÊ¹ÓÃÕâ¸ö°´¼üÆô¶¯LeelaZero¡£\n\n\
-Èç¹ûÄãÃ»ÓÐÎªLeelaZeroÉèÖÃÒýÇæÂ·¾¶»òÕßÈ¨ÖØÎÄ¼þ£¬»áÓÐ¶Ô»°¿òµ¯³öÌáÊ¾ÄãÑ¡Ôñ¿ÉÖ´ÐÐÎÄ¼þºÍÈ¨ÖØÎÄ¼þ¡£\n\n\
-³ý·ÇÄãÊ¹ÓÃÁËÌØÊâµÄÒýÇæ£¬±ÈÈç¶¯Ì¬ÌùÄ¿£¬Äã²»ÐèÒªÊäÈëÆäËü²ÎÊý¡£\n\n\
-µ±LeelaZero³É¹¦Æô¶¯ÒÔºó£¬µÈÉÏÊýÃë£¬¹¤¾ßÀ¸ÀïµÄ¼¸¸ö»ÒÉ«°´Å¥»á±ä³É²ÊÉ«£¬Õâ¸öÔËÐÐ°´Å¥ÓÉ±ä³ÉÓÃÀ´¹Ø±ÕÒýÇæµÄ°´Å¥¡£\n\n\
-Èç¹ûÄãÏëÔÚÓÎÏ·¹ý³ÌÖÐ¸Ä±äÒýÇæ»òÕßÈ¨ÖØÎÄ¼þ£¬ÄãÐèÒªÏÈ¹Ø±ÕÒýÇæ£¬È»ºóÔÚ±à¼­²Ëµ¥ÖÐÐÞ¸ÄÒýÇæºÍÈ¨ÖØÎÄ¼þÂ·¾¶£¬×îºóÖØÆôÒýÇæ¼´¿É¡£\n\n\
-ÐÂÆô¶¯µÄÒýÇæ»á×Ô¶¯¼ÓÔØµ±Ç°µÄ¶Ô¾Ö½ø¶È¡£¼´Ê¹LeelaZeroÒâÍâ±ÀÀ££¬LZRobeÒ²»á¶ÔËüÖØÆô£¬²¢ÔÚÊýÃëÄÚ×Ô¶¯¼ÓÔØ¶Ô¾Ö½ø¶ÈÒÔÈ·±£¶Ô¾ÖµÄË³Àû½øÐÐ¡£\n\n\
-Èç¹ûÄãÔÚ³·Ïû¼¸²½ÒÔºóÏëÒªÐÂÔö¼ÓÆå×Ó£¬ÒÔÇ°µÄ±ä»¯²»»á±»±£´æ¡£\n\n\
-´ø×Å¹·µÄÍ·ÏñµÄ°´Å¥ÓÃÀ´ºÍLeelaZero¶Ô¾Ö¡£¹·µÄÍ·ÏñºóÃæµÄ±³¾°±íÊ¾AIËùÖ´Æå×ÓµÄÑÕÉ«¡£\n\n\
-Èç¹ûÄã°ÑÁ½¸ö¹·µÄÍ·ÏñµÄ°´Å¥¶¼°´ÏÂ£¬ÄÇAI»á×ÔÎÒ¶Ô¾Ö¡£\n\n\
-ÔÚ¡°Ë¼¿¼Ê±¼ä¡±±êÇ©ÓÒ±ßµÄÊý×Ö¿ò±íÊ¾AIË¼¿¼Ê±¼äÉèÖÃ£¬Ê±¼äµ¥Î»ÊÇÒ»Ãë¡£\n\n\
-ÀýÈç£¬Èç¹ûÄã°ÑÕâ¸öÊý×ÖÉèÖÃ³ÉÁË5£¬ÄÇAI»áÔÚ¶ÔÊÖÏÂ×ÓºóµÄ5ÃëÖ®ÄÚÏÂ³öÒ»²½Æå¡£\n\n\
-Èç¹ûÄã¸Ä±äÁËË¼¿¼µÄÊ±¼ä£¬Ëü»áÔÚÄãÏÂ´ÎÈÃAI×ßÆåÊ±ÉúÐ§¡£\n\n\
-Èç¹ûÄãÔÚAIË¼¿¼ÆÚ¼äÈ¡ÏûÁËËüËùÖ´µÄÒ»·½£¬Ëü»¹ÊÇ»á¼ÌÐøË¼¿¼£¬Ö±µ½ÏÂ³öÏÂÒ»²½Æå¡£ËùÒÔÄã»¹ÊÇÒªµÈµ½ÏÂÒ»²½ÆåÔÚÆåÅÌÉÏ³öÏÖ¡£\n\n\
-´ø×ÅÎÊºÅµÄ°´Å¥ÓÃÀ´·ÖÎöÆåÆ×£¬·ÖÎö½á¹û°´Ò»¶¨µÄÆµÂÊË¢ÐÂ¡£\n\n\
-Ë¢ÐÂÆµÂÊ¿ÉÒÔÔÚÓÃ¡°Ë¢ÐÂ¼ä¸ô¡±±êÇ©ÓÒ±ßµÄÊý×Ö¿òÀ´ÉèÖÃ£¬µ¥Î»ÊÇ°Ù·ÖÖ®Ò»Ãë¡£\n\n\
-ÀýÈç£¬Äã°ÑÕâ¸öÊý×ÖÈÏ³ÉÁË50£¬ÄÇ·ÖÎö½á¹û»áÔÚ1ÃëÄÚË¢ÐÂÁ½´Î¡£\n\n\
-ÔÚ·ÖÎö¹ý³ÌÖÐ£¬ÂÌµãµÄÑÕÉ«ÊÇËÑË÷×î¶àµÄµã£¬Æä´ÎÊÇÀ¶µã£¬»ÆµãºÍºìµãµÄËÑË÷½ÏÉÙ¡£\n\n\
-²ÊÉ«µãÉÏµÄÊý×Ö±íÊ¾Ê¤ÂÊºÍËÑË÷Êý¡£ËÑË÷Êý×î¶àµÄµãÍ¨³£ÊÇ×îºÃµÄÑ¡µã¡£\n\n\
-Èç¹ûÄã°ÑÊó±ê·Åµ½ÕýÔÚ·ÖÎöµÄµãÉÏ£¬Õâ¸öµãÏÂÃæµÄ·ÖÎö²½Êý½«»á×Ô¶¯ÏÔÊ¾£¬ÉÏÃæÓÐÓ¢ÎÄ×ÖÄ¸±íÊ¾Ë³Ðò¡£\n\n\
-Ê×ÏÈÊÇÐ¡Ð´×ÖÄ¸£¬È»ºóÊÇ´óÐ´×ÖÄ¸¡£ÏÔÊ¾µÄ×î´ó²½Êý¿ÉÒÔÓÃ¡°Ô¤²â³¤¶È¡±±êÇ©ÓÒ±ßµÄ»¬¸ËÀ´ÉèÖÃ¡£\n\n\
-Èç¹ûÓÐÁ¬ÐøÁ½ÊÖ·ÅÆú(Ë«·½¸÷Ò»ÊÖ)»òÕßÒ»·½ÈÏÊä£¬ÔòÆå¾Ö½áÊø£¬LeelaZero²»»á¶Ô½áÊøµÄÆå¾Ö×ö·ÖÎö¡£\n\n\
-Èç¹ûÄãÏë·ÖÎöÒÑ½áÊøµÄÆå¾Ö£¬ÐèÒª´ÓÍ·¼ÓÔØ£¬²¢É¾³ýµ¼ÖÂÆå¾Ö½áÊøµÄÁ½ÊÖ·ÅÆú»òÒ»ÊÖÈÏÊä£¬ÆäËü×Å×Ó²»»á¸Ä±ä¡£\n\n\
-ÔÚ¶Ô¾Ö½Ó½ü½áÊø»òÕßÒ»·½Õ¼ÓÐ¾ø¶ÔµÄÓÅÊÆµÄÊ±ºò£¬LeeaZero¿ÉÄÜ»áÓÐ·ÅÆúµÄ²½µÄÑ¡µã£¬²é¿´Õâ¸öÑ¡µãµÄ·ÖÎö¿ÉÒÔ°ÑÊó±ê·ÅÔÚ·ÅÆúÑ¡ÏîµÄÑ¡µãÉÏ¡£\n\n\
-´ø×ÅËãÅÌ±êÊ¶µÄ°´Å¥ÓÃÀ´¼ÆËã¶Ô¾Ö½á¹û¡£ÓÉÓÚËÀ×Ó²»Ò»¶¨±»Ìáµô£¬ËùÒÔÏÔÊ¾½á¹û²¢²»×¼È·¡£\n\n\
-Èç¹ûÄã¸Ä±äÁËLeelaZeroµÄÒýÇæºÍÈ¨ÖØÎÄ¼þÂ·¾¶£¬µ±ÄãÍË³öÕâ¸ö³ÌÐòµÄÊ±ºò£¬»áÓÐ¶Ô»°¿òÎÊÄãÊÇ·ñ±£´æ¡£\n\n\
-Èç¹ûÄãÑ¡ÔñÁË±£´æÕâ¸ö±ä»¯£¬ÄÇLeelaZeroµÄÒýÇæºÍÈ¨ÖØÎÄ¼þÂ·¾¶»á±»±£´æµ½Ò»¸öÃûÎª¡°config.txt¡±µÄÎÄ¼þÖÐ£¬ÏÂ´ÎÆô¶¯»á×Ô¶¯¼ÓÔØ¡£\n\n\
-ËäÈ»³ÌÐòµÄ×÷ÕßÒ»Ö±ÔÚÅ¬Á¦¼õÉÙ³ÌÐòµÄBug£¬µ«ÎÒÃÇÒÀÈ»ÎÞ·¨È·±£³ÌÐò²»»á±ÀÀ£¡£\n\n\
-Èç¹û³ÌÐòÒâÍâ±ÀÀ££¬LeelaZeroÒÀÈ»ÔÚÔËÐÐ£¬ÇëÊ¹ÓÃÈÎÎñ¹ÜÀíÆ÷½áÊøLeelaZero£¬ÒÔÃâËü¼ÌÐøÕ¼ÓÃÄãµÄÓ²¼þ×ÊÔ´£¡\n\n\
-¸ÐÐ»Äú¶ÁÍêÕâ¸ö°ïÖúÎÄ¼þ¡£»¶Ó­¶Ô³ÌÐò´úÂë½øÐÐÄ¤¸Ä£¬ÒÔÊÊÓ¦¸ü¶àµÄ³¡ºÏ£¡"
+ä½¿ç”¨Visual Studioæˆ–è€…Code::Blocksç¼–è¯‘è¿™ä¸ªç¨‹åºå¹¶ä¸å›°éš¾ã€‚\n\n\
+å¦‚æžœä½ æƒ³è¯•ç€ç¼–è¯‘è¿™ä¸ªç¨‹åºï¼Œé¦–å…ˆè¦å»ºç«‹ä¸€ä¸ªåŸºäºŽWin32å›¾å½¢ç”¨æˆ·ç•Œé¢çš„é¡¹é¡¹ç›®ï¼Œç„¶åŽæŠŠ.hæ–‡ä»¶ã€.cppæ–‡ä»¶ï¼Œä¸€ä¸ª.rcæ–‡ä»¶ï¼Œä¸€ä¸ª.icoæ–‡ä»¶å’Œ.bmpæ–‡ä»¶åŒ…å«è¿›åŽ»ã€‚\n\n\
+è®°å¾—åœ¨å·¥ç¨‹è®¾ç½®ä¸­æŠŠwxWidgetsçš„åŒ…å«æ–‡ä»¶å’Œåº“æ–‡ä»¶çš„è·¯å¾„åŠ è¿›åŽ»ã€‚\n\n\
+Code::Blocksæ”¯æŒåˆ›å»ºä¸€ä¸ªwxWidgetsé¡¹ç›®ï¼Œè‡ªåŠ¨åŒ…å«wxWidgetsçš„ç›¸å…³è·¯å¾„ï¼Œè¿™æ ·ä¹Ÿè®¸å¯ä»¥ç®€åŒ–ç¼–è¯‘æµç¨‹ã€‚\n\n\
+åœ¨ä½ æˆåŠŸç¼–è¯‘å¥½ç¨‹åºä»¥åŽï¼Œå‘Šè¯‰ä½ å¦‚ä½•ç”¨è¿™ä¸ªç¨‹åºã€‚\n\n\
+è¿™ä¸ªç¨‹åºçš„å›¾æ ‡æ˜¯ä¸€ä¸ªç‹—çš„å¤´åƒï¼Œå› ä¸ºå›´æ£‹çš„è‹±æ–‡â€œGoâ€çš„å‘éŸ³ç±»ä¼¼äºŽä¸­æ–‡é‡Œçš„â€œç‹—â€ã€‚\n\n\
+åœ¨ä½ æ‰“å¼€è¿™ä¸ªç¨‹åºä»¥åŽï¼Œä½ ä¼šçœ‹åˆ°èœå•æ ä¸‹é¢æœ‰ä¸€ä¸ªå·¥å…·æ ï¼Œæ‰€æœ‰çš„åŠŸèƒ½éƒ½å¯ä»¥åœ¨å·¥å…·æ ä¸­æ‰¾åˆ°ã€‚\n\n\
+æ£‹ç›˜å·¦ä¾§æ˜¾ç¤ºäº†è½å­ä¸€æ–¹å’Œæå­æ•°é‡ï¼Œå³ä¾§æœ‰æ”¾å¼ƒä¸€æ­¥å’Œè®¤è¾“çš„é€‰ç‚¹ã€‚ä¸»çª—å£ä¸‹æ–¹çš„çŠ¶æ€æ ä¼šæ˜¾ç¤ºå¼•æ“Žçš„çŠ¶æ€ã€‚\n\n\
+é¼ æ ‡å·¦é”®ç”¨æ¥æ”¾æ£‹å­ï¼Œé¼ æ ‡å³é”®ç”¨æ¥æ‚”æ£‹ï¼Œé”®ç›˜å³ä¸‹çš„å¯¹å±€æµç¨‹å¯ä»¥ç”¨æ¥è·³è½¬åˆ°ä»»æ„æ£‹æ­¥ã€‚\n\n\
+å¯¹å±€æµç¨‹æŒ‰ç…§ä»Žå·¦åˆ°å³çš„é¡ºåºè›‡å½¢æŽ’åˆ—ï¼Œæ¯ä¸€åˆ—æœ‰25æ‰‹æ£‹ï¼Œæƒ³è·³è½¬åˆ°å¯¹åº”çš„æ£‹æ­¥ï¼Œä½¿ç”¨é¼ æ ‡å·¦é”®ç‚¹ç›¸åº”çš„ä½ç½®å³å¯ã€‚\n\n\
+ä¸ºäº†é¿å…å‡ºçŽ°å‘½ä»¤æ‰Žå †å¯¼è‡´LeelaZeroå´©æºƒçš„æƒ…å†µï¼Œåœ¨å¼•æ“Žå¼€å¯ç­‰å¾…çš„æ—¶é—´å†…ï¼Œæ‚”æ£‹å’Œè·³è½¬æ£‹æ­¥æ˜¯ä¸å…è®¸çš„ï¼Œä½†å¯ä»¥è½å­ã€‚\n\n\
+è¿™ä¸ªç¨‹åºä¸æ”¯æŒå¤šåˆ†æ”¯æ£‹è°±ï¼Œå¦‚æžœä½ è¦æ–°å¼€å¯¹å±€æˆ–è€…æ‰“å¼€å¯¹å±€æ–‡ä»¶ï¼Œç¨‹åºä¸­çš„æ£‹è°±ä¼šè¢«ä¸¢å¼ƒã€‚\n\n\
+å¦‚æžœä½ æƒ³ä¿å­˜æ£‹è°±ï¼Œå¼•æ“Žå¿…é¡»æ‰“å¼€ï¼Œè€Œä¸”èœå•æˆ–è€…å·¥å…·æ ä¸­çš„ä¿å­˜åŠŸèƒ½åªä¼šå­˜å½“å‰æ£‹ç›˜ä¸Šçš„æ£‹æ­¥ã€‚\n\n\
+æ‰€ä»¥å¦‚æžœä½ ä¸æƒ³ä¸¢å¤±å¯¹å±€ä¿¡æ¯ï¼Œè¯·èµ°åˆ°å¯¹å±€æœ€åŽä¸€æ­¥å†ä¿å­˜æ£‹è°±ã€‚\n\n\
+å·¥å…·æ é‡Œæœ‰ä¸€ä¸ªè¿è¡ŒæŒ‰é’®ï¼Œå¯ä»¥ä½¿ç”¨è¿™ä¸ªæŒ‰é”®å¯åŠ¨LeelaZeroã€‚\n\n\
+å¦‚æžœä½ æ²¡æœ‰ä¸ºLeelaZeroè®¾ç½®å¼•æ“Žè·¯å¾„æˆ–è€…æƒé‡æ–‡ä»¶ï¼Œä¼šæœ‰å¯¹è¯æ¡†å¼¹å‡ºæç¤ºä½ é€‰æ‹©å¯æ‰§è¡Œæ–‡ä»¶å’Œæƒé‡æ–‡ä»¶ã€‚\n\n\
+é™¤éžä½ ä½¿ç”¨äº†ç‰¹æ®Šçš„å¼•æ“Žï¼Œæ¯”å¦‚åŠ¨æ€è´´ç›®ï¼Œä½ ä¸éœ€è¦è¾“å…¥å…¶å®ƒå‚æ•°ã€‚\n\n\
+å½“LeelaZeroæˆåŠŸå¯åŠ¨ä»¥åŽï¼Œç­‰ä¸Šæ•°ç§’ï¼Œå·¥å…·æ é‡Œçš„å‡ ä¸ªç°è‰²æŒ‰é’®ä¼šå˜æˆå½©è‰²ï¼Œè¿™ä¸ªè¿è¡ŒæŒ‰é’®ç”±å˜æˆç”¨æ¥å…³é—­å¼•æ“Žçš„æŒ‰é’®ã€‚\n\n\
+å¦‚æžœä½ æƒ³åœ¨æ¸¸æˆè¿‡ç¨‹ä¸­æ”¹å˜å¼•æ“Žæˆ–è€…æƒé‡æ–‡ä»¶ï¼Œä½ éœ€è¦å…ˆå…³é—­å¼•æ“Žï¼Œç„¶åŽåœ¨ç¼–è¾‘èœå•ä¸­ä¿®æ”¹å¼•æ“Žå’Œæƒé‡æ–‡ä»¶è·¯å¾„ï¼Œæœ€åŽé‡å¯å¼•æ“Žå³å¯ã€‚\n\n\
+æ–°å¯åŠ¨çš„å¼•æ“Žä¼šè‡ªåŠ¨åŠ è½½å½“å‰çš„å¯¹å±€è¿›åº¦ã€‚å³ä½¿LeelaZeroæ„å¤–å´©æºƒï¼ŒLZRobeä¹Ÿä¼šå¯¹å®ƒé‡å¯ï¼Œå¹¶åœ¨æ•°ç§’å†…è‡ªåŠ¨åŠ è½½å¯¹å±€è¿›åº¦ä»¥ç¡®ä¿å¯¹å±€çš„é¡ºåˆ©è¿›è¡Œã€‚\n\n\
+å¦‚æžœä½ åœ¨æ’¤æ¶ˆå‡ æ­¥ä»¥åŽæƒ³è¦æ–°å¢žåŠ æ£‹å­ï¼Œä»¥å‰çš„å˜åŒ–ä¸ä¼šè¢«ä¿å­˜ã€‚\n\n\
+å¸¦ç€ç‹—çš„å¤´åƒçš„æŒ‰é’®ç”¨æ¥å’ŒLeelaZeroå¯¹å±€ã€‚ç‹—çš„å¤´åƒåŽé¢çš„èƒŒæ™¯è¡¨ç¤ºAIæ‰€æ‰§æ£‹å­çš„é¢œè‰²ã€‚\n\n\
+å¦‚æžœä½ æŠŠä¸¤ä¸ªç‹—çš„å¤´åƒçš„æŒ‰é’®éƒ½æŒ‰ä¸‹ï¼Œé‚£AIä¼šè‡ªæˆ‘å¯¹å±€ã€‚\n\n\
+åœ¨â€œæ€è€ƒæ—¶é—´â€æ ‡ç­¾å³è¾¹çš„æ•°å­—æ¡†è¡¨ç¤ºAIæ€è€ƒæ—¶é—´è®¾ç½®ï¼Œæ—¶é—´å•ä½æ˜¯ä¸€ç§’ã€‚\n\n\
+ä¾‹å¦‚ï¼Œå¦‚æžœä½ æŠŠè¿™ä¸ªæ•°å­—è®¾ç½®æˆäº†5ï¼Œé‚£AIä¼šåœ¨å¯¹æ‰‹ä¸‹å­åŽçš„5ç§’ä¹‹å†…ä¸‹å‡ºä¸€æ­¥æ£‹ã€‚\n\n\
+å¦‚æžœä½ æ”¹å˜äº†æ€è€ƒçš„æ—¶é—´ï¼Œå®ƒä¼šåœ¨ä½ ä¸‹æ¬¡è®©AIèµ°æ£‹æ—¶ç”Ÿæ•ˆã€‚\n\n\
+å¦‚æžœä½ åœ¨AIæ€è€ƒæœŸé—´å–æ¶ˆäº†å®ƒæ‰€æ‰§çš„ä¸€æ–¹ï¼Œå®ƒè¿˜æ˜¯ä¼šç»§ç»­æ€è€ƒï¼Œç›´åˆ°ä¸‹å‡ºä¸‹ä¸€æ­¥æ£‹ã€‚æ‰€ä»¥ä½ è¿˜æ˜¯è¦ç­‰åˆ°ä¸‹ä¸€æ­¥æ£‹åœ¨æ£‹ç›˜ä¸Šå‡ºçŽ°ã€‚\n\n\
+å¸¦ç€é—®å·çš„æŒ‰é’®ç”¨æ¥åˆ†æžæ£‹è°±ï¼Œåˆ†æžç»“æžœæŒ‰ä¸€å®šçš„é¢‘çŽ‡åˆ·æ–°ã€‚\n\n\
+åˆ·æ–°é¢‘çŽ‡å¯ä»¥åœ¨ç”¨â€œåˆ·æ–°é—´éš”â€æ ‡ç­¾å³è¾¹çš„æ•°å­—æ¡†æ¥è®¾ç½®ï¼Œå•ä½æ˜¯ç™¾åˆ†ä¹‹ä¸€ç§’ã€‚\n\n\
+ä¾‹å¦‚ï¼Œä½ æŠŠè¿™ä¸ªæ•°å­—è®¤æˆäº†50ï¼Œé‚£åˆ†æžç»“æžœä¼šåœ¨1ç§’å†…åˆ·æ–°ä¸¤æ¬¡ã€‚\n\n\
+åœ¨åˆ†æžè¿‡ç¨‹ä¸­ï¼Œç»¿ç‚¹çš„é¢œè‰²æ˜¯æœç´¢æœ€å¤šçš„ç‚¹ï¼Œå…¶æ¬¡æ˜¯è“ç‚¹ï¼Œé»„ç‚¹å’Œçº¢ç‚¹çš„æœç´¢è¾ƒå°‘ã€‚\n\n\
+å½©è‰²ç‚¹ä¸Šçš„æ•°å­—è¡¨ç¤ºèƒœçŽ‡å’Œæœç´¢æ•°ã€‚æœç´¢æ•°æœ€å¤šçš„ç‚¹é€šå¸¸æ˜¯æœ€å¥½çš„é€‰ç‚¹ã€‚\n\n\
+å¦‚æžœä½ æŠŠé¼ æ ‡æ”¾åˆ°æ­£åœ¨åˆ†æžçš„ç‚¹ä¸Šï¼Œè¿™ä¸ªç‚¹ä¸‹é¢çš„åˆ†æžæ­¥æ•°å°†ä¼šè‡ªåŠ¨æ˜¾ç¤ºï¼Œä¸Šé¢æœ‰è‹±æ–‡å­—æ¯è¡¨ç¤ºé¡ºåºã€‚\n\n\
+é¦–å…ˆæ˜¯å°å†™å­—æ¯ï¼Œç„¶åŽæ˜¯å¤§å†™å­—æ¯ã€‚æ˜¾ç¤ºçš„æœ€å¤§æ­¥æ•°å¯ä»¥ç”¨â€œé¢„æµ‹é•¿åº¦â€æ ‡ç­¾å³è¾¹çš„æ»‘æ†æ¥è®¾ç½®ã€‚\n\n\
+å¦‚æžœæœ‰è¿žç»­ä¸¤æ‰‹æ”¾å¼ƒ(åŒæ–¹å„ä¸€æ‰‹)æˆ–è€…ä¸€æ–¹è®¤è¾“ï¼Œåˆ™æ£‹å±€ç»“æŸï¼ŒLeelaZeroä¸ä¼šå¯¹ç»“æŸçš„æ£‹å±€åšåˆ†æžã€‚\n\n\
+å¦‚æžœä½ æƒ³åˆ†æžå·²ç»“æŸçš„æ£‹å±€ï¼Œéœ€è¦ä»Žå¤´åŠ è½½ï¼Œå¹¶åˆ é™¤å¯¼è‡´æ£‹å±€ç»“æŸçš„ä¸¤æ‰‹æ”¾å¼ƒæˆ–ä¸€æ‰‹è®¤è¾“ï¼Œå…¶å®ƒç€å­ä¸ä¼šæ”¹å˜ã€‚\n\n\
+åœ¨å¯¹å±€æŽ¥è¿‘ç»“æŸæˆ–è€…ä¸€æ–¹å æœ‰ç»å¯¹çš„ä¼˜åŠ¿çš„æ—¶å€™ï¼ŒLeeaZeroå¯èƒ½ä¼šæœ‰æ”¾å¼ƒçš„æ­¥çš„é€‰ç‚¹ï¼ŒæŸ¥çœ‹è¿™ä¸ªé€‰ç‚¹çš„åˆ†æžå¯ä»¥æŠŠé¼ æ ‡æ”¾åœ¨æ”¾å¼ƒé€‰é¡¹çš„é€‰ç‚¹ä¸Šã€‚\n\n\
+å¸¦ç€ç®—ç›˜æ ‡è¯†çš„æŒ‰é’®ç”¨æ¥è®¡ç®—å¯¹å±€ç»“æžœã€‚ç”±äºŽæ­»å­ä¸ä¸€å®šè¢«ææŽ‰ï¼Œæ‰€ä»¥æ˜¾ç¤ºç»“æžœå¹¶ä¸å‡†ç¡®ã€‚\n\n\
+å¦‚æžœä½ æ”¹å˜äº†LeelaZeroçš„å¼•æ“Žå’Œæƒé‡æ–‡ä»¶è·¯å¾„ï¼Œå½“ä½ é€€å‡ºè¿™ä¸ªç¨‹åºçš„æ—¶å€™ï¼Œä¼šæœ‰å¯¹è¯æ¡†é—®ä½ æ˜¯å¦ä¿å­˜ã€‚\n\n\
+å¦‚æžœä½ é€‰æ‹©äº†ä¿å­˜è¿™ä¸ªå˜åŒ–ï¼Œé‚£LeelaZeroçš„å¼•æ“Žå’Œæƒé‡æ–‡ä»¶è·¯å¾„ä¼šè¢«ä¿å­˜åˆ°ä¸€ä¸ªåä¸ºâ€œconfig.txtâ€çš„æ–‡ä»¶ä¸­ï¼Œä¸‹æ¬¡å¯åŠ¨ä¼šè‡ªåŠ¨åŠ è½½ã€‚\n\n\
+è™½ç„¶ç¨‹åºçš„ä½œè€…ä¸€ç›´åœ¨åŠªåŠ›å‡å°‘ç¨‹åºçš„Bugï¼Œä½†æˆ‘ä»¬ä¾ç„¶æ— æ³•ç¡®ä¿ç¨‹åºä¸ä¼šå´©æºƒã€‚\n\n\
+å¦‚æžœç¨‹åºæ„å¤–å´©æºƒï¼ŒLeelaZeroä¾ç„¶åœ¨è¿è¡Œï¼Œè¯·ä½¿ç”¨ä»»åŠ¡ç®¡ç†å™¨ç»“æŸLeelaZeroï¼Œä»¥å…å®ƒç»§ç»­å ç”¨ä½ çš„ç¡¬ä»¶èµ„æºï¼\n\n\
+æ„Ÿè°¢æ‚¨è¯»å®Œè¿™ä¸ªå¸®åŠ©æ–‡ä»¶ã€‚æ¬¢è¿Žå¯¹ç¨‹åºä»£ç è¿›è¡Œè†œæ”¹ï¼Œä»¥é€‚åº”æ›´å¤šçš„åœºåˆï¼"
 #else
 #define STR_NEW "new"
 #define STR_OPEN "open"
@@ -201,7 +201,7 @@ The button with an abcus is used to calculate the result of the game. Since the 
 If you changed the path of Leela Zero or the Weight file path, when you exit this program, a message box will ask you if you want to save this change.\n\n\
 If you choose saving this change, the paths of Leela Zero and Weight file will be stored in a file named \"config.txt\".Next time you start LZRobe, it will load the paths automatically.\n\n\
 The auther is trying to reduce the bugs of the program, but we are sorry that we cannot completely avoid the collapse of the program.\n\n\
-If once the program collapse while Leela Zero is running, please terminate Leela Zero with task manager lest it continue to occupy your hardware resource!
+If once the program collapse while Leela Zero is running, please terminate Leela Zero with task manager lest it continue to occupy your hardware resource!\n\n\
 Thanks for reading the introduction file! Welcome to modify these code to adapt more cases!"
 #endif
 #endif
