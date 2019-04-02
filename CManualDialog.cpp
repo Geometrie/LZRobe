@@ -9,7 +9,7 @@ CManualDialog::CManualDialog(wxWindow* lpParent, wxString wxstrTitle, wxString w
 	fgSizer1->SetFlexibleDirection(wxBOTH);
 	fgSizer1->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
-	m_lpTextCtrl = new wxTextCtrl(this, wxID_ANY, wxstrHelp, wxDefaultPosition, wxSize(380, 350), wxTE_MULTILINE);
+	m_lpTextCtrl = new wxTextCtrl(this, wxID_ANY, wxstrHelp, wxDefaultPosition, wxSize(380, 350), wxTE_MULTILINE | wxTE_READONLY);
 	fgSizer1->Add(m_lpTextCtrl, 0, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
 
 	m_lpButtonClose = new wxButton(this, wxID_CLOSE, wxstrButtonLabel, wxDefaultPosition, wxDefaultSize, 0);

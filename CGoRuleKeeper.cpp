@@ -95,7 +95,7 @@ bool CGoRuleKeeper::m_fnIsLegalMove(StoneColor stone_color, int x, int y, std::v
 	std::vector<CGameBase::BoardPoint*>::iterator iterMarkVisitor;
 	std::vector<CGameBase::BoardPoint*> vecLink;
 	bLegal = false;
-	if (x == -1 && y == -1)
+	if ((x == 19 && y == 0) || (x == 19 && y == 1))
 	{
 		bLegal = true;
 	}

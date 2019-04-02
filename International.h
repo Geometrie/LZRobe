@@ -10,12 +10,13 @@
 #define STR_FORWARD "重做"
 #define STR_SELECT_ENGINE "选择引擎"
 #define STR_SELECT_WEIGHT "选择权重"
+#define STR_EXTRA_PARA "附加参数"
 #define STR_RUN_ENGINE "启动引擎"
 #define STR_CLOSE_ENGINE "关闭引擎"
 #define STR_RESULT "计算胜负"
 #define STR_STEP "显示棋步序号"
 #define	STR_SET_GAMEBOARD_COLOR "设置棋盘颜色"
-#define STR_MANUAL "使用手册"
+#define STR_MANUAL "使用说明"
 #define STR_ABOUT "关于LZRobe"
 #define STR_FILE "文件"
 #define STR_EDIT "编辑"
@@ -25,6 +26,7 @@
 #define STR_WHITE_DOG "AI执白"
 #define STR_TIME "思考时间"
 #define STR_SHOW_ANALYZE "显示分析"
+#define STR_TERMINATED_GAME "对局已经结束，需要重新加载才能显示分析，确定重新加载么？"
 #define STR_INTERVAL "刷新间隔"
 #define STR_ROUTE_LENGTH "预测长度"
 #define STR_NO_ENGINE "引擎未运行"
@@ -43,8 +45,13 @@
 #define STR_ENGINE_CLOSING "引擎正在关闭"
 #define STR_SELFPLAY "引擎正在自我对局"
 #define STR_ANALYZING "局势分析中"
-#define STR_VERSION "当前版本：1.00"
+#define STR_VERSION "当前版本：1.01"
 #define STR_CLOSE "关闭"
+#define STR_MOVE_TURN "着子权"
+#define STR_PRISONERS "提子"
+#define STR_PASS "放弃一手"
+#define STR_RESIGN "认输"
+#define STR_GAME_PROCESS "对局进程"
 #define STR_DIRECTION "欢迎试用LZRobe！这是一个为人工智能围棋软件LeelaZero提供图形界面的程序。\n\n\
 如果你想了解关于LeelaZero更多的信息，请访问下面的网址：\n\n\
 zero.sjeng.org\n\n\
@@ -59,19 +66,21 @@ Code::Blocks支持创建一个wxWidgets项目，自动包含wxWidgets的相关路径，这样也许可以
 在你成功编译好程序以后，告诉你如何用这个程序。\n\n\
 这个程序的图标是一个狗的头像，因为围棋的英文“Go”的发音类似于中文里的“狗”。\n\n\
 在你打开这个程序以后，你会看到菜单栏下面有一个工具栏，所有的功能都可以在工具栏中找到。\n\n\
-主窗口下方的状态栏会显示引擎的状态。\n\n\
-鼠标左键用来放棋子，鼠标右键用来悔棋，键盘上的字母P用来停一手。\n\n\
+棋盘左侧显示了落子一方和提子数量，右侧有放弃一步和认输的选点。主窗口下方的状态栏会显示引擎的状态。\n\n\
+鼠标左键用来放棋子，鼠标右键用来悔棋，键盘右下的对局流程可以用来跳转到任意棋步。\n\n\
+对局流程按照从左到右的顺序蛇形排列，每一列有25手棋，想跳转到对应的棋步，使用鼠标左键点相应的位置即可。\n\n\
+为了避免出现命令扎堆导致LeelaZero崩溃的情况，在引擎开启等待的时间内，悔棋和跳转棋步是不允许的，但可以落子。\n\n\
 这个程序不支持多分支棋谱，如果你要新开对局或者打开对局文件，程序中的棋谱会被丢弃。\n\n\
 如果你想保存棋谱，引擎必须打开，而且菜单或者工具栏中的保存功能只会存当前棋盘上的棋步。\n\n\
 所以如果你不想丢失对局信息，请走到对局最后一步再保存棋谱。\n\n\
-工具栏里有一个运行按钮，可以使用这个按键启动Leela Zero。\n\n\
+工具栏里有一个运行按钮，可以使用这个按键启动LeelaZero。\n\n\
 如果你没有为LeelaZero设置引擎路径或者权重文件，会有对话框弹出提示你选择可执行文件和权重文件。\n\n\
 除非你使用了特殊的引擎，比如动态贴目，你不需要输入其它参数。\n\n\
 当LeelaZero成功启动以后，等上数秒，工具栏里的几个灰色按钮会变成彩色，这个运行按钮由变成用来关闭引擎的按钮。\n\n\
 如果你想在游戏过程中改变引擎或者权重文件，你需要先关闭引擎，然后在编辑菜单中修改引擎和权重文件路径，最后重启引擎即可。\n\n\
 新启动的引擎会自动加载当前的对局进度。即使LeelaZero意外崩溃，LZRobe也会对它重启，并在数秒内自动加载对局进度以确保对局的顺利进行。\n\n\
 如果你在撤消几步以后想要新增加棋子，以前的变化不会被保存。\n\n\
-带着狗的头像的按钮用来和Leela Zero对局。狗的头像后面的背景表示AI所执棋子的颜色。\n\n\
+带着狗的头像的按钮用来和LeelaZero对局。狗的头像后面的背景表示AI所执棋子的颜色。\n\n\
 如果你把两个狗的头像的按钮都按下，那AI会自我对局。\n\n\
 在“思考时间”标签右边的数字框表示AI思考时间设置，时间单位是一秒。\n\n\
 例如，如果你把这个数字设置成了5，那AI会在对手下子后的5秒之内下出一步棋。\n\n\
@@ -84,9 +93,14 @@ Code::Blocks支持创建一个wxWidgets项目，自动包含wxWidgets的相关路径，这样也许可以
 彩色点上的数字表示胜率和搜索数。搜索数最多的点通常是最好的选点。\n\n\
 如果你把鼠标放到正在分析的点上，这个点下面的分析步数将会自动显示，上面有英文字母表示顺序。\n\n\
 首先是小写字母，然后是大写字母。显示的最大步数可以用“预测长度”标签右边的滑杆来设置。\n\n\
-带着算盘标识的按钮用来计算对局结果。由于死子不一定被提掉，所以预测结果并不准确。\n\n\
+如果有连续两手放弃(双方各一手)或者一方认输，则棋局结束，LeelaZero不会对结束的棋局做分析。\n\n\
+如果你想分析已结束的棋局，需要从头加载，并删除导致棋局结束的两手放弃或一手认输，其它着子不会改变。\n\n\
+在对局接近结束或者一方占有绝对的优势的时候，LeeaZero可能会有放弃的步的选点，查看这个选点的分析可以把鼠标放在放弃选项的选点上。\n\n\
+带着算盘标识的按钮用来计算对局结果。由于死子不一定被提掉，所以显示结果并不准确。\n\n\
 如果你改变了LeelaZero的引擎和权重文件路径，当你退出这个程序的时候，会有对话框问你是否保存。\n\n\
 如果你选择了保存这个变化，那LeelaZero的引擎和权重文件路径会被保存到一个名为“config.txt”的文件中，下次启动会自动加载。\n\n\
+虽然程序的作者一直在努力减少程序的Bug，但我们依然无法确保程序不会崩溃。\n\n\
+如果程序意外崩溃，LeelaZero依然在运行，请使用任务管理器结束LeelaZero，以免它继续占用你的硬件资源！\n\n\
 感谢您读完这个帮助文件。欢迎对程序代码进行膜改，以适应更多的场合！"
 #else
 #define STR_NEW "new"
@@ -97,6 +111,7 @@ Code::Blocks支持创建一个wxWidgets项目，自动包含wxWidgets的相关路径，这样也许可以
 #define STR_FORWARD "redo"
 #define STR_SELECT_ENGINE "select engine"
 #define STR_SELECT_WEIGHT "select weight"
+#define STR_EXTRA_PARA "extra parameter"
 #define STR_RUN_ENGINE "run engine"
 #define STR_CLOSE_ENGINE "close engine"
 #define STR_RESULT "calculate result"
@@ -112,6 +127,7 @@ Code::Blocks支持创建一个wxWidgets项目，自动包含wxWidgets的相关路径，这样也许可以
 #define STR_WHITE_DOG "AI plays white"
 #define STR_TIME "think time"
 #define STR_SHOW_ANALYZE "show analyze"
+#define STR_TERMINATED_GAME "The game has terminated. Would you like to reload it for analyzing?"
 #define STR_INTERVAL "refresh interval"
 #define STR_ROUTE_LENGTH "analyze length"
 #define STR_NO_ENGINE "no engine"
@@ -130,8 +146,13 @@ Code::Blocks支持创建一个wxWidgets项目，自动包含wxWidgets的相关路径，这样也许可以
 #define STR_ENGINE_CLOSING "Engine is closing"
 #define STR_SELFPLAY "Engine is self playing"
 #define STR_ANALYZING "Analyzinng"
-#define STR_VERSION "Current version: 1.00"
+#define STR_VERSION "Current version: 1.01"
 #define STR_CLOSE "Close"
+#define STR_MOVE_TURN "Move Turn"
+#define STR_PRISONERS "Prisoners"
+#define STR_PASS "Pass"
+#define STR_RESIGN "Resign"
+#define STR_GAME_PROCESS "Game Process"
 #define STR_DIRECTION "Welcome to try LZRobe! This is a software that provides a graphical user interface of the computer go software Leela Zero.\n\n\
 If you're interested in more information about Leela Zero, please browse the following website:\n\n\
 zero.sjeng.org\n\n\
@@ -146,8 +167,10 @@ Code::Blocks supports creating a wxWidgets project containing the path of wxWidg
 After you have compiled this program successfully, I tell you how to use this program.\n\n\
 The icon of this program is a dog's head. Because the pronounciation of \"Go\" means \"dog\" in Chinese.\n\n\
 Once you open this program, you will see a tool bar below the menu.All the functions of this program can be found in the tool bar.\n\n\
-The status of engine will be shown in the status bar at the bottom of the main frame.\n\n\
-The left button of the mouse is used to put stones, while the right button is used to undo a move. \"P\" on the keyboard is used to pass.\n\n\
+The move turn and number of prisoners are shown in the left of the gameboard. The pass and resign choice are laid on the right of the game board. The status of engine will be shown in the status bar at the bottom of the main frame.\n\n\
+The game process are arranged from left to right with a wandering snake shape, where every column contains 25 steps. If you would like to jump to one step, you can click its related position with left button of your mouse.\n\n\
+The left button of the mouse is used to put stones, while the right button is used to undo a move. The game progress on the bottom right of the gameboard can be used to jump to any step.\n\n\
+In order to avoid a command jam cause Leela Zero collapse, retracting or jumping moves are not allowed during the waiting of the engine's opening. But putting stones on the gameboard is allowed.\n\n\
 The program does not support multi-branch game records. So if you try to start a new game or open a new game record from the menu or tool bar, the current record will be deleted\n\n\
 If you want to save the game record, the engine must be opening, and the save menu or tool bar only save the records on the gameboard.\n\n\
 So if you do not want to lost any game record, please go to the last step of the game before saving the game record.\n\n\
@@ -171,9 +194,14 @@ In the analyzation, the points with green color are the most visited points, the
 The numbers at the points with green color indicates the winrate and visits. The point with highest visits is usually the best point to select.\n\n\
 If you put the mouse at the analyzing point, the following steps will automatically be shown, where the letters indicates the consequence.\n\n\
 The lower case letters come first, and then the upper case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.\n\n\
+If there are two contiunus pass (one  for each side), the game will end. Leela Zero would not analyze an terminated game.\n\n\
+So if you want to analy an terminate game, the game record should be reloaded from the start, and the two pass steps or the resign step will be deleted, but the other moves will not be changed.\n\n\
+When the game approaches the end or one side have an extremely advantage, Leela Zero may have the pass choice. If you want to check the relative analyze, you can put the mouse on the pass point.\n\n\
 The button with an abcus is used to calculate the result of the game. Since the dead stones may not be removed from the gameboard, the result is not exactly the true result.\n\n\
 If you changed the path of Leela Zero or the Weight file path, when you exit this program, a message box will ask you if you want to save this change.\n\n\
 If you choose saving this change, the paths of Leela Zero and Weight file will be stored in a file named \"config.txt\".Next time you start LZRobe, it will load the paths automatically.\n\n\
+The auther is trying to reduce the bugs of the program, but we are sorry that we cannot completely avoid the collapse of the program.\n\n\
+If once the program collapse while Leela Zero is running, please terminate Leela Zero with task manager lest it continue to occupy your hardware resource!
 Thanks for reading the introduction file! Welcome to modify these code to adapt more cases!"
 #endif
 #endif

@@ -12,7 +12,13 @@ public:
 	CGameBoardManager m_GameBoardManager;
 	CLZInquirer();
 	void m_fnSetThinkingTime();
+	void m_fnClearLZBoard();
 	void m_fnSendMoveInfo(CGameBase::ExtendMove *lpMove);
+	void m_fnAppendGameRecord();
+	void m_fnJumpTo(int iNewStep);
+	void m_fnRefreshAnalyze();
+	void m_fnBackward();
+	void m_fnForward();
 	void m_fnInquireMove();
 	void m_fnInquireResult();
 	void m_fnInquireAnalyze();

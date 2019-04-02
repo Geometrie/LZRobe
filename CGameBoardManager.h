@@ -10,7 +10,7 @@ public:
     ~CGameBoardManager();
 	std::list<CGameBase::BoardPoint*> m_lstExistingStones;
 	std::vector<CGameBase::BoardPoint*> m_vecAnalyzingStones;
-    int m_iStepPos;
+    int m_iStepPos, m_lpiPrisoners[2];
     bool m_bAlive, m_bAcceptAnalyze;
 	void m_fnRefreshStones();
     bool OnTestMove(int x, int y);

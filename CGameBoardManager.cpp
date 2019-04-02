@@ -5,6 +5,7 @@ CGameBoardManager::CGameBoardManager()
     m_iStepPos = 0;
     m_bAlive = true;
     m_bAcceptAnalyze = true;
+	m_lpiPrisoners[0] = m_lpiPrisoners[1] = 0;
 }
 
 
@@ -92,7 +93,7 @@ bool CGameBoardManager::OnAddMove(int x, int y)
     {
         bLegal = false;
     }
-    else if ((x == -1 && y == -1))
+    else if ((x == 19 && y == 0) || (x == 19 && y == 1))
     {
         bLegal = true;
     }
@@ -129,13 +130,17 @@ bool CGameBoardManager::OnAddMove(int x, int y)
             lpptCurrent->stone_color = m_scTurnColor;
 			m_lstExistingStones.push_back(lpptCurrent);
         }
-        if (x == -1 && y == -1 && m_vecRecords.size() > 0)
+        if (x == 19 && y == 0 && m_vecRecords.size() > 0)
         {
-            if (m_vecRecords.rbegin()->x == -1 && m_vecRecords.rbegin()->y == -1)
+            if (m_vecRecords.rbegin()->x == 19 && m_vecRecords.rbegin()->y == 0)
             {
                 m_bAlive = false;
             }
         }
+		if (x == 19 && y == 1)
+		{
+			m_bAlive = false;
+		}
         movNew.x = x;
         movNew.y = y;
         movNew.stone_color = m_scTurnColor;
@@ -153,6 +158,17 @@ bool CGameBoardManager::OnAddMove(int x, int y)
 			m_fnRefreshStones();
         }
         m_vecRecords.push_back(movNew);
+		switch (m_scTurnColor)
+		{
+		case SC_BLACK:
+			m_lpiPrisoners[1] += int(movNew.vecRemoved.size());
+			break;
+		case SC_WHITE:
+			m_lpiPrisoners[0] += int(movNew.vecRemoved.size());
+			break;
+		default:
+			break;
+		}
         movNew.vecRemoved.clear();
         m_iStepPos = int(m_vecRecords.size());
     }
@@ -176,12 +192,22 @@ bool CGameBoardManager::OnBackMove()
         }
         if (lpLastMove->vecRemoved.size() > 0)
         {
+			switch (lpLastMove->stone_color)
+			{
+			case SC_BLACK:
+				m_lpiPrisoners[0] -= int(lpLastMove->vecRemoved.size());
+				break;
+			case SC_WHITE:
+				m_lpiPrisoners[1] -= int(lpLastMove->vecRemoved.size());
+				break;
+			default:
+				break;
+			}
             for (iterRemoveVisitor = lpLastMove->vecRemoved.begin(); iterRemoveVisitor != lpLastMove->vecRemoved.end(); ++iterRemoveVisitor)
             {
 				lpbpRemove = m_fnPoint(iterRemoveVisitor->x, iterRemoveVisitor->y);
 				lpbpRemove->stone_color = m_scTurnColor;
 				m_lstExistingStones.push_back(lpbpRemove);
-
             }
         }
         m_scTurnColor = lpLastMove->stone_color;
@@ -212,6 +238,17 @@ bool CGameBoardManager::OnRedoMove()
         }
         if (lpNextMove->vecRemoved.size() > 0)
         {
+			switch (lpNextMove->stone_color)
+			{
+			case SC_BLACK:
+				m_lpiPrisoners[0] += int(lpNextMove->vecRemoved.size());
+				break;
+			case SC_WHITE:
+				m_lpiPrisoners[1] += int(lpNextMove->vecRemoved.size());
+				break;
+			default:
+				break;
+			}
             for (iterRemoveVisitor = lpNextMove->vecRemoved.begin(); iterRemoveVisitor != lpNextMove->vecRemoved.end(); ++iterRemoveVisitor)
             {
                 m_fnPoint(iterRemoveVisitor->x, iterRemoveVisitor->y)->stone_color = SC_NULL;
@@ -245,7 +282,6 @@ bool CGameBoardManager::OnModifyGameRecord()
     {
         bSucceed = false;
     }
-    m_bAlive = true;
     return bSucceed;
 }
 
@@ -269,6 +305,7 @@ void CGameBoardManager::OnClearGameRecord()
         }
     }
     m_scTurnColor = SC_BLACK;
+	m_lpiPrisoners[0] = m_lpiPrisoners[1] = 0;
     m_bAlive = true;
 }
 
@@ -279,11 +316,6 @@ void CGameBoardManager::OnClearAnalyze()
 	for (iterVisitor = m_vecAnalyzingStones.begin(); iterVisitor != m_vecAnalyzingStones.end(); ++iterVisitor)
 	{
 		lpbpCurrent = (*iterVisitor);
-		//if (lpbpCurrent->visits != 0 || lpbpCurrent->pv.size() > 0)
-		//{
-		//	lpbpCurrent->pv.clear();
-		//	lpbpCurrent->visits = 0;
-		//}
 		lpbpCurrent->pv_len = 0;
 		lpbpCurrent->visits = 0;
         lpbpCurrent->order = -1;

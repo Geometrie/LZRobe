@@ -11,7 +11,6 @@ public:
     wxInputStream *m_lpInputStream;
     bool m_bKeepLoop, m_bRefresh;
     CGameBase::BoardPoint *m_lpbpAnalyzing;
-    CGameBase::ExtendMove *m_lpemNew, *m_lpemLast;
 protected:
     enum DATA_TYPE
     {
@@ -26,8 +25,7 @@ protected:
         DT_WINRATE,
         DT_PRIOR,
         DT_ORDER,
-        DT_PV,
-        DT_RESIGN
+        DT_PV
     };
     DATA_TYPE m_dtStatus;
     DATA_TYPE m_fnClassifyCommand(char *lpstrCommand);

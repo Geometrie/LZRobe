@@ -34,6 +34,7 @@ protected:
     void OnScore(wxCommandEvent &event);
     void OnSelectEngine(wxCommandEvent &event);
     void OnSelectWeight(wxCommandEvent &event);
+	void OnExtraPara(wxCommandEvent &event);
     void OnLeelaZero(wxCommandEvent &event);
     void OnBackward(wxCommandEvent &event);
     void OnForward(wxCommandEvent &event);

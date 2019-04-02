@@ -5,7 +5,7 @@ class CGoRuleKeeper
 {
 public:
 	std::vector<CGameBase::ExtendMove> m_vecRecords;
-	CGameBase::BoardPoint m_lpGameBoard[361];
+	CGameBase::BoardPoint m_lpGameBoard[363];
 	StoneColor m_scTurnColor;
 	static StoneColor opposite_color(StoneColor original_color)
 	{

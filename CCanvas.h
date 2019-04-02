@@ -13,7 +13,6 @@ private:
     void OnPaint(wxPaintEvent &event);
     void OnLeftButtonUp(wxMouseEvent &event);
     void OnRightButtonUp(wxMouseEvent &event);
-    void OnKeyUp(wxKeyEvent &event);
     DECLARE_EVENT_TABLE()
 };
 

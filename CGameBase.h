@@ -19,9 +19,14 @@ namespace CGameBase
             bLegal = true;
             if (strcmp(position_info, "pass") == 0)
             {
-                x = -1;
-                y = -1;
+                x = 19;
+                y = 0;
             }
+			else if (strcmp(position_info, "resign") == 0)
+			{
+				x = 19;
+				y = 1;
+			}
             else if (position_info[0] >= 'a' && position_info[0] < 'i')
             {
                 x = position_info[0] - 'a';
@@ -42,7 +47,7 @@ namespace CGameBase
             {
                 bLegal = false;
             }
-            if (bLegal && x != -1)
+            if (bLegal && x != 19)
             {
                 if (position_info[1] > '0' && position_info[1] <= '9' && position_info[2] == '\0')
                 {
@@ -61,13 +66,17 @@ namespace CGameBase
         }
         bool export_position(char *position_info)
         {
-            bool bLegal = (x >= 0 && x < 19 && y >= 0 && y < 19) || (x == -1 && y == -1);
+            bool bLegal = (x >= 0 && x < 19 && y >= 0 && y < 19) || (x == 19 && y == 0) || (x == 19 && y == 1);
             if (bLegal)
             {
-                if (x == -1 && y == -1)
+                if (x == 19 && y == 0)
                 {
                     strcpy(position_info, "pass");
                 }
+				else if (x == 19 && y == 1)
+				{
+					strcpy(position_info, "resign");
+				}
                 else
                 {
                     if (x < 8)
@@ -142,7 +151,7 @@ namespace CGameBase
         {
             bool bLegal;
             bLegal = true;
-            if ((stone_color == SC_BLACK || stone_color == SC_WHITE) && ((x >= 0 && x < 19 && y >= 0 && y < 19) || (x == -1 && y == -1)))
+            if ((stone_color == SC_BLACK || stone_color == SC_WHITE) && ((x >= 0 && x < 19 && y >= 0 && y < 19) || (x == 19 && y == 0) || (x == 19 && y == 1)))
             {
                 if (stone_color == SC_WHITE)
                 {
@@ -183,7 +192,6 @@ namespace CGameBase
         int win_rate;
         int prior;
         int order;
-        //std::vector<BasePosition> pv;
 		BasePosition pv[64];
 		int pv_len;
     };

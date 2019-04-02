@@ -15,6 +15,7 @@ void CMainFrame::m_fnSetupMenu()
     m_lpEditMenu->Append(ID_SELECT_WEIGHT, _(STR_SELECT_WEIGHT), _(""), wxITEM_NORMAL);
     m_lpEditMenu->Append(ID_LEELA_ZERO, _(STR_RUN_ENGINE), _(""), wxITEM_NORMAL);
     m_lpEditMenu->Append(ID_FINAL_SCORE, _(STR_RESULT), _(""), wxITEM_NORMAL);
+	m_lpEditMenu->Append(ID_EXTRA_PARA, _(STR_EXTRA_PARA), _(""), wxITEM_NORMAL);
     m_lpViewMenu = new wxMenu(_(""));
     m_lpViewMenu->Append(ID_SHOW_STEP, _(STR_STEP), _(""), wxITEM_CHECK);
 	m_lpViewMenu->Append(wxID_SELECT_COLOR, _(STR_SET_GAMEBOARD_COLOR), _(""), wxITEM_NORMAL);
@@ -60,7 +61,7 @@ void CMainFrame::m_fnSetupToolBar()
 	m_lpToolBar->AddSeparator();
 	lpStaticText = new wxStaticText(m_lpToolBar, wxID_ANY, _(STR_ROUTE_LENGTH));
 	m_lpToolBar->AddControl(lpStaticText, _(""));
-	m_lpAnalyzeSlider = new wxSlider(m_lpToolBar, wxID_ANY, 16, 2, 50, wxDefaultPosition, wxSize(144, 25), wxSL_VALUE_LABEL);
+	m_lpAnalyzeSlider = new wxSlider(m_lpToolBar, wxID_ANY, 16, 2, 50, wxDefaultPosition, wxSize(150, 25), wxSL_VALUE_LABEL);
 	m_lpToolBar->AddControl(m_lpAnalyzeSlider, _(""));
 	m_lpToolBar->AddSeparator();
     m_lpToolBar->AddTool(ID_FINAL_SCORE, _(""), wxBITMAP(SCORE_BMP), wxBITMAP(SCORE_DISABLE_BMP), wxITEM_NORMAL, _(STR_RESULT));
@@ -87,6 +88,8 @@ void CMainFrame::m_fnCreateCanvas()
 	m_lpCanvas->m_GameStatusManager.m_lpStatusBar = m_lpStatusBar;
 	m_lpCanvas->m_bmpOriginalBlackStone = wxBITMAP(BLACK_STONE_BMP);
 	m_lpCanvas->m_bmpOriginalWhiteStone = wxBITMAP(WHITE_STONE_BMP);
+	m_lpCanvas->m_bmpOriginalPass = wxBITMAP(PASS_BMP);
+	m_lpCanvas->m_bmpOriginalResign = wxBITMAP(RESIGN_BMP);
 }
 
 void CMainFrame::m_fnPrepareEngine()
@@ -116,15 +119,20 @@ CMainFrame::CMainFrame(const wxString &title, wxSize init_size = wxDefaultSize):
 void CMainFrame::OnNew(wxCommandEvent &event)
 {
     wxMessageDialog MD(this, _(STR_DISCARD_RECORD_INQUIRY), _(STR_WARNING), wxOK|wxCANCEL);
-    if (MD.ShowModal() == wxID_OK)
+    if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size() == 0 || MD.ShowModal() == wxID_OK)
     {
-        if (m_lpCanvas->m_GameBoardManager.m_iStepPos > 0)
+        if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size() > 0)
         {
             m_lpCanvas->m_GameBoardManager.OnClearGameRecord();
-        }
-        if (m_lpLZProcess->m_bAlive && m_lpCanvas->m_lpOutputStream != NULL)
-        {
-            m_lpCanvas->m_lpOutputStream->Write("clear_board\n", 12);
+			if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
+			{
+				m_lpCanvas->m_fnRefreshAnalyze();
+				m_lpCanvas->m_fnInquireAnalyze();
+			}
+			if (m_lpLZProcess->m_bAlive)
+			{
+				m_lpCanvas->m_fnClearLZBoard();
+			}
         }
         Refresh();
     }
@@ -139,26 +147,21 @@ void CMainFrame::OnOpen(wxCommandEvent &event)
     if (OpenFileDialog.ShowModal() == wxID_OK)
     {
         bRead = true;
-        if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size () > 0)
+        if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size () == 0 || MD.ShowModal() == wxID_OK)
         {
-            if (MD.ShowModal() == wxID_OK)
+            if (m_lpCanvas->m_GameBoardManager.m_vecRecords.size() > 0)
             {
                 m_lpCanvas->m_GameBoardManager.OnClearGameRecord();
+				if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
+				{
+					m_lpCanvas->m_fnRefreshAnalyze();
+					m_lpCanvas->m_fnInquireAnalyze();
+				}
                 if (m_lpLZProcess->m_bAlive)
                 {
-                    if (m_lpCanvas->m_lpOutputStream != NULL)
-                    {
-                        m_lpCanvas->m_lpOutputStream->Write("clear_board\n", 12);
-                    }
+					m_lpCanvas->m_fnClearLZBoard();
                 }
             }
-            else
-            {
-                bRead = false;
-            }
-        }
-        if (bRead)
-        {
             ifs.open(OpenFileDialog.GetPath().char_str());
             m_lpCanvas->m_GameBoardManager.OnReadSgf(ifs);
             ifs.close();
@@ -206,12 +209,28 @@ void CMainFrame::OnSetGameboardColor(wxCommandEvent &event)
 
 void CMainFrame::OnBackward(wxCommandEvent &event)
 {
-    m_lpCanvas->m_fnBackward();
+	if (m_lpCanvas->m_GameStatusManager.m_fnBothAuthorized() && (m_lpCanvas->m_GameStatusManager.m_esCurrentEngine == ES_CLOSED || m_lpCanvas->m_GameStatusManager.m_esCurrentEngine == ES_OPENED))
+	{
+		m_lpCanvas->m_fnBackward();
+		Refresh();
+		if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
+		{
+			m_lpCanvas->m_fnInquireAnalyze();
+		}
+	}
 }
 
 void CMainFrame::OnForward(wxCommandEvent &event)
 {
-    m_lpCanvas->m_fnForward();
+	if (m_lpCanvas->m_GameStatusManager.m_fnBothAuthorized())
+	{
+		m_lpCanvas->m_fnForward();
+		Refresh();
+		if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
+		{
+			m_lpCanvas->m_fnInquireAnalyze();
+		}
+	}
 }
 
 void CMainFrame::OnSelectEngine(wxCommandEvent &event)
@@ -244,7 +263,6 @@ void CMainFrame::OnSelectWeight(wxCommandEvent &event)
 
 void CMainFrame::OnLeelaZero(wxCommandEvent &event)
 {
-	wxTextEntryDialog TED(this, _(STR_WARNING), _(STR_EXTRA_PARAMETERS), wxEmptyString, wxOK | wxCANCEL);
     wxMessageDialog MD(this, _(STR_CLOSE_ENGINE_INQUIRY), _(STR_WARNING), wxOK | wxCANCEL);
     wxFileDialog OpenEigineDialog(this, _(""), _(""), _(""), _("Leela Zero Engine (*.exe)|*.exe"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
     wxFileDialog OpenWeightDialog(this, _(""), _(""), _(""), _("Weight File(*.gz)|*.gz|Network File(*.txt)|*.txt"), wxFD_OPEN | wxFD_FILE_MUST_EXIST);
@@ -304,16 +322,12 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
             }
             if(bApplicable)
             {
-                if (TED.ShowModal() == wxID_OK)
+				m_lpCanvas->m_GameStatusManager.m_fnTryToOpenEngine();
+                if(m_fnOpenLZProcess() == 0)
                 {
-					m_wxstrExtraPara = TED.GetValue();
-					m_lpCanvas->m_GameStatusManager.m_fnTryToOpenEngine();
-                    if(m_fnOpenLZProcess() == 0)
-                    {
-						m_lpCanvas->m_GameStatusManager.m_fnEngineConfirmed();
-						m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
-						m_lpCanvas->m_GameStatusManager.m_fnEngineClosed();
-                    }
+					m_lpCanvas->m_GameStatusManager.m_fnEngineConfirmed();
+					m_lpCanvas->m_GameStatusManager.m_fnTryToCloseEngine();
+					m_lpCanvas->m_GameStatusManager.m_fnEngineClosed();
                 }
             }
         }
@@ -324,6 +338,15 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
 void CMainFrame::OnScore(wxCommandEvent &event)
 {
     m_lpCanvas->m_fnInquireResult();
+}
+
+void CMainFrame::OnExtraPara(wxCommandEvent &event)
+{
+	wxTextEntryDialog TED(this, _(STR_EXTRA_PARAMETERS), _(STR_WARNING), wxEmptyString, wxOK | wxCANCEL);
+    if (TED.ShowModal() == wxID_OK)
+    {
+		m_wxstrExtraPara = TED.GetValue();
+    }
 }
 
 
@@ -340,6 +363,12 @@ void CMainFrame::OnBlackDog(wxCommandEvent &event)
             if (MD.ShowModal() == wxID_OK)
             {
                 m_lpCanvas->m_GameBoardManager.OnModifyGameRecord();
+				if (!m_lpCanvas->m_GameBoardManager.m_bAlive)
+				{
+					m_lpCanvas->m_fnClearLZBoard();
+					m_lpCanvas->m_fnAppendGameRecord();
+					m_lpCanvas->m_GameBoardManager.m_bAlive = true;
+				}
             }
             else
             {
@@ -377,6 +406,12 @@ void CMainFrame::OnWhiteDog(wxCommandEvent &event)
             if (MD.ShowModal() == wxID_OK)
             {
                 m_lpCanvas->m_GameBoardManager.OnModifyGameRecord();
+				if (!m_lpCanvas->m_GameBoardManager.m_bAlive)
+				{
+					m_lpCanvas->m_fnClearLZBoard();
+					m_lpCanvas->m_fnAppendGameRecord();
+					m_lpCanvas->m_GameBoardManager.m_bAlive = true;
+				}
             }
             else
             {
@@ -407,9 +442,30 @@ void CMainFrame::OnWhiteDog(wxCommandEvent &event)
 
 void CMainFrame::OnAnalyze(wxCommandEvent &event)
 {
+	wxMessageDialog MD(this, _(STR_TERMINATED_GAME), _(STR_WARNING), wxOK | wxCANCEL);
 	m_lpCanvas->m_GameStatusManager.m_fnSetAnalyze();
     if (m_lpToolBar->GetToolState(ID_ANALYZE))
     {
+		if (!m_lpCanvas->m_GameBoardManager.m_bAlive)
+		{
+			if (MD.ShowModal() == wxID_OK)
+			{
+				while (m_lpCanvas->m_GameBoardManager.m_iStepPos > 0)
+				{
+					m_lpCanvas->m_GameBoardManager.OnBackMove();
+				}
+				while (m_lpCanvas->m_GameBoardManager.m_vecRecords.size() > 0 && m_lpCanvas->m_GameBoardManager.m_vecRecords.rbegin()->x == 19)
+				{
+					m_lpCanvas->m_GameBoardManager.m_vecRecords.pop_back();
+				}
+				m_lpCanvas->m_fnClearLZBoard();
+				m_lpCanvas->m_GameBoardManager.m_bAlive = true;
+			}
+			else
+			{
+				m_lpToolBar->ToggleTool(ID_ANALYZE, false);
+			}
+		}
 		m_lpCanvas->m_iAnalyzeInterval = m_lpIntervalSpinCtrl->GetValue();
 		m_lpCanvas->m_GameStatusManager.m_fnSetAnalyze();
 		m_lpCanvas->m_fnInquireAnalyze();
@@ -583,6 +639,7 @@ EVT_TOOL(wxID_SELECT_COLOR, CMainFrame::OnSetGameboardColor)
 EVT_MENU(ID_SELECT_ENGINE, CMainFrame::OnSelectEngine)
 EVT_MENU(ID_SELECT_WEIGHT, CMainFrame::OnSelectWeight)
 EVT_MENU(ID_LEELA_ZERO, CMainFrame::OnLeelaZero)
+EVT_MENU(ID_EXTRA_PARA, CMainFrame::OnExtraPara)
 EVT_MENU(wxID_UNDO, CMainFrame::OnBackward)
 EVT_TOOL(wxID_UNDO, CMainFrame::OnBackward)
 EVT_MENU(wxID_REDO, CMainFrame::OnForward)

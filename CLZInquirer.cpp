@@ -5,6 +5,14 @@ CLZInquirer::CLZInquirer()
 	m_bAcceptChange = true;
 }
 
+void CLZInquirer::m_fnClearLZBoard()
+{
+	if (m_lpOutputStream != NULL)
+	{
+		m_lpOutputStream->Write("clear_board\n", 12);
+	}
+}
+
 
 void CLZInquirer::m_fnSetThinkingTime()
 {
@@ -23,6 +31,75 @@ void CLZInquirer::m_fnSendMoveInfo(CGameBase::ExtendMove *lpMove)
 		m_lpOutputStream->Write(lpstrCommand, strlen(lpstrCommand));
 	}
 }
+
+
+void CLZInquirer::m_fnAppendGameRecord()
+{
+	int i;
+	if (m_GameBoardManager.m_iStepPos > 0)
+	{
+		for (i = 0; i < m_GameBoardManager.m_iStepPos; ++i)
+		{
+			m_fnSendMoveInfo(&(m_GameBoardManager.m_vecRecords[i]));
+		}
+	}
+}
+
+
+void CLZInquirer::m_fnJumpTo(int iNewStep)
+{
+	CGameBase::ExtendMove *lpemNew;
+	char *lpstrCommand = (char*)"undo\n";
+	if (m_bAcceptChange && iNewStep <= int(m_GameBoardManager.m_vecRecords.size()))
+	{
+		m_fnRefreshAnalyze();
+		while (m_GameBoardManager.m_iStepPos < iNewStep && m_GameBoardManager.OnRedoMove())
+		{
+			lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
+			m_fnSendMoveInfo(lpemNew);
+		}
+		while (m_GameBoardManager.m_iStepPos > iNewStep && m_GameBoardManager.OnBackMove())
+		{
+			if (m_lpOutputStream != 0)
+			{
+				m_lpOutputStream->Write(lpstrCommand, strlen(lpstrCommand));
+			}
+		}
+	}
+}
+
+void CLZInquirer::m_fnRefreshAnalyze()
+{
+	m_GameBoardManager.m_bAcceptAnalyze = false;
+	m_GameBoardManager.OnClearAnalyze();
+}
+
+
+void CLZInquirer::m_fnBackward()
+{
+	char *lpstrCommand = (char*)"undo\n";
+	if (m_bAcceptChange && m_GameBoardManager.OnBackMove())
+	{
+		m_fnRefreshAnalyze();
+		if (m_lpOutputStream != 0)
+		{
+			m_lpOutputStream->Write(lpstrCommand, strlen(lpstrCommand));
+		}
+	}
+}
+
+void CLZInquirer::m_fnForward()
+{
+	CGameBase::ExtendMove *lpemNew;
+	if (m_bAcceptChange && m_GameBoardManager.OnRedoMove())
+	{
+		m_fnRefreshAnalyze();
+		lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
+		m_fnSendMoveInfo(lpemNew);
+	}
+}
+
+
 
 void CLZInquirer::m_fnInquireMove()
 {
