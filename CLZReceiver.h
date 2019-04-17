@@ -24,11 +24,12 @@ protected:
         DT_VISITS,
         DT_WINRATE,
         DT_PRIOR,
+		DT_LCB,
         DT_ORDER,
         DT_PV
     };
     DATA_TYPE m_dtStatus;
-    DATA_TYPE m_fnClassifyCommand(char *lpstrCommand);
     void m_fnApplyMessage(char *lpstrMessage);
+    DATA_TYPE m_fnClassifyCommand(char *lpstrCommand);
 };
 #endif // CLZRECEIVER_H

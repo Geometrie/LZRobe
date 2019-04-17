@@ -2,8 +2,6 @@
 
 CManualDialog::CManualDialog(wxWindow* lpParent, wxString wxstrTitle, wxString wxstrHelp, wxString wxstrButtonLabel) : wxDialog(lpParent, wxID_ANY, wxstrTitle)
 {
-	//this->SetSizeHints(wxDefaultSize, wxDefaultSize);
-
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
 	fgSizer1->SetFlexibleDirection(wxBOTH);

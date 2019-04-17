@@ -1,11 +1,17 @@
 #ifndef CGORULEKEEPER_H
 #define CGORULEKEEPER_H
-#include "CGameBase.h"
+#include <queue>
+#include "CPool.h"
 class CGoRuleKeeper
 {
 public:
-	std::vector<CGameBase::ExtendMove> m_vecRecords;
-	CGameBase::BoardPoint m_lpGameBoard[363];
+	CGoRuleKeeper();
+	~CGoRuleKeeper();
+	CPool<CGameBase::ExtendMove> m_emplGameRecords;
+	CPool<CGameBase::Remove> m_rmplRemoved;
+	CGameBase::BoardPoint *m_lpbpGameBoard;
+	CGameBase::Remove *m_lprmRemove, *m_lprmRemoveEnd;
+	CGameBase::BoardPoint *m_lpbpKoMark;
 	StoneColor m_scTurnColor;
 	static StoneColor opposite_color(StoneColor original_color)
 	{
@@ -27,10 +33,22 @@ public:
 	};
 	CGameBase::BoardPoint* m_fnPoint(int x, int y)
 	{
-		return m_lpGameBoard + (x * 19 + y);
+		return m_lpbpGameBoard + (x * nBoardSize + y);
 	}
-	void m_fnSelectStoneBlock(int x, int y, std::vector<CGameBase::BasePosition> &vecBlock);
-	int m_fnCountLiberty(std::vector<CGameBase::BasePosition> &vecBlock);
-	bool m_fnIsLegalMove(StoneColor sc, int x, int y, std::vector<CGameBase::BoardPoint*> &vecRemove);
+	void m_fnCoordinate(CGameBase::BoardPoint *lpbp, int &x, int &y)
+	{
+		int iInd;
+		iInd = int(lpbp - m_lpbpGameBoard);
+		x = iInd / nBoardSize;
+		y = iInd % nBoardSize;
+	}
+	void m_fnChangeSize();
+	void m_fnSelectStoneBlock(CGameBase::BoardPoint *lpbpSeed);
+	int m_fnCountLiberty();
+	bool m_fnIsLegalMove(StoneColor sc, CGameBase::BoardPoint *lpbpPosition);
+private:
+	CGameBase::BoardPoint **m_lplpbpSelectStones, **m_lplpbpSelectEnd;
+	CGameBase::BoardPoint **m_lplpbpCountLiberties, **m_lplpbpCountEnd;
+	CGameBase::BoardPoint **m_lplpbpNeighbour, **m_lplpbpNeighbourEnd;
 };
 #endif

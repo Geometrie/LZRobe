@@ -26,7 +26,6 @@ void CGameStatusManager::m_fnEngineConfirmed()
 		m_lpToolBar->SetToolShortHelp(ID_LEELA_ZERO, _(STR_CLOSE_ENGINE));
 		m_lpEditMenu->Enable(ID_LEELA_ZERO, true);
 		m_lpToolBar->EnableTool(ID_LEELA_ZERO, true);
-		m_lpToolBar->EnableTool(wxID_SAVE, true);
 		m_lpToolBar->EnableTool(ID_BLACK_DOG, true);
 		m_lpToolBar->EnableTool(ID_WHITE_DOG, true);
 		m_lpToolBar->EnableTool(ID_ANALYZE, true);
@@ -59,7 +58,6 @@ void CGameStatusManager::m_fnTryToCloseEngine()
 		{
 			m_lpToolBar->ToggleTool(ID_ANALYZE, false);
 		}
-		m_lpToolBar->EnableTool(wxID_SAVE, false);
 		m_lpToolBar->EnableTool(ID_BLACK_DOG, false);
 		m_lpToolBar->EnableTool(ID_WHITE_DOG, false);
 		m_lpToolBar->EnableTool(ID_ANALYZE, false);

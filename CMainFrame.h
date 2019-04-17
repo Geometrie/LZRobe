@@ -14,7 +14,7 @@ class CMainFrame: public wxFrame
 {
 public:
     CMainFrame(const wxString &title, wxSize init_size);
-    wxMenu *m_lpFileMenu, *m_lpViewMenu, *m_lpEditMenu, *m_lpHelpMenu;
+    wxMenu *m_lpFileMenu, *m_lpViewMenu, *m_lpCoordMenu, *m_lpEditMenu, *m_lpHelpMenu;//, *m_lpLinkMenu
     wxToolBar *m_lpToolBar;
     wxSpinCtrl *m_lpTimeSpinCtrl, *m_lpIntervalSpinCtrl;
 	wxSlider *m_lpAnalyzeSlider;
@@ -24,17 +24,26 @@ public:
     CLZProcess *m_lpLZProcess;
     wxString m_wxstrEnginePath, m_wxstrWeightPath, m_wxstrExtraPara;
     PROCESS_EXIT_TYPE m_ProcessExitType;
-    bool m_bPathChanged;
+    bool m_bPathChanged, m_bExtraParaChanged;
+	void m_fnOpenSGF(char *lpstrFile);
 protected:
     void OnNew(wxCommandEvent &event);
+	void OnHandicap(wxCommandEvent &event);
     void OnOpen(wxCommandEvent &event);
+	void OnDropFile(wxDropFilesEvent &event);
     void OnSave(wxCommandEvent &event);
     void OnShowStep(wxCommandEvent &event);
 	void OnSetGameboardColor(wxCommandEvent &event);
+	void OnHideCoord(wxCommandEvent &event);
+	void OnSetNetCoord(wxCommandEvent &event);
+	void OnSetNumCoord(wxCommandEvent &event);
+	void OnSetSGFCoord(wxCommandEvent &event);
+	void OnSetGTPCoord(wxCommandEvent &event);
     void OnScore(wxCommandEvent &event);
     void OnSelectEngine(wxCommandEvent &event);
     void OnSelectWeight(wxCommandEvent &event);
 	void OnExtraPara(wxCommandEvent &event);
+	void OnBoardSize(wxCommandEvent &event);
     void OnLeelaZero(wxCommandEvent &event);
     void OnBackward(wxCommandEvent &event);
     void OnForward(wxCommandEvent &event);

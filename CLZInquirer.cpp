@@ -5,6 +5,15 @@ CLZInquirer::CLZInquirer()
 	m_bAcceptChange = true;
 }
 
+void CLZInquirer::m_fnChangeLZBoardSize()
+{
+	wxString wxstrCommand = wxString::Format(wxString("boardsize %d\n"), nBoardSize);
+	if (m_lpOutputStream != NULL)
+	{
+		m_lpOutputStream->Write(wxstrCommand.char_str(), wxstrCommand.length());
+	}
+}
+
 void CLZInquirer::m_fnClearLZBoard()
 {
 	if (m_lpOutputStream != NULL)
@@ -13,11 +22,23 @@ void CLZInquirer::m_fnClearLZBoard()
 	}
 }
 
+void CLZInquirer::m_fnSetLZHandicap()
+{
+	wxString wxstrCommand = wxString::Format(wxString("fixed_handicap %d\n"), m_GameBoardManager.m_nHandicap);
+	if (m_lpOutputStream != NULL)
+	{
+		m_lpOutputStream->Write(wxstrCommand.char_str(), wxstrCommand.length());
+	}
+}
+
 
 void CLZInquirer::m_fnSetThinkingTime()
 {
-	wxString wxstrCommand = wxString("time_settings 0 ") + wxString::Format(wxString("%d"), m_iThinkingTime) + wxString(" 1\n");
-	m_lpOutputStream->Write(wxstrCommand.char_str(), wxstrCommand.length());
+	wxString wxstrCommand = wxString::Format(wxString("time_settings 0 %d 1\n"), m_iThinkingTime);
+	if (m_lpOutputStream != NULL)
+	{
+		m_lpOutputStream->Write(wxstrCommand.char_str(), wxstrCommand.length());
+	}
 }
 
 void CLZInquirer::m_fnSendMoveInfo(CGameBase::ExtendMove *lpMove)
@@ -35,30 +56,34 @@ void CLZInquirer::m_fnSendMoveInfo(CGameBase::ExtendMove *lpMove)
 
 void CLZInquirer::m_fnAppendGameRecord()
 {
-	int i;
-	if (m_GameBoardManager.m_iStepPos > 0)
+	CGameBase::ExtendMove *lpemVisitor;
+	std::stack<CGameBase::ExtendMove*> stklpemStack;
+	lpemVisitor = m_GameBoardManager.m_lpemCurrentMove;
+	while (lpemVisitor != &(m_GameBoardManager.m_emBlankMove))
 	{
-		for (i = 0; i < m_GameBoardManager.m_iStepPos; ++i)
-		{
-			m_fnSendMoveInfo(&(m_GameBoardManager.m_vecRecords[i]));
-		}
+		stklpemStack.push(lpemVisitor);
+		lpemVisitor = lpemVisitor->parent;
+	}
+	while (!stklpemStack.empty())
+	{
+		lpemVisitor = stklpemStack.top();
+		stklpemStack.pop();
+		m_fnSendMoveInfo(lpemVisitor);
 	}
 }
 
 
 void CLZInquirer::m_fnJumpTo(int iNewStep)
 {
-	CGameBase::ExtendMove *lpemNew;
 	char *lpstrCommand = (char*)"undo\n";
-	if (m_bAcceptChange && iNewStep <= int(m_GameBoardManager.m_vecRecords.size()))
+	if (m_bAcceptChange && iNewStep <= (m_GameBoardManager.m_lpemCurrentMove->step + m_GameBoardManager.m_lpemCurrentMove->depth))
 	{
-		m_fnRefreshAnalyze();
-		while (m_GameBoardManager.m_iStepPos < iNewStep && m_GameBoardManager.OnRedoMove())
+		m_fnResetAnalyze();
+		while (m_GameBoardManager.m_lpemCurrentMove->step < iNewStep && m_GameBoardManager.OnRedoMove())
 		{
-			lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
-			m_fnSendMoveInfo(lpemNew);
+			m_fnSendMoveInfo(m_GameBoardManager.m_lpemCurrentMove);
 		}
-		while (m_GameBoardManager.m_iStepPos > iNewStep && m_GameBoardManager.OnBackMove())
+		while (m_GameBoardManager.m_lpemCurrentMove->step > iNewStep && m_GameBoardManager.OnBackMove())
 		{
 			if (m_lpOutputStream != 0)
 			{
@@ -68,7 +93,7 @@ void CLZInquirer::m_fnJumpTo(int iNewStep)
 	}
 }
 
-void CLZInquirer::m_fnRefreshAnalyze()
+void CLZInquirer::m_fnResetAnalyze()
 {
 	m_GameBoardManager.m_bAcceptAnalyze = false;
 	m_GameBoardManager.OnClearAnalyze();
@@ -80,7 +105,7 @@ void CLZInquirer::m_fnBackward()
 	char *lpstrCommand = (char*)"undo\n";
 	if (m_bAcceptChange && m_GameBoardManager.OnBackMove())
 	{
-		m_fnRefreshAnalyze();
+		m_fnResetAnalyze();
 		if (m_lpOutputStream != 0)
 		{
 			m_lpOutputStream->Write(lpstrCommand, strlen(lpstrCommand));
@@ -88,13 +113,13 @@ void CLZInquirer::m_fnBackward()
 	}
 }
 
-void CLZInquirer::m_fnForward()
+void CLZInquirer::m_fnForward(CGameBase::ExtendMove *lpemMove)
 {
 	CGameBase::ExtendMove *lpemNew;
-	if (m_bAcceptChange && m_GameBoardManager.OnRedoMove())
+	if (m_bAcceptChange && m_GameBoardManager.OnRedoMove(lpemMove))
 	{
-		m_fnRefreshAnalyze();
-		lpemNew = &(m_GameBoardManager.m_vecRecords[m_GameBoardManager.m_iStepPos - 1]);
+		m_fnResetAnalyze();
+		lpemNew = m_GameBoardManager.m_lpemCurrentMove;
 		m_fnSendMoveInfo(lpemNew);
 	}
 }

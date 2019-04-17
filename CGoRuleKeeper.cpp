@@ -1,163 +1,206 @@
-#include <queue>
 #include "CGoRuleKeeper.h"
-void CGoRuleKeeper::m_fnSelectStoneBlock(int x, int y, std::vector<CGameBase::BasePosition> &vecBlock)
+CGoRuleKeeper::CGoRuleKeeper()
 {
-	StoneColor stone_color;
-	CGameBase::BasePosition bpTest;
-	CGameBase::BoardPoint *lpbpTest;
-	int i;
-	std::queue<CGameBase::BasePosition> qubpQueue;
-	std::vector<CGameBase::BasePosition>::iterator iterBlockVisitor;
-	if (x >= 0 && x < 19 && y >= 0 && y < 19)
+	m_lpbpGameBoard = new CGameBase::BoardPoint[nBoardSize * nBoardSize + 2];
+	m_lplpbpSelectStones = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
+	m_lplpbpSelectEnd = m_lplpbpSelectStones;
+	m_lplpbpCountLiberties = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
+	m_lplpbpCountEnd = m_lplpbpCountLiberties;
+	m_lprmRemove = new CGameBase::Remove[nBoardSize * nBoardSize - 1];
+	m_lprmRemoveEnd = m_lprmRemove;
+	m_lplpbpNeighbour = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
+	m_lplpbpNeighbourEnd = m_lplpbpNeighbour;
+	m_lpbpKoMark = NULL;
+	m_emplGameRecords.init(nBoardSize * nBoardSize * 4);
+	m_rmplRemoved.init(nBoardSize * nBoardSize * 4);
+}
+CGoRuleKeeper::~CGoRuleKeeper()
+{
+	m_rmplRemoved.release();
+	m_emplGameRecords.release();
+	delete[]m_lplpbpNeighbour;
+	delete[]m_lprmRemove;
+	delete[]m_lplpbpCountLiberties;
+	delete[]m_lplpbpSelectStones;
+	delete[]m_lpbpGameBoard;
+}
+
+void CGoRuleKeeper::m_fnChangeSize()
+{
+	m_rmplRemoved.release();
+	m_emplGameRecords.release();
+	delete[]m_lplpbpNeighbour;
+	delete[]m_lprmRemove;
+	delete[]m_lplpbpCountLiberties;
+	delete[]m_lplpbpSelectStones;
+	delete[]m_lpbpGameBoard;
+	m_lpbpGameBoard = new CGameBase::BoardPoint[nBoardSize * nBoardSize + 2];
+	m_lplpbpSelectStones = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
+	m_lplpbpSelectEnd = m_lplpbpSelectStones;
+	m_lplpbpCountLiberties = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
+	m_lplpbpCountEnd = m_lplpbpCountLiberties;
+	m_lprmRemove = new CGameBase::Remove[nBoardSize * nBoardSize - 1];
+	m_lprmRemoveEnd = m_lprmRemove;
+	m_lplpbpNeighbour = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
+	m_lplpbpNeighbourEnd = m_lplpbpNeighbour;
+	m_lpbpKoMark = NULL;
+	m_emplGameRecords.init(nBoardSize * nBoardSize * 4);
+	m_rmplRemoved.init(nBoardSize * nBoardSize * 4);
+}
+
+void CGoRuleKeeper::m_fnSelectStoneBlock(CGameBase::BoardPoint *lpbpSeed)
+{
+	std::queue<CGameBase::BoardPoint*> qubpQueue;
+	CGameBase::BoardPoint *lpbpTest, **lplpbpVisitor;
+	int i, xSeed, ySeed, xTest, yTest;;
+	qubpQueue.push(lpbpSeed);
+	lpbpSeed->mark += 1;
+	*m_lplpbpSelectEnd = lpbpSeed;
+	++m_lplpbpSelectEnd;
+	while (qubpQueue.size() > 0)
 	{
-		bpTest.x = x;
-		bpTest.y = y;
-		lpbpTest = m_fnPoint(x, y);
-		stone_color = lpbpTest->stone_color;
-		lpbpTest->mark += 1;
-		qubpQueue.push(bpTest);
-		vecBlock.push_back(bpTest);
-		while (!qubpQueue.empty())
+		lpbpSeed = qubpQueue.front();
+		qubpQueue.pop();
+		m_fnCoordinate(lpbpSeed, xSeed, ySeed);
+		for (i = 0; i < 4; ++i)
 		{
-			bpTest = qubpQueue.front();
-			qubpQueue.pop();
-			x = bpTest.x;
-			y = bpTest.y;
-			for (i = 0; i < 4; ++i)
+			xTest = xSeed + (1 - i % 2) * (1 - (i / 2) * 2);
+			yTest = ySeed + (i % 2) * (1 - (i / 2) * 2);
+			if (xTest >= 0 && xTest < nBoardSize && yTest >= 0 && yTest < nBoardSize)
 			{
-				bpTest.x = x + (1 - i % 2) * (1 - (i / 2) * 2);
-				bpTest.y = y + (i % 2) * (1 - (i / 2) * 2);
-				if (bpTest.x >= 0 && bpTest.x < 19 && bpTest.y >= 0 && bpTest.y < 19)
+				lpbpTest = m_fnPoint(xTest, yTest);
+				if ((lpbpTest->stone_color == lpbpSeed->stone_color) && ((lpbpTest->mark & 1) == 0))
 				{
-					lpbpTest = m_fnPoint(bpTest.x, bpTest.y);
-					if (lpbpTest->stone_color == stone_color && (lpbpTest->mark & 1) == 0)
-					{
-						lpbpTest->mark += 1;
-						vecBlock.push_back(bpTest);
-						qubpQueue.push(bpTest);
-					}
+					lpbpTest->mark += 1;
+					*m_lplpbpSelectEnd = lpbpTest;
+					++m_lplpbpSelectEnd;
+					qubpQueue.push(lpbpTest);
 				}
 			}
 		}
-		for (iterBlockVisitor = vecBlock.begin(); iterBlockVisitor != vecBlock.end(); ++iterBlockVisitor)
-		{
-			lpbpTest = m_fnPoint(iterBlockVisitor->x, iterBlockVisitor->y);
-			lpbpTest->mark -= 1;
-		}
+	}
+	for (lplpbpVisitor = m_lplpbpSelectStones; lplpbpVisitor != m_lplpbpSelectEnd; ++lplpbpVisitor)
+	{
+		(*lplpbpVisitor)->mark -= 1;
 	}
 }
 
 
-int CGoRuleKeeper::m_fnCountLiberty(std::vector<CGameBase::BasePosition> &vecBlock)
+int CGoRuleKeeper::m_fnCountLiberty()
 {
-	std::vector<CGameBase::BasePosition>::iterator iterBlockVisitor;
-	std::vector<CGameBase::BoardPoint*> vecLiberties;
-	std::vector<CGameBase::BoardPoint*>::iterator iterLibertyVisitor;
+	CGameBase::BoardPoint **lplpbpVisitor;
 	CGameBase::BoardPoint *lpbpTest;
-	int i, nCount, x, y;
-	for (iterBlockVisitor = vecBlock.begin(); iterBlockVisitor != vecBlock.end(); ++iterBlockVisitor)
+	int i, xStone, yStone, xTest, yTest, nCount;
+	for (lplpbpVisitor = m_lplpbpSelectStones; lplpbpVisitor != m_lplpbpSelectEnd; ++lplpbpVisitor)
 	{
+		m_fnCoordinate(*lplpbpVisitor, xStone, yStone);
 		for (i = 0; i < 4; ++i)
 		{
-			x = iterBlockVisitor->x + (1 - i % 2) * (1 - (i / 2) * 2);
-			y = iterBlockVisitor->y + (i % 2) * (1 - (i / 2) * 2);
-			if (x >= 0 && x < 19 && y >= 0 && y < 19)
+			xTest = xStone + (1 - i % 2) * (1 - (i / 2) * 2);
+			yTest = yStone + (i % 2) * (1 - (i / 2) * 2);
+			if (xTest >= 0 && xTest < nBoardSize && yTest >= 0 && yTest < nBoardSize)
 			{
-				lpbpTest = m_fnPoint(x, y);
+				lpbpTest = m_fnPoint(xTest, yTest);
 				if (lpbpTest->stone_color == SC_NULL && (lpbpTest->mark & 1) == 0)
 				{
 					lpbpTest->mark += 1;
-					vecLiberties.push_back(lpbpTest);
+					*m_lplpbpCountEnd = lpbpTest;
+					++m_lplpbpCountEnd;
 				}
 			}
 		}
 	}
-	nCount = int(vecLiberties.size());
-	if (nCount > 0)
+	for (lplpbpVisitor = m_lplpbpCountLiberties; lplpbpVisitor != m_lplpbpCountEnd; ++lplpbpVisitor)
 	{
-		for (iterLibertyVisitor = vecLiberties.begin(); iterLibertyVisitor != vecLiberties.end(); ++iterLibertyVisitor)
-		{
-			(*iterLibertyVisitor)->mark -= 1;
-		}
-		vecLiberties.clear();
+		(*lplpbpVisitor)->mark -= 1;
 	}
+	nCount = int(m_lplpbpCountEnd - m_lplpbpCountLiberties);
+	m_lplpbpCountEnd = m_lplpbpCountLiberties;
 	return nCount;
 }
 
-bool CGoRuleKeeper::m_fnIsLegalMove(StoneColor stone_color, int x, int y, std::vector<CGameBase::BoardPoint*> &vecRemove)
+bool CGoRuleKeeper::m_fnIsLegalMove(StoneColor sc, CGameBase::BoardPoint *lpbpPosition)
 {
+	int i, xCenter, yCenter, xNeighbour, yNeighbour, nLiberty;
 	bool bLegal;
-	int i, nLiberty;
-	CGameBase::BoardPoint *lpbpTest, *lpbpSelect;
-	CGameBase::BasePosition bpTest;
-	std::vector<CGameBase::BasePosition> vecBlock;
-	std::vector<CGameBase::BasePosition>::iterator iterBlockVisitor;
-	std::vector<CGameBase::BoardPoint*>::iterator iterMarkVisitor;
-	std::vector<CGameBase::BoardPoint*> vecLink;
-	bLegal = false;
-	if ((x == 19 && y == 0) || (x == 19 && y == 1))
+	CGameBase::BoardPoint *lpbpNeighbour, **lplpbpBlockVisitor;
+	m_fnCoordinate(lpbpPosition, xCenter, yCenter);
+	if (xCenter == nBoardSize && (yCenter == 0 || yCenter == 1))
 	{
 		bLegal = true;
 	}
-	for (i = 0; i < 4; ++i)
+	else if (lpbpPosition->stone_color != SC_NULL)
 	{
-		bpTest.x = x + (1 - i % 2) * (1 - (i / 2) * 2);
-		bpTest.y = y + (i % 2) * (1 - (i / 2) * 2);
-		if (bpTest.x >= 0 && bpTest.x < 19 && bpTest.y >= 0 && bpTest.y < 19)
+		bLegal = false;
+	}
+	else
+	{
+		bLegal = false;
+		for (i = 0; i < 4; ++i)
 		{
-			lpbpTest = m_fnPoint(bpTest.x, bpTest.y);
-			if (lpbpTest->stone_color == SC_NULL)
+			xNeighbour = xCenter + (1 - i % 2) * (1 - (i / 2) * 2);
+			yNeighbour = yCenter + (i % 2) * (1 - (i / 2) * 2);
+			if (xNeighbour >= 0 && xNeighbour < nBoardSize && yNeighbour >= 0 && yNeighbour < nBoardSize)
 			{
-				bLegal = true;
-			}
-			else if ((lpbpTest->mark & 2) == 0)
-			{
-				m_fnSelectStoneBlock(bpTest.x, bpTest.y, vecBlock);
-				nLiberty = m_fnCountLiberty(vecBlock);
-				if ((lpbpTest->stone_color == stone_color) && (nLiberty > 1))
+				lpbpNeighbour = m_fnPoint(xNeighbour, yNeighbour);
+				if (lpbpNeighbour->stone_color == SC_NULL)
 				{
 					bLegal = true;
-					for (iterBlockVisitor = vecBlock.begin(); iterBlockVisitor != vecBlock.end(); ++iterBlockVisitor)
-					{
-						lpbpSelect = m_fnPoint(iterBlockVisitor->x, iterBlockVisitor->y);
-						if ((lpbpSelect->mark & 2) == 0)
-						{
-							lpbpSelect->mark += 2;
-							vecLink.push_back(lpbpSelect);
-						}
-					}
 				}
-				if ((lpbpTest->stone_color != stone_color) && (nLiberty == 1))
+				else if ((lpbpNeighbour->mark & 2) == 0)
 				{
-					bLegal = true;
-					for (iterBlockVisitor = vecBlock.begin(); iterBlockVisitor != vecBlock.end(); ++iterBlockVisitor)
+					m_fnSelectStoneBlock(lpbpNeighbour);
+					nLiberty = m_fnCountLiberty();
+					for (lplpbpBlockVisitor = m_lplpbpSelectStones; lplpbpBlockVisitor != m_lplpbpSelectEnd; ++lplpbpBlockVisitor)
 					{
-						lpbpSelect = m_fnPoint(iterBlockVisitor->x, iterBlockVisitor->y);
-						if ((lpbpSelect->mark & 2) == 0)
+						(*lplpbpBlockVisitor)->mark += 2;
+						*m_lplpbpNeighbourEnd = *lplpbpBlockVisitor;
+						++m_lplpbpNeighbourEnd;
+					}
+					if (lpbpNeighbour->stone_color == sc)
+					{
+						if (nLiberty > 1)
 						{
-							lpbpSelect->mark += 2;
-							vecRemove.push_back(lpbpSelect);
+							bLegal = true;
 						}
 					}
+					else if (nLiberty == 1)
+					{
+						for (lplpbpBlockVisitor = m_lplpbpSelectStones; lplpbpBlockVisitor != m_lplpbpSelectEnd; ++lplpbpBlockVisitor)
+						{
+							m_lprmRemoveEnd->bp = *lplpbpBlockVisitor;
+							++m_lprmRemoveEnd;
+						}
+						bLegal = true;
+					}
+					m_lplpbpSelectEnd = m_lplpbpSelectStones;
 				}
-				vecBlock.clear();
 			}
 		}
-	}
-	if (vecRemove.size() > 0)
-	{
-		for (iterMarkVisitor = vecRemove.begin(); iterMarkVisitor != vecRemove.end(); ++iterMarkVisitor)
+		if (m_lplpbpNeighbourEnd != m_lplpbpNeighbour)
 		{
-			(*iterMarkVisitor)->mark -= 2;
+			for (lplpbpBlockVisitor = m_lplpbpNeighbour; lplpbpBlockVisitor != m_lplpbpNeighbourEnd; ++lplpbpBlockVisitor)
+			{
+				(*lplpbpBlockVisitor)->mark -= 2;
+			}
+			m_lplpbpNeighbourEnd = m_lplpbpNeighbour;
 		}
 	}
-	if (vecLink.size() > 0)
+	if (m_lprmRemoveEnd - m_lprmRemove == 1)
 	{
-		for (iterMarkVisitor = vecLink.begin(); iterMarkVisitor != vecLink.end(); ++iterMarkVisitor)
+		if (lpbpPosition == m_lpbpKoMark)
 		{
-			(*iterMarkVisitor)->mark -= 2;
+			bLegal = false;
+			m_lprmRemoveEnd = m_lprmRemove;
 		}
-		vecLink.clear();
+		else
+		{
+			m_lpbpKoMark = m_lprmRemove->bp;
+		}
+	}
+	else
+	{
+		m_lpbpKoMark = NULL;
 	}
 	return bLegal;
 }

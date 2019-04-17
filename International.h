@@ -1,109 +1,131 @@
 #ifndef INTERNATIONAL_H
 #define INTERNATIONAL_H
-//#define LANGUAGE_CHINESE_SIMPLIFIED
+#define LANGUAGE_CHINESE_SIMPLIFIED
 #ifdef LANGUAGE_CHINESE_SIMPLIFIED
-#define STR_NEW "æ–°å¯¹å±€"
-#define STR_OPEN "æ‰“å¼€"
-#define STR_SAVE "ä¿å­˜"
-#define STR_EXIT "é€€å‡º"
-#define STR_BACKWARD "æ’¤æ¶ˆ"
-#define STR_FORWARD "é‡åš"
-#define STR_SELECT_ENGINE "é€‰æ‹©å¼•æ“"
-#define STR_SELECT_WEIGHT "é€‰æ‹©æƒé‡"
-#define STR_EXTRA_PARA "é™„åŠ å‚æ•°"
-#define STR_RUN_ENGINE "å¯åŠ¨å¼•æ“"
-#define STR_CLOSE_ENGINE "å…³é—­å¼•æ“"
-#define STR_RESULT "è®¡ç®—èƒœè´Ÿ"
-#define STR_STEP "æ˜¾ç¤ºæ£‹æ­¥åºå·"
-#define	STR_SET_GAMEBOARD_COLOR "è®¾ç½®æ£‹ç›˜é¢œè‰²"
-#define STR_MANUAL "ä½¿ç”¨è¯´æ˜"
-#define STR_ABOUT "å…³äºLZRobe"
-#define STR_FILE "æ–‡ä»¶"
-#define STR_EDIT "ç¼–è¾‘"
-#define STR_VIEW "è§†å›¾"
-#define STR_HELP "å¸®åŠ©"
-#define STR_BLACK_DOG "AIæ‰§é»‘"
-#define STR_WHITE_DOG "AIæ‰§ç™½"
-#define STR_TIME "æ€è€ƒæ—¶é—´"
-#define STR_SHOW_ANALYZE "æ˜¾ç¤ºåˆ†æ"
-#define STR_TERMINATED_GAME "å¯¹å±€å·²ç»ç»“æŸï¼Œéœ€è¦é‡æ–°åŠ è½½æ‰èƒ½æ˜¾ç¤ºåˆ†æï¼Œç¡®å®šé‡æ–°åŠ è½½ä¹ˆï¼Ÿ"
-#define STR_INTERVAL "åˆ·æ–°é—´éš”"
-#define STR_ROUTE_LENGTH "é¢„æµ‹é•¿åº¦"
-#define STR_NO_ENGINE "å¼•æ“æœªè¿è¡Œ"
-#define STR_WARNING "æç¤º"
-#define STR_CHANGE_RECORD_INQUIRY "ç¡®å®šä¸¢å¼ƒå‰é¢çš„å˜åŒ–ä¹ˆï¼Ÿ"
-#define STR_GAME_RESULT "å¯¹å±€ç»“æœ"
-#define STR_BLACK_RESIGN "é»‘è®¤è¾“ï¼Œç™½ä¸­ç›˜èƒœ"
-#define STR_WHITE_RESIGN "ç™½è®¤è¾“ï¼Œé»‘ä¸­ç›˜èƒœ"
-#define STR_DISCARD_RECORD_INQUIRY "æ£€æµ‹åˆ°å¯¹å±€ä¿¡æ¯ï¼Œç¡®å®šè¦ä¸¢å¼ƒä¹ˆï¼Ÿ"
-#define STR_EXTRA_PARAMETERS "è¾“å…¥å…¶å®ƒå‚æ•°"
-#define STR_CLOSE_ENGINE_INQUIRY "ç¡®å®šå…³é—­å¼•æ“ä¹ˆï¼Ÿ"
-#define STR_CHANGE_PATH "æ£€æµ‹åˆ°ä½ ä¿®æ”¹äº†å¼•æ“æˆ–è€…æƒé‡çš„è·¯å¾„ï¼Œæ˜¯å¦ä¿å­˜ï¼Ÿ"
-#define STR_RESTART_ENGINE "å¼•æ“å´©æºƒï¼Œæ­£åœ¨é‡å¯"
-#define STR_ENGINE_OPENING "å¼•æ“æ­£åœ¨å¯åŠ¨ï¼Œè¯·è€å¿ƒç­‰å¾…"
-#define STR_ENGINE_AVAILABLE "å¼•æ“å·²å¯åŠ¨"
-#define STR_ENGINE_CLOSING "å¼•æ“æ­£åœ¨å…³é—­"
-#define STR_SELFPLAY "å¼•æ“æ­£åœ¨è‡ªæˆ‘å¯¹å±€"
-#define STR_ANALYZING "å±€åŠ¿åˆ†æä¸­"
-#define STR_VERSION "å½“å‰ç‰ˆæœ¬ï¼š1.01"
-#define STR_CLOSE "å…³é—­"
-#define STR_MOVE_TURN "ç€å­æƒ"
-#define STR_PRISONERS "æå­"
-#define STR_PASS "æ”¾å¼ƒä¸€æ‰‹"
-#define STR_RESIGN "è®¤è¾“"
-#define STR_GAME_PROCESS "å¯¹å±€è¿›ç¨‹"
-#define STR_DIRECTION "æ¬¢è¿è¯•ç”¨LZRobeï¼è¿™æ˜¯ä¸€ä¸ªä¸ºäººå·¥æ™ºèƒ½å›´æ£‹è½¯ä»¶LeelaZeroæä¾›å›¾å½¢ç•Œé¢çš„ç¨‹åºã€‚\n\n\
-å¦‚æœä½ æƒ³äº†è§£å…³äºLeelaZeroæ›´å¤šçš„ä¿¡æ¯ï¼Œè¯·è®¿é—®ä¸‹é¢çš„ç½‘å€ï¼š\n\n\
+#define STR_NEW "ĞÂ¶Ô¾Ö"
+#define STR_HANDICAP "ÈÃ×Ó¶Ô¾Ö"
+#define STR_HANDICAP_NUM "ÉèÖÃÈÃ×ÓÊı"
+#define STR_OPEN "´ò¿ª"
+#define STR_SAVE "±£´æ"
+#define STR_EXIT "ÍË³ö"
+#define STR_BACKWARD "³·Ïû"
+#define STR_FORWARD "ÖØ×ö"
+#define STR_SELECT_ENGINE "Ñ¡ÔñÒıÇæ"
+#define STR_SELECT_WEIGHT "Ñ¡ÔñÈ¨ÖØ"
+#define STR_EXTRA_PARA "¸½¼Ó²ÎÊı"
+#define STR_BOARD_SIZE "¸Ä±äÆåÅÌ´óĞ¡"
+#define STR_RUN_ENGINE "Æô¶¯ÒıÇæ"
+#define STR_CLOSE_ENGINE "¹Ø±ÕÒıÇæ"
+#define STR_RESULT "¼ÆËãÊ¤¸º"
+#define STR_STEP "ÏÔÊ¾Æå²½ĞòºÅ"
+#define STR_COORDINATE "ÆåÅÌ×ø±ê"
+#define STR_COORD_NULL "Òş²Ø×ø±ê"
+#define STR_COORD_NET "ÍøÆå¿Í»§¶Ë×ø±ê"
+#define STR_COORD_NUM "´¿Êı×Ö×ø±ê"
+#define STR_COORD_SGF "SGF×ÖÄ¸×ø±ê"
+#define STR_COORD_GTP "GTPĞ­Òé×ø±ê"
+#define	STR_SET_GAMEBOARD_COLOR "ÉèÖÃÆåÅÌÑÕÉ«"
+#define STR_MANUAL "Ê¹ÓÃËµÃ÷"
+#define STR_ABOUT "¹ØÓÚLZRobe"
+#define STR_FILE "ÎÄ¼ş"
+#define STR_EDIT "±à¼­"
+#define STR_VIEW "ÊÓÍ¼"
+#define STR_LINK "Á¬½Ó"
+#define STR_HELP "°ïÖú"
+#define STR_BLACK_DOG "AIÖ´ºÚ"
+#define STR_WHITE_DOG "AIÖ´°×"
+#define STR_TIME "Ë¼¿¼Ê±¼ä"
+#define STR_SHOW_ANALYZE "ÏÔÊ¾·ÖÎö"
+#define STR_TERMINATED_GAME "¶Ô¾ÖÒÑ¾­½áÊø£¬ĞèÒªÖØĞÂ¼ÓÔØ²ÅÄÜÏÔÊ¾·ÖÎö£¬È·¶¨ÖØĞÂ¼ÓÔØÃ´£¿"
+#define STR_INTERVAL "Ë¢ĞÂ¼ä¸ô"
+#define STR_ROUTE_LENGTH "Ô¤²â³¤¶È"
+#define STR_NO_ENGINE "ÒıÇæÎ´ÔËĞĞ"
+#define STR_TIP "ÌáÊ¾"
+#define STR_ADD_BRANCH_INQUIRY "È·¶¨Ôö¼Ó·ÖÖ§Ã´£¿"
+#define STR_DELETE_BRANCH_INQUIRY "È·¶¨É¾³ı·ÖÖ§Ã´£¿"
+#define STR_GAME_RESULT "¶Ô¾Ö½á¹û"
+#define STR_BLACK_RESIGN "ºÚÈÏÊä£¬°×ÖĞÅÌÊ¤"
+#define STR_WHITE_RESIGN "°×ÈÏÊä£¬ºÚÖĞÅÌÊ¤"
+#define STR_DISCARD_RECORD_INQUIRY "¼ì²âµ½¶Ô¾ÖĞÅÏ¢£¬È·¶¨Òª¶ªÆúÃ´£¿"
+#define STR_EXTRA_PARAMETERS "ÊäÈëÆäËü²ÎÊı"
+#define STR_CLOSE_ENGINE_INQUIRY "È·¶¨¹Ø±ÕÒıÇæÃ´£¿"
+#define STR_CHANGE_PATH "¼ì²âµ½ÄãĞŞ¸ÄÁËÒıÇæ»òÕßÈ¨ÖØµÄÂ·¾¶£¬ÊÇ·ñ±£´æ£¿"
+#define STR_CHANGE_EXTRA_PARA "¼ì²âµ½ÁËÄãÔö¼ÓÁË¶îÍâ²ÎÊı£¬ÊÇ·ñ±£´æ£¿"
+#define STR_RESTART_ENGINE "ÒıÇæ±ÀÀ££¬ÕıÔÚÖØÆô"
+#define STR_ENGINE_OPENING "ÒıÇæÕıÔÚÆô¶¯£¬ÇëÄÍĞÄµÈ´ı"
+#define STR_ENGINE_AVAILABLE "ÒıÇæÒÑÆô¶¯"
+#define STR_ENGINE_CLOSING "ÒıÇæÕıÔÚ¹Ø±Õ"
+#define STR_SELFPLAY "ÒıÇæÕıÔÚÓë×Ô¼º¶Ô¾Ö"
+#define STR_ANALYZING "¾ÖÊÆ·ÖÎöÖĞ"
+#define STR_VERSION "µ±Ç°°æ±¾£º1.02 ²âÊÔ°æ"
+#define STR_CLOSE "¹Ø±Õ"
+#define STR_MOVE_TURN "×Å×ÓÈ¨"
+#define STR_PRISONERS "Ìá×Ó"
+#define STR_PASS "·ÅÆúÒ»ÊÖ"
+#define STR_RESIGN "ÈÏÊä"
+#define STR_GAME_PROCESS "¶Ô¾Ö½ø³Ì"
+#define STR_DIRECTION "»¶Ó­ÊÔÓÃLZRobe£¡ÕâÊÇÒ»¸öÎªÈË¹¤ÖÇÄÜÎ§ÆåÈí¼şLeelaZeroÌá¹©Í¼ĞÎ½çÃæµÄ³ÌĞò¡£\n\n\
+Èç¹ûÄãÏëÁË½â¹ØÓÚLeelaZero¸ü¶àµÄĞÅÏ¢£¬Çë·ÃÎÊÏÂÃæµÄÍøÖ·£º\n\n\
 zero.sjeng.org\n\n\
-LZRobeå¯ä»¥å¸®åŠ©ä½ ä¸LeelaZeroå¯¹æˆ˜ï¼Œæˆ–è€…åˆ†ææ£‹è°±æ¥æé«˜ä½ çš„æ°´å¹³ã€‚\n\n\
-è¿™ä¸ªç¨‹åºæ˜¯åŸºäºC++è¯­è¨€å†™çš„ï¼Œå¹¶ä½¿ç”¨äº†ä¸€ä¸ªå«wxWidgetsçš„å›¾å½¢ç•Œé¢åº“\n\n\
-æ‰€ä»¥å¦‚æœä½ æƒ³ç¼–è¯‘è¿™ä¸ªç¨‹åºï¼Œä½ éœ€è¦å…ˆä¸‹è½½å¹¶é…ç½®wxWidgetsåº“ï¼Œè¯·æµè§ˆä¸‹åœ¨çš„ç½‘å€ï¼š\n\n\
+LZRobe¿ÉÒÔ°ïÖúÄãÓëLeelaZero¶ÔÕ½£¬»òÕß·ÖÎöÆåÆ×À´Ìá¸ßÄãµÄË®Æ½¡£\n\n\
+LZRobeÊÇ»ùÓÚC++ÓïÑÔĞ´µÄ£¬²¢Ê¹ÓÃÁËÒ»¸ö½ĞwxWidgetsµÄÍ¼ĞÎ½çÃæ¿â¡£\n\n\
+ËùÒÔÈç¹ûÄãÏë±àÒëLZRobe£¬ÄãĞèÒªÏÈÏÂÔØ²¢ÅäÖÃwxWidgets¿â£¬Çëä¯ÀÀÏÂÔÚµÄÍøÖ·£º\n\n\
 www.wxwidgets.org\n\n\
-ä½¿ç”¨Visual Studioæˆ–è€…Code::Blocksç¼–è¯‘è¿™ä¸ªç¨‹åºå¹¶ä¸å›°éš¾ã€‚\n\n\
-å¦‚æœä½ æƒ³è¯•ç€ç¼–è¯‘è¿™ä¸ªç¨‹åºï¼Œé¦–å…ˆè¦å»ºç«‹ä¸€ä¸ªåŸºäºWin32å›¾å½¢ç”¨æˆ·ç•Œé¢çš„é¡¹é¡¹ç›®ï¼Œç„¶åæŠŠ.hæ–‡ä»¶ã€.cppæ–‡ä»¶ï¼Œä¸€ä¸ª.rcæ–‡ä»¶ï¼Œä¸€ä¸ª.icoæ–‡ä»¶å’Œ.bmpæ–‡ä»¶åŒ…å«è¿›å»ã€‚\n\n\
-è®°å¾—åœ¨å·¥ç¨‹è®¾ç½®ä¸­æŠŠwxWidgetsçš„åŒ…å«æ–‡ä»¶å’Œåº“æ–‡ä»¶çš„è·¯å¾„åŠ è¿›å»ã€‚\n\n\
-Code::Blocksæ”¯æŒåˆ›å»ºä¸€ä¸ªwxWidgetsé¡¹ç›®ï¼Œè‡ªåŠ¨åŒ…å«wxWidgetsçš„ç›¸å…³è·¯å¾„ï¼Œè¿™æ ·ä¹Ÿè®¸å¯ä»¥ç®€åŒ–ç¼–è¯‘æµç¨‹ã€‚\n\n\
-åœ¨ä½ æˆåŠŸç¼–è¯‘å¥½ç¨‹åºä»¥åï¼Œå‘Šè¯‰ä½ å¦‚ä½•ç”¨è¿™ä¸ªç¨‹åºã€‚\n\n\
-è¿™ä¸ªç¨‹åºçš„å›¾æ ‡æ˜¯ä¸€ä¸ªç‹—çš„å¤´åƒï¼Œå› ä¸ºå›´æ£‹çš„è‹±æ–‡â€œGoâ€çš„å‘éŸ³ç±»ä¼¼äºä¸­æ–‡é‡Œçš„â€œç‹—â€ã€‚\n\n\
-åœ¨ä½ æ‰“å¼€è¿™ä¸ªç¨‹åºä»¥åï¼Œä½ ä¼šçœ‹åˆ°èœå•æ ä¸‹é¢æœ‰ä¸€ä¸ªå·¥å…·æ ï¼Œæ‰€æœ‰çš„åŠŸèƒ½éƒ½å¯ä»¥åœ¨å·¥å…·æ ä¸­æ‰¾åˆ°ã€‚\n\n\
-æ£‹ç›˜å·¦ä¾§æ˜¾ç¤ºäº†è½å­ä¸€æ–¹å’Œæå­æ•°é‡ï¼Œå³ä¾§æœ‰æ”¾å¼ƒä¸€æ­¥å’Œè®¤è¾“çš„é€‰ç‚¹ã€‚ä¸»çª—å£ä¸‹æ–¹çš„çŠ¶æ€æ ä¼šæ˜¾ç¤ºå¼•æ“çš„çŠ¶æ€ã€‚\n\n\
-é¼ æ ‡å·¦é”®ç”¨æ¥æ”¾æ£‹å­ï¼Œé¼ æ ‡å³é”®ç”¨æ¥æ‚”æ£‹ï¼Œé”®ç›˜å³ä¸‹çš„å¯¹å±€æµç¨‹å¯ä»¥ç”¨æ¥è·³è½¬åˆ°ä»»æ„æ£‹æ­¥ã€‚\n\n\
-å¯¹å±€æµç¨‹æŒ‰ç…§ä»å·¦åˆ°å³çš„é¡ºåºè›‡å½¢æ’åˆ—ï¼Œæ¯ä¸€åˆ—æœ‰25æ‰‹æ£‹ï¼Œæƒ³è·³è½¬åˆ°å¯¹åº”çš„æ£‹æ­¥ï¼Œä½¿ç”¨é¼ æ ‡å·¦é”®ç‚¹ç›¸åº”çš„ä½ç½®å³å¯ã€‚\n\n\
-ä¸ºäº†é¿å…å‡ºç°å‘½ä»¤æ‰å †å¯¼è‡´LeelaZeroå´©æºƒçš„æƒ…å†µï¼Œåœ¨å¼•æ“å¼€å¯ç­‰å¾…çš„æ—¶é—´å†…ï¼Œæ‚”æ£‹å’Œè·³è½¬æ£‹æ­¥æ˜¯ä¸å…è®¸çš„ï¼Œä½†å¯ä»¥è½å­ã€‚\n\n\
-è¿™ä¸ªç¨‹åºä¸æ”¯æŒå¤šåˆ†æ”¯æ£‹è°±ï¼Œå¦‚æœä½ è¦æ–°å¼€å¯¹å±€æˆ–è€…æ‰“å¼€å¯¹å±€æ–‡ä»¶ï¼Œç¨‹åºä¸­çš„æ£‹è°±ä¼šè¢«ä¸¢å¼ƒã€‚\n\n\
-å¦‚æœä½ æƒ³ä¿å­˜æ£‹è°±ï¼Œå¼•æ“å¿…é¡»æ‰“å¼€ï¼Œè€Œä¸”èœå•æˆ–è€…å·¥å…·æ ä¸­çš„ä¿å­˜åŠŸèƒ½åªä¼šå­˜å½“å‰æ£‹ç›˜ä¸Šçš„æ£‹æ­¥ã€‚\n\n\
-æ‰€ä»¥å¦‚æœä½ ä¸æƒ³ä¸¢å¤±å¯¹å±€ä¿¡æ¯ï¼Œè¯·èµ°åˆ°å¯¹å±€æœ€åä¸€æ­¥å†ä¿å­˜æ£‹è°±ã€‚\n\n\
-å·¥å…·æ é‡Œæœ‰ä¸€ä¸ªè¿è¡ŒæŒ‰é’®ï¼Œå¯ä»¥ä½¿ç”¨è¿™ä¸ªæŒ‰é”®å¯åŠ¨LeelaZeroã€‚\n\n\
-å¦‚æœä½ æ²¡æœ‰ä¸ºLeelaZeroè®¾ç½®å¼•æ“è·¯å¾„æˆ–è€…æƒé‡æ–‡ä»¶ï¼Œä¼šæœ‰å¯¹è¯æ¡†å¼¹å‡ºæç¤ºä½ é€‰æ‹©å¯æ‰§è¡Œæ–‡ä»¶å’Œæƒé‡æ–‡ä»¶ã€‚\n\n\
-é™¤éä½ ä½¿ç”¨äº†ç‰¹æ®Šçš„å¼•æ“ï¼Œæ¯”å¦‚åŠ¨æ€è´´ç›®ï¼Œä½ ä¸éœ€è¦è¾“å…¥å…¶å®ƒå‚æ•°ã€‚\n\n\
-å½“LeelaZeroæˆåŠŸå¯åŠ¨ä»¥åï¼Œç­‰ä¸Šæ•°ç§’ï¼Œå·¥å…·æ é‡Œçš„å‡ ä¸ªç°è‰²æŒ‰é’®ä¼šå˜æˆå½©è‰²ï¼Œè¿™ä¸ªè¿è¡ŒæŒ‰é’®ç”±å˜æˆç”¨æ¥å…³é—­å¼•æ“çš„æŒ‰é’®ã€‚\n\n\
-å¦‚æœä½ æƒ³åœ¨æ¸¸æˆè¿‡ç¨‹ä¸­æ”¹å˜å¼•æ“æˆ–è€…æƒé‡æ–‡ä»¶ï¼Œä½ éœ€è¦å…ˆå…³é—­å¼•æ“ï¼Œç„¶ååœ¨ç¼–è¾‘èœå•ä¸­ä¿®æ”¹å¼•æ“å’Œæƒé‡æ–‡ä»¶è·¯å¾„ï¼Œæœ€åé‡å¯å¼•æ“å³å¯ã€‚\n\n\
-æ–°å¯åŠ¨çš„å¼•æ“ä¼šè‡ªåŠ¨åŠ è½½å½“å‰çš„å¯¹å±€è¿›åº¦ã€‚å³ä½¿LeelaZeroæ„å¤–å´©æºƒï¼ŒLZRobeä¹Ÿä¼šå¯¹å®ƒé‡å¯ï¼Œå¹¶åœ¨æ•°ç§’å†…è‡ªåŠ¨åŠ è½½å¯¹å±€è¿›åº¦ä»¥ç¡®ä¿å¯¹å±€çš„é¡ºåˆ©è¿›è¡Œã€‚\n\n\
-å¦‚æœä½ åœ¨æ’¤æ¶ˆå‡ æ­¥ä»¥åæƒ³è¦æ–°å¢åŠ æ£‹å­ï¼Œä»¥å‰çš„å˜åŒ–ä¸ä¼šè¢«ä¿å­˜ã€‚\n\n\
-å¸¦ç€ç‹—çš„å¤´åƒçš„æŒ‰é’®ç”¨æ¥å’ŒLeelaZeroå¯¹å±€ã€‚ç‹—çš„å¤´åƒåé¢çš„èƒŒæ™¯è¡¨ç¤ºAIæ‰€æ‰§æ£‹å­çš„é¢œè‰²ã€‚\n\n\
-å¦‚æœä½ æŠŠä¸¤ä¸ªç‹—çš„å¤´åƒçš„æŒ‰é’®éƒ½æŒ‰ä¸‹ï¼Œé‚£AIä¼šè‡ªæˆ‘å¯¹å±€ã€‚\n\n\
-åœ¨â€œæ€è€ƒæ—¶é—´â€æ ‡ç­¾å³è¾¹çš„æ•°å­—æ¡†è¡¨ç¤ºAIæ€è€ƒæ—¶é—´è®¾ç½®ï¼Œæ—¶é—´å•ä½æ˜¯ä¸€ç§’ã€‚\n\n\
-ä¾‹å¦‚ï¼Œå¦‚æœä½ æŠŠè¿™ä¸ªæ•°å­—è®¾ç½®æˆäº†5ï¼Œé‚£AIä¼šåœ¨å¯¹æ‰‹ä¸‹å­åçš„5ç§’ä¹‹å†…ä¸‹å‡ºä¸€æ­¥æ£‹ã€‚\n\n\
-å¦‚æœä½ æ”¹å˜äº†æ€è€ƒçš„æ—¶é—´ï¼Œå®ƒä¼šåœ¨ä½ ä¸‹æ¬¡è®©AIèµ°æ£‹æ—¶ç”Ÿæ•ˆã€‚\n\n\
-å¦‚æœä½ åœ¨AIæ€è€ƒæœŸé—´å–æ¶ˆäº†å®ƒæ‰€æ‰§çš„ä¸€æ–¹ï¼Œå®ƒè¿˜æ˜¯ä¼šç»§ç»­æ€è€ƒï¼Œç›´åˆ°ä¸‹å‡ºä¸‹ä¸€æ­¥æ£‹ã€‚æ‰€ä»¥ä½ è¿˜æ˜¯è¦ç­‰åˆ°ä¸‹ä¸€æ­¥æ£‹åœ¨æ£‹ç›˜ä¸Šå‡ºç°ã€‚\n\n\
-å¸¦ç€é—®å·çš„æŒ‰é’®ç”¨æ¥åˆ†ææ£‹è°±ï¼Œåˆ†æç»“æœæŒ‰ä¸€å®šçš„é¢‘ç‡åˆ·æ–°ã€‚\n\n\
-åˆ·æ–°é¢‘ç‡å¯ä»¥åœ¨ç”¨â€œåˆ·æ–°é—´éš”â€æ ‡ç­¾å³è¾¹çš„æ•°å­—æ¡†æ¥è®¾ç½®ï¼Œå•ä½æ˜¯ç™¾åˆ†ä¹‹ä¸€ç§’ã€‚\n\n\
-ä¾‹å¦‚ï¼Œä½ æŠŠè¿™ä¸ªæ•°å­—è®¤æˆäº†50ï¼Œé‚£åˆ†æç»“æœä¼šåœ¨1ç§’å†…åˆ·æ–°ä¸¤æ¬¡ã€‚\n\n\
-åœ¨åˆ†æè¿‡ç¨‹ä¸­ï¼Œç»¿ç‚¹çš„é¢œè‰²æ˜¯æœç´¢æœ€å¤šçš„ç‚¹ï¼Œå…¶æ¬¡æ˜¯è“ç‚¹ï¼Œé»„ç‚¹å’Œçº¢ç‚¹çš„æœç´¢è¾ƒå°‘ã€‚\n\n\
-å½©è‰²ç‚¹ä¸Šçš„æ•°å­—è¡¨ç¤ºèƒœç‡å’Œæœç´¢æ•°ã€‚æœç´¢æ•°æœ€å¤šçš„ç‚¹é€šå¸¸æ˜¯æœ€å¥½çš„é€‰ç‚¹ã€‚\n\n\
-å¦‚æœä½ æŠŠé¼ æ ‡æ”¾åˆ°æ­£åœ¨åˆ†æçš„ç‚¹ä¸Šï¼Œè¿™ä¸ªç‚¹ä¸‹é¢çš„åˆ†ææ­¥æ•°å°†ä¼šè‡ªåŠ¨æ˜¾ç¤ºï¼Œä¸Šé¢æœ‰è‹±æ–‡å­—æ¯è¡¨ç¤ºé¡ºåºã€‚\n\n\
-é¦–å…ˆæ˜¯å°å†™å­—æ¯ï¼Œç„¶åæ˜¯å¤§å†™å­—æ¯ã€‚æ˜¾ç¤ºçš„æœ€å¤§æ­¥æ•°å¯ä»¥ç”¨â€œé¢„æµ‹é•¿åº¦â€æ ‡ç­¾å³è¾¹çš„æ»‘æ†æ¥è®¾ç½®ã€‚\n\n\
-å¦‚æœæœ‰è¿ç»­ä¸¤æ‰‹æ”¾å¼ƒ(åŒæ–¹å„ä¸€æ‰‹)æˆ–è€…ä¸€æ–¹è®¤è¾“ï¼Œåˆ™æ£‹å±€ç»“æŸï¼ŒLeelaZeroä¸ä¼šå¯¹ç»“æŸçš„æ£‹å±€åšåˆ†æã€‚\n\n\
-å¦‚æœä½ æƒ³åˆ†æå·²ç»“æŸçš„æ£‹å±€ï¼Œéœ€è¦ä»å¤´åŠ è½½ï¼Œå¹¶åˆ é™¤å¯¼è‡´æ£‹å±€ç»“æŸçš„ä¸¤æ‰‹æ”¾å¼ƒæˆ–ä¸€æ‰‹è®¤è¾“ï¼Œå…¶å®ƒç€å­ä¸ä¼šæ”¹å˜ã€‚\n\n\
-åœ¨å¯¹å±€æ¥è¿‘ç»“æŸæˆ–è€…ä¸€æ–¹å æœ‰ç»å¯¹çš„ä¼˜åŠ¿çš„æ—¶å€™ï¼ŒLeeaZeroå¯èƒ½ä¼šæœ‰æ”¾å¼ƒçš„æ­¥çš„é€‰ç‚¹ï¼ŒæŸ¥çœ‹è¿™ä¸ªé€‰ç‚¹çš„åˆ†æå¯ä»¥æŠŠé¼ æ ‡æ”¾åœ¨æ”¾å¼ƒé€‰é¡¹çš„é€‰ç‚¹ä¸Šã€‚\n\n\
-å¸¦ç€ç®—ç›˜æ ‡è¯†çš„æŒ‰é’®ç”¨æ¥è®¡ç®—å¯¹å±€ç»“æœã€‚ç”±äºæ­»å­ä¸ä¸€å®šè¢«ææ‰ï¼Œæ‰€ä»¥æ˜¾ç¤ºç»“æœå¹¶ä¸å‡†ç¡®ã€‚\n\n\
-å¦‚æœä½ æ”¹å˜äº†LeelaZeroçš„å¼•æ“å’Œæƒé‡æ–‡ä»¶è·¯å¾„ï¼Œå½“ä½ é€€å‡ºè¿™ä¸ªç¨‹åºçš„æ—¶å€™ï¼Œä¼šæœ‰å¯¹è¯æ¡†é—®ä½ æ˜¯å¦ä¿å­˜ã€‚\n\n\
-å¦‚æœä½ é€‰æ‹©äº†ä¿å­˜è¿™ä¸ªå˜åŒ–ï¼Œé‚£LeelaZeroçš„å¼•æ“å’Œæƒé‡æ–‡ä»¶è·¯å¾„ä¼šè¢«ä¿å­˜åˆ°ä¸€ä¸ªåä¸ºâ€œconfig.txtâ€çš„æ–‡ä»¶ä¸­ï¼Œä¸‹æ¬¡å¯åŠ¨ä¼šè‡ªåŠ¨åŠ è½½ã€‚\n\n\
-è™½ç„¶ç¨‹åºçš„ä½œè€…ä¸€ç›´åœ¨åŠªåŠ›å‡å°‘ç¨‹åºçš„Bugï¼Œä½†æˆ‘ä»¬ä¾ç„¶æ— æ³•ç¡®ä¿ç¨‹åºä¸ä¼šå´©æºƒã€‚\n\n\
-å¦‚æœç¨‹åºæ„å¤–å´©æºƒï¼ŒLeelaZeroä¾ç„¶åœ¨è¿è¡Œï¼Œè¯·ä½¿ç”¨ä»»åŠ¡ç®¡ç†å™¨ç»“æŸLeelaZeroï¼Œä»¥å…å®ƒç»§ç»­å ç”¨ä½ çš„ç¡¬ä»¶èµ„æºï¼\n\n\
-æ„Ÿè°¢æ‚¨è¯»å®Œè¿™ä¸ªå¸®åŠ©æ–‡ä»¶ã€‚æ¬¢è¿å¯¹ç¨‹åºä»£ç è¿›è¡Œè†œæ”¹ï¼Œä»¥é€‚åº”æ›´å¤šçš„åœºåˆï¼"
+Ê¹ÓÃVisual Studio»òÕßCode::Blocks±àÒëLZRobe²¢²»À§ÄÑ¡£\n\n\
+Èç¹ûÄãÏëÊÔ×Å±àÒëLZRobe£¬Ê×ÏÈÒª½¨Á¢Ò»¸ö»ùÓÚWin32Í¼ĞÎÓÃ»§½çÃæµÄÏîÏîÄ¿£¬È»ºó°Ñ.hÎÄ¼ş¡¢.cppÎÄ¼ş£¬Ò»¸ö.rcÎÄ¼ş£¬Ò»¸ö.icoÎÄ¼şºÍ.bmpÎÄ¼ş°üº¬½øÈ¥¡£\n\n\
+¼ÇµÃÔÚ¹¤³ÌÉèÖÃÖĞ°ÑwxWidgetsµÄ°üº¬ÎÄ¼şºÍ¿âÎÄ¼şµÄÂ·¾¶¼Ó½øÈ¥¡£\n\n\
+Code::BlocksÖ§³Ö´´½¨Ò»¸öwxWidgetsÏîÄ¿£¬×Ô¶¯°üº¬wxWidgetsµÄÏà¹ØÂ·¾¶£¬ÕâÑùÒ²Ğí¿ÉÒÔ¼ò»¯±àÒëÁ÷³Ì¡£\n\n\
+ÔÚÄã³É¹¦±àÒëºÃ³ÌĞòÒÔºó£¬¸æËßÄãÈçºÎÓÃLZRobe¡£\n\n\
+LZRobeµÄÍ¼±êÊÇÒ»¸ö¹·µÄÍ·Ïñ£¬ÒòÎªÎ§ÆåµÄÓ¢ÎÄ¡°Go¡±µÄ·¢ÒôÀàËÆÓÚÖĞÎÄÀïµÄ¡°¹·¡±¡£\n\n\
+ÔÚÄã´ò¿ªLZRobeÒÔºó£¬Äã»á¿´µ½²Ëµ¥À¸ÏÂÃæÓĞÒ»¸ö¹¤¾ßÀ¸£¬´ó¶àÊı¹¦ÄÜ¶¼¿ÉÒÔÔÚ¹¤¾ßÀ¸ÖĞÕÒµ½¡£\n\n\
+ĞÂ¶Ô¾Ö»áÉ¾³ıµ±Ç°µÄ¶Ô¾ÖĞÅÏ¢¡£ÈÃ×Ó¶Ô¾ÖÖ»ÄÜÔÚÎÄ¼ş²Ëµ¥À¸ÖĞÑ¡È¡¡£\n\n\
+LZRobeÔÊĞíÓÃÊó±ê°ÑsgfÎÄ¼şÍÏ·Åµ½´°¿ÚÖĞÀ´´ò¿ª¡£Ò²¿ÉÒÔ°Ñ.sgf¸ñÊ½µÄÆåÆ×ÎÄ¼şµÄ´ò¿ª·½Ê½Ö±½ÓÉèÖÃ³ÉLZRobe¡£\n\n\
+µ«Èç¹ûÄãµÄÆåÆ×ÎÄ¼şÃû»òÕßÂ·¾¶ÖĞÓĞ·ÇASCIIÂë×Ö·û(±ÈÈçºº×Ö)£¬ÄãÖ»ÄÜÓÃ²Ëµ¥»òÕß¹¤¾ßÀ¸À´´ò¿ª¡£\n\n\
+ÆåÅÌ×ó²àÏÔÊ¾ÁËÂä×ÓÒ»·½ºÍÌá×ÓÊıÁ¿£¬ÓÒ²àÓĞ·ÅÆúÒ»²½ºÍÈÏÊäµÄÑ¡µã¡£Ö÷´°¿ÚÏÂ·½µÄ×´Ì¬À¸»áÏÔÊ¾ÒıÇæµÄ×´Ì¬¡£\n\n\
+Êó±ê×ó¼üÓÃÀ´·ÅÆå×Ó£¬Êó±êÓÒ¼üÓÃÀ´»ÚÆå£¬¼üÅÌÓÒÏÂµÄ¶Ô¾ÖÁ÷³Ì¿ÉÒÔÓÃÀ´Ìø×ªµ½ÈÎÒâÆå²½¡£\n\n\
+¶Ô¾ÖÁ÷³Ì°´ÕÕ´Ó×óµ½ÓÒµÄË³ĞòÉßĞÎÅÅÁĞ£¬Ã¿Ò»ÁĞÓĞ25ÊÖÆå£¬ÏëÌø×ªµ½¶ÔÓ¦µÄÆå²½£¬Ê¹ÓÃÊó±ê×ó¼üµãÏàÓ¦µÄÎ»ÖÃ¼´¿É¡£\n\n\
+ÎªÁË±ÜÃâ³öÏÖÃüÁîÔú¶Ñµ¼ÖÂLeelaZero±ÀÀ£µÄÇé¿ö£¬ÔÚÒıÇæ¿ªÆôµÈ´ıµÄÊ±¼äÄÚ£¬»ÚÆåºÍÌø×ªÆå²½ÊÇ²»ÔÊĞíµÄ£¬µ«¿ÉÒÔÂä×Ó¡£\n\n\
+LZRobeÖ§³Ö¶à·ÖÖ§ÆåÆ×£¬Èç¹ûÄã¸Ä±äÁËÔ­À´ÆåÆ×ÖĞµÄÏÂ·¨£¬»áÓĞÌáÊ¾ÈÃÄãÑ¡ÔñÊÇ·ñÔö¼ÓĞÂµÄ·ÖÖ§¡£°ÑÆåÆ×±£´æÎªsgf¸ñÊ½Ò²¿ÉÒÔÍ¬Ê±´æÏÂËùÓĞµÄ·ÖÖ§¡£\n\n\
+ÎªÁË²»ÖÁÓÚÑÛ»¨çÔÂÒ£¬¶à·ÖÖ§ÆåÆ×ÔÚ¶Ô¾ÖÁ÷³ÌÖĞÖ»»áÏÔÊ¾µ±Ç°Æå²½ËùÔÚµÄ×î³¤Á´£¬ÆäÖĞÓĞ·ÖÖ§µÄÆå²½»á·Ö±ğÓÉÔ­À´µÄºÚÉ«Óë°×É«±äÎªºìÉ«ÓëÀ¶É«¡£\n\n\
+Èç¹ûÄãÌø×ªµ½ÓĞ·ÖÖ§µÄÆå²½£¬ÄÇÏÂÒ»²½µÄ²»Í¬·ÖÖ§»á°´³¤¶ÌÓÃ°µ×ÏÉ«´ÖÌå´óĞ´Ó¢ÎÄ×ÖÄ¸±ê×¢ÔÚÆåÅÌÉÏ¡£A´ú±í×Å×î³¤µÄ·ÖÖ§£¬Ô½¶ÌµÄ·ÖÖ§¶ÔÓ¦×ÖÄ¸±íÔ½¿¿ºóµÄÎ»ÖÃµÄ×ÖÄ¸¡£\n\n\
+ÓÃÊó±ê×ó¼üµã»÷ÏàÓ¦×ÖÄ¸ËùÔÚµÄÎ»ÖÃ¿ÉÒÔ½øÈë¶ÔÓ¦µÄ·ÖÖ§£¬ÓÃÊó±êÓÒ¼üµã»÷Ôò¿ÉÒÔÉ¾³ıÏàÓ¦µÄ·ÖÖ§¡£\n\n\
+¶à·ÖÖ§Á´µÄË³ĞòÊÇ±£³Ö¶¯Ì¬Î¬»¤µÄ£¬Èç¹ûÄãÔö¼Ó»òÕßÉ¾³ıÁË·ÖÖ§£¬¿ÉÄÜ»á¶ÔËüµÄÉÏÒ»¼¶·ÖÖ§µÄÅÅĞò²úÉúÓ°Ïì¡£\n\n\
+ÓÉÓÚLeela ZeroµÄ¹Ù·½È¨ÖØ²»Ö§³Ö·Ç19Â·¶Ô¾Ö£¬ËùÒÔ·Ç19Â·µÄÆåÅÌÖ»Ö§³Ö´ò¿ª¡¢ĞŞ¸ÄºÍ±£´æÆåÆ×¡£Èç¹ûÒª´ò¿ª·Ç19Â·ÆåÆ×£¬ĞèÒªÏÈ°ÑÆåÅÌµ÷Õûµ½ÏàÓ¦´óĞ¡¡£\n\n\
+ÆåÅÌ×ø±ê¿ÉÒÔÑ¡ÔñÒş²Ø£¬Ò²¿ÉÒÔÑ¡Ôñ¼¸ÖÖ²»Í¬µÄÏÔÊ¾Ä£Ê½¡£×¢ÒâGTPĞ­Òé×ø±êµÄºá×ø±êÃ»ÓĞ×ÖÄ¸¡°I¡±£¬×İ×ø±êÊÇ´ÓÏÂÍùÉÏÅÅÁĞµÄ¡£\n\n\
+¹¤¾ßÀ¸ÀïÓĞÒ»¸öÔËĞĞ°´Å¥£¬¿ÉÒÔÊ¹ÓÃÕâ¸ö°´¼üÆô¶¯LeelaZero¡£\n\n\
+Èç¹ûÄãÃ»ÓĞÎªLeelaZeroÉèÖÃÒıÇæÂ·¾¶»òÕßÈ¨ÖØÎÄ¼ş£¬»áÓĞ¶Ô»°¿òµ¯³öÌáÊ¾ÄãÑ¡Ôñ¿ÉÖ´ĞĞÎÄ¼şºÍÈ¨ÖØÎÄ¼ş¡£\n\n\
+³ı·ÇÄãÊ¹ÓÃÁËÌØÊâµÄÒıÇæ£¬±ÈÈç¶¯Ì¬ÌùÄ¿£¬Äã²»ĞèÒªÊäÈëÆäËü²ÎÊı¡£\n\n\
+µ±LeelaZero³É¹¦Æô¶¯ÒÔºó£¬µÈÉÏÊıÃë£¬¹¤¾ßÀ¸ÀïµÄ¼¸¸ö»ÒÉ«°´Å¥»á±ä³É²ÊÉ«£¬Õâ¸öÔËĞĞ°´Å¥ÓÉ±ä³ÉÓÃÀ´¹Ø±ÕÒıÇæµÄ°´Å¥¡£\n\n\
+Èç¹ûÄãÏëÔÚÓÎÏ·¹ı³ÌÖĞ¸Ä±äÒıÇæ»òÕßÈ¨ÖØÎÄ¼ş£¬ÄãĞèÒªÏÈ¹Ø±ÕÒıÇæ£¬È»ºóÔÚ±à¼­²Ëµ¥ÖĞĞŞ¸ÄÒıÇæºÍÈ¨ÖØÎÄ¼şÂ·¾¶£¬×îºóÖØÆôÒıÇæ¼´¿É¡£\n\n\
+ĞÂÆô¶¯µÄÒıÇæ»á×Ô¶¯¼ÓÔØµ±Ç°µÄ¶Ô¾Ö½ø¶È¡£¼´Ê¹LeelaZeroÒâÍâ±ÀÀ££¬LZRobeÒ²»á¶ÔËüÖØÆô£¬²¢ÔÚÊıÃëÄÚ×Ô¶¯¼ÓÔØ¶Ô¾Ö½ø¶ÈÒÔÈ·±£¶Ô¾ÖµÄË³Àû½øĞĞ¡£\n\n\
+Èç¹ûÄãÔÚ³·Ïû¼¸²½ÒÔºóÏëÒªĞÂÔö¼ÓÆå×Ó£¬ÒÔÇ°µÄ±ä»¯²»»á±»±£´æ¡£\n\n\
+´ø×Å¹·µÄÍ·ÏñµÄ°´Å¥ÓÃÀ´ºÍLeelaZero¶Ô¾Ö¡£¹·µÄÍ·ÏñºóÃæµÄ±³¾°±íÊ¾AIËùÖ´Æå×ÓµÄÑÕÉ«¡£\n\n\
+Èç¹ûÄã°ÑÁ½¸ö¹·µÄÍ·ÏñµÄ°´Å¥¶¼°´ÏÂ£¬ÄÇAI»á×ÔÎÒ¶Ô¾Ö¡£\n\n\
+ÔÚ¡°Ë¼¿¼Ê±¼ä¡±±êÇ©ÓÒ±ßµÄÊı×Ö¿ò±íÊ¾AIË¼¿¼Ê±¼äÉèÖÃ£¬Ê±¼äµ¥Î»ÊÇÒ»Ãë¡£\n\n\
+ÀıÈç£¬Èç¹ûÄã°ÑÕâ¸öÊı×ÖÉèÖÃ³ÉÁË5£¬ÄÇAI»áÔÚ¶ÔÊÖÏÂ×ÓºóµÄ5ÃëÖ®ÄÚÏÂ³öÒ»²½Æå¡£\n\n\
+Èç¹ûÄã¸Ä±äÁËË¼¿¼µÄÊ±¼ä£¬Ëü»áÔÚÄãÏÂ´ÎÈÃAI×ßÆåÊ±ÉúĞ§¡£\n\n\
+Èç¹ûÄãÔÚAIË¼¿¼ÆÚ¼äÈ¡ÏûÁËËüËùÖ´µÄÒ»·½£¬Ëü»¹ÊÇ»á¼ÌĞøË¼¿¼£¬Ö±µ½ÏÂ³öÏÂÒ»²½Æå¡£ËùÒÔÄã»¹ÊÇÒªµÈµ½ÏÂÒ»²½ÆåÔÚÆåÅÌÉÏ³öÏÖ¡£\n\n\
+´ø×ÅÎÊºÅµÄ°´Å¥ÓÃÀ´·ÖÎöÆåÆ×£¬·ÖÎö½á¹û°´Ò»¶¨µÄÆµÂÊË¢ĞÂ¡£\n\n\
+Ë¢ĞÂÆµÂÊ¿ÉÒÔÔÚÓÃ¡°Ë¢ĞÂ¼ä¸ô¡±±êÇ©ÓÒ±ßµÄÊı×Ö¿òÀ´ÉèÖÃ£¬µ¥Î»ÊÇ°Ù·ÖÖ®Ò»Ãë¡£\n\n\
+ÀıÈç£¬Äã°ÑÕâ¸öÊı×ÖÈÏ³ÉÁË50£¬ÄÇ·ÖÎö½á¹û»áÔÚ1ÃëÄÚË¢ĞÂÁ½´Î¡£\n\n\
+ÔÚ·ÖÎö¹ı³ÌÖĞ£¬ÂÌµãµÄÑÕÉ«ÊÇËÑË÷×î¶àµÄµã£¬Æä´ÎÊÇÀ¶µã£¬»ÆµãºÍºìµãµÄËÑË÷½ÏÉÙ¡£\n\n\
+²ÊÉ«µãÉÏµÄÊı×Ö±íÊ¾Ê¤ÂÊºÍËÑË÷Êı¡£ËÑË÷Êı×î¶àµÄµãÍ¨³£ÊÇ×îºÃµÄÑ¡µã¡£\n\n\
+ÎªÁË·ÀÖ¹³ÌĞò±ÀÀ££¬ÔÚ·ÖÎöÆåÆ×µÄÊ±ºò£¬Çë²»ÒªËæÒâ¸Ä±ä´°¿Ú´óĞ¡¡£\n\n\
+Èç¹ûÄã°ÑÊó±ê·Åµ½ÕıÔÚ·ÖÎöµÄµãÉÏ£¬Õâ¸öµãÏÂÃæµÄ·ÖÎö²½Êı½«»á×Ô¶¯ÏÔÊ¾£¬ÉÏÃæÓĞ×ÖÄ¸±íÊ¾Ë³Ğò¡£\n\n\
+Ê×ÏÈÊÇĞ¡Ğ´Ó¢ÎÄ×ÖÄ¸£¬È»ºóÊÇĞ¡Ğ´Ï£À°×ÖÄ¸¡£ÏÔÊ¾µÄ×î´ó²½Êı¿ÉÒÔÓÃ¡°Ô¤²â³¤¶È¡±±êÇ©ÓÒ±ßµÄ»¬¸ËÀ´ÉèÖÃ¡£\n\n\
+Èç¹ûÓĞÁ¬ĞøÁ½ÊÖ·ÅÆú(Ë«·½¸÷Ò»ÊÖ)»òÕßÒ»·½ÈÏÊä£¬ÔòÆå¾Ö½áÊø£¬LeelaZero²»»á¶Ô½áÊøµÄÆå¾Ö×ö·ÖÎö¡£\n\n\
+Èç¹ûÄãÏë·ÖÎöÒÑ½áÊøµÄÆå¾Ö£¬ĞèÒª´ÓÍ·¼ÓÔØ£¬ÆåÆ×µÄĞÅÏ¢²»»á¸Ä±ä¡£\n\n\
+ÔÚ¶Ô¾Ö½Ó½ü½áÊø»òÕßÒ»·½Õ¼ÓĞ¾ø¶ÔµÄÓÅÊÆµÄÊ±ºò£¬LeeaZero¿ÉÄÜ»áÓĞ·ÅÆúµÄ²½µÄÑ¡µã£¬²é¿´Õâ¸öÑ¡µãµÄ·ÖÎö¿ÉÒÔ°ÑÊó±ê·ÅÔÚ·ÅÆúÑ¡ÏîµÄÑ¡µãÉÏ¡£\n\n\
+´ø×ÅËãÅÌ±êÊ¶µÄ°´Å¥ÓÃÀ´¼ÆËã¶Ô¾Ö½á¹û¡£ÓÉÓÚËÀ×Ó²»Ò»¶¨±»Ìáµô£¬ËùÒÔÏÔÊ¾½á¹û²¢²»×¼È·¡£\n\n\
+Èç¹ûÄã¸Ä±äÁËLeelaZeroµÄÒıÇæºÍÈ¨ÖØÎÄ¼şÂ·¾¶£¬»òÕß¸Ä±äÁË¸½¼Ó²ÎÊı£¬µ±ÄãÍË³öLZRobeµÄÊ±ºò£¬»áÓĞ¶Ô»°¿òÎÊÄãÊÇ·ñ±£´æ¡£\n\n\
+Èç¹ûÄãÑ¡ÔñÁË±£´æÕâ¸ö±ä»¯£¬ÄÇLeelaZeroµÄÒıÇæºÍÈ¨ÖØÎÄ¼şÂ·¾¶ÒÔ¼°ÄãµÄ¸½¼Ó²ÎÊı»á±»±£´æµ½Ò»¸öÃûÎª¡°config.txt¡±µÄÎÄ¼şÖĞ£¬ÏÂ´ÎÆô¶¯»á×Ô¶¯¼ÓÔØ¡£\n\n\
+ËäÈ»³ÌĞòµÄ×÷ÕßÒ»Ö±ÔÚÅ¬Á¦¼õÉÙ³ÌĞòµÄBug£¬µ«ÎÒÃÇÒÀÈ»ÎŞ·¨È·±£³ÌĞò²»»á±ÀÀ£¡£\n\n\
+Èç¹û³ÌĞòÒâÍâ±ÀÀ££¬LeelaZeroÒÀÈ»ÔÚÔËĞĞ£¬ÇëÊ¹ÓÃÈÎÎñ¹ÜÀíÆ÷½áÊøLeelaZero£¬ÒÔÃâËü¼ÌĞøÕ¼ÓÃÄãµÄÓ²¼ş×ÊÔ´£¡\n\n\
+¸ĞĞ»Äú¶ÁÍêÕâ¸ö°ïÖúÎÄ¼ş¡£»¶Ó­¶Ô³ÌĞò´úÂë½øĞĞÄ¤¸Ä£¬ÒÔÊÊÓ¦¸ü¶àµÄ³¡ºÏ£¡"
 #else
 #define STR_NEW "new"
+#define STR_HANDICAP "handicap game"
+#define STR_HANDICAP_NUM "handicap number"
 #define STR_OPEN "open"
 #define STR_SAVE "save"
 #define STR_EXIT "exit"
@@ -116,12 +138,19 @@ Code::Blocksæ”¯æŒåˆ›å»ºä¸€ä¸ªwxWidgetsé¡¹ç›®ï¼Œè‡ªåŠ¨åŒ…å«wxWidgetsçš„ç›¸å…³è·
 #define STR_CLOSE_ENGINE "close engine"
 #define STR_RESULT "calculate result"
 #define STR_STEP "show step index"
+#define STR_COORDINATE "game board coordinates"
+#define STR_COORD_NULL "hide coordinates"
+#define STR_COORD_NET "net client coordinates"
+#define STR_COORD_NUM "pure digital coordinates"
+#define STR_COORD_SGF "sgf alphabet coordinates"
+#define STR_COORD_GTP "gtp protocal coordinates"
 #define	STR_SET_GAMEBOARD_COLOR "set game board color"
 #define STR_MANUAL "manual"
 #define STR_ABOUT "about LZRobe"
 #define STR_FILE "File"
 #define STR_EDIT "Edit"
 #define STR_VIEW "View"
+#define STR_LINK "Link"
 #define STR_HELP "Help"
 #define STR_BLACK_DOG "AI plays black"
 #define STR_WHITE_DOG "AI plays white"
@@ -131,48 +160,59 @@ Code::Blocksæ”¯æŒåˆ›å»ºä¸€ä¸ªwxWidgetsé¡¹ç›®ï¼Œè‡ªåŠ¨åŒ…å«wxWidgetsçš„ç›¸å…³è·
 #define STR_INTERVAL "refresh interval"
 #define STR_ROUTE_LENGTH "analyze length"
 #define STR_NO_ENGINE "no engine"
-#define STR_WARNING "Tip"
-#define STR_CHANGE_RECORD_INQUIRY "Are you sure to discard the previous variation?"
+#define STR_TIP "Tip"
+#define STR_ADD_BRANCH_INQUIRY "Are you sure to add branch?"
+#define STR_DELETE_BRANCH_INQUIRY "Are you sure to delete branch?"
 #define STR_GAME_RESULT "game result"
 #define STR_BLACK_RESIGN "Black has resigned, white win!"
 #define STR_WHITE_RESIGN "White has resigned, black win!"
 #define STR_DISCARD_RECORD_INQUIRY "Are you sure to discard the previous game record?"
 #define STR_EXTRA_PARAMETERS "Input other parameters"
+#define STR_BOARD_SIZE "Change Gameboard Size"
 #define STR_CLOSE_ENGINE_INQUIRY "Are you sure to close the engine?"
 #define STR_CHANGE_PATH "You have changed the paths of engine or weight file, would you like to save this change?"
+#define STR_CHANGE_EXTRA_PARA "You have appended extra parameters, would you like to save them?"
 #define STR_RESTART_ENGINE "Engine has collapse, it is restarting."
 #define STR_ENGINE_OPENING "Engine is starting, please wait."
 #define STR_ENGINE_AVAILABLE "Engine is available"
 #define STR_ENGINE_CLOSING "Engine is closing"
-#define STR_SELFPLAY "Engine is self playing"
+#define STR_SELFPLAY "Engine is playing against itself"
 #define STR_ANALYZING "Analyzinng"
-#define STR_VERSION "Current version: 1.01"
+#define STR_VERSION "Current version: 1.02 beta"
 #define STR_CLOSE "Close"
 #define STR_MOVE_TURN "Move Turn"
 #define STR_PRISONERS "Prisoners"
 #define STR_PASS "Pass"
 #define STR_RESIGN "Resign"
 #define STR_GAME_PROCESS "Game Process"
-#define STR_DIRECTION "formation about Leela Zero, please browse the following website:\n\n\
+#define STR_DIRECTION "Welcome to try LZRobe! This is a software that provides a graphical user interface of the computer go software Leela Zero.\n\n\
+If you're interested in more information about Leela Zero, please browse the following website:\n\n\
 zero.sjeng.org\n\n\
 LZRobe can help you to play Go againt Leela Zero or analyze the Go game records with Leela Zero to improve your strength of the game.\n\n\
-This program is written in C++ pragramming language with a GUI Library named wxWidgets.\n\n\
-So if you would like to compile this program, you have to download and install the wxWidgets library first.Please look up the following website:\n\n\
+LZRobe is written in C++ pragramming language with a GUI Library named wxWidgets.\n\n\
+So if you would like to compile LZRobe, you have to download and install the wxWidgets library first.Please look up the following website:\n\n\
 www.wxwidgets.org\n\n\
-It is not difficult to compile this program with Visual Studio or Code::Blocks.\n\n\
-If you try to compile this program, you should create a Win32 GUI empty project and add the files, including.h files, .cpp files, a .rc file, a .ico file and.bmp files.\n\n\
+It is not difficult to compile LZRobe with Visual Studio or Code::Blocks.\n\n\
+If you try to compile LZRobe, you should create a Win32 GUI empty project and add the files, including.h files, .cpp files, a .rc file, a .ico file and.bmp files.\n\n\
 Don't forget appending include and lib dictionaries of wxWidgets in the setting of your project.\n\n\
-Code::Blocks supports creating a wxWidgets project containing the path of wxWidgets, this maybe make it simpler to compile this program.\n\n\
-After you have compiled this program successfully, I tell you how to use this program.\n\n\
-The icon of this program is a dog's head. Because the pronounciation of \"Go\" means \"dog\" in Chinese.\n\n\
-Once you open this program, you will see a tool bar below the menu. All the functions of this program can be found in the tool bar.\n\n\
+Code::Blocks supports creating a wxWidgets project containing the path of wxWidgets, this maybe make it simpler to compile LZRobe.\n\n\
+After you have compiled LZRobe successfully, I tell you how to use LZRobe.\n\n\
+The icon of LZRobe is a dog's head. Because the pronounciation of \"Go\" means \"dog\" in Chinese.\n\n\
+Once you open LZRobe, you will see a tool bar below the menu. Most of the functions of LZRobe can be found in the tool bar.\n\n\
+New game will drop all the information of current game. A handicap game can onle be set in the file menu.\n\n\
+LZRobe allows dragging a sgf file to the window and open it. You can also set the default open program for an sgf file as LZRobe.\n\n\
+But if there are non-ascii chars(e.g. Chinese characters) in your file name or path, you can only open it in menu or tool bar\n\n\
 The move turn and number of prisoners are shown in the left of the gameboard. The pass and resign choice are laid on the right of the game board. The status of engine will be shown in the status bar at the bottom of the main frame.\n\n\
 The game process are arranged from left to right with a wandering snake shape, where every column contains 25 steps. If you would like to jump to one step, you can click its related position with left button of your mouse.\n\n\
 The left button of the mouse is used to put stones, while the right button is used to undo a move. The game progress on the bottom right of the gameboard can be used to jump to any step.\n\n\
 In order to avoid a command jam cause Leela Zero collapse, retracting or jumping moves are not allowed during the waiting of the engine's opening. But putting stones on the gameboard is allowed.\n\n\
-The program does not support multi-branch game records. So if you try to start a new game or open a new game record from the menu or tool bar, the current record will be deleted\n\n\
-If you want to save the game record, the engine must be opening, and the save menu or tool bar only save the records on the gameboard.\n\n\
-So if you do not want to lose any game record, please go to the last step of the game before saving the game record.\n\n\
+LZRobe support multi-branch game record. If you change the move in the original game record, there will be a tip to ask you whether add a new branch. If you save the game record, the branches can also be stored in .sgf files.\n\n\
+In order to avoid your eye being dazzled, the game process only shows the longest chain containing the current move, where the branch points will separately become red and blue from its original colors black and white.\n\n\
+If you jump to a step containing branches, the varation of next step will be marked on the game board with upper case letters in dark purple bold font according its length. A stands for the longest branch, while the shorter the branch is, the later the letter position in the alphabet it relates.\n\n\
+You can enter the related branch with click one letter with the left button of your mouse, while the right button of your mouse can be used to delete a branch.\n\n\
+The sequence of the branches is dynamically preserved. If you add or delete a branch, this may affect the sequence of its parent branch.\n\n\
+Due to the official network weights cannot support games with other board size than 19, so such games can only support opening, editing and saving game recoard. If you would like to open a game record with other board size that 19, place adjust to its related board size first.\n\n\
+The coordinates on the game board can be hidden, several modes of coordinates can be selected. Notice that in GTP protocal, there is no letter \"I\" in the horizonal coordinate, and the order of vertical coordinates is arranged from bottom to top.\n\n\
 There is a run button in the tool bar. You can start Leela Zero with this button.\n\n\
 If you did not set the path of Leela Zero or the weight file, when you push the run button, file dialogs will appear to tip you choose the Leela Zero executable file and the weight file.\n\n\
 You need not to fill any letter into the extra parameters, unless you are using a specified engine, such as dynamic komi.\n\n\
@@ -191,13 +231,14 @@ The frequency can be set with the spinbox on the right of the \"refresh interval
 For example, if you set the number as 50, the analyze result will refresh twice in one second.\n\n\
 In the analyzation, the points with green color are the most visited points, then come the blue points. The yellow and red points are less visited.\n\n\
 The numbers at the points with green color indicates the winrate and visits. The point with highest visits is usually the best point to select.\n\n\
+In order to avoid LZRobe collapse, please don't change the size of the window when the analyze is opened.\n\n\
 If you put the mouse at the analyzing point, the following steps will automatically be shown, where the letters indicates the consequence.\n\n\
-The lower case letters come first, and then the upper case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.\n\n\
+The latin letters with lower case come first, and then come the greek letters with lower case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.\n\n\
 If there are two continuous pass (one  for each side), the game will end. Leela Zero would not analyze a terminated game.\n\n\
-So if you want to analyze a terminate game, the game record should be reloaded from the start, and the two pass steps or the resign step will be deleted, but the other moves will not be changed.\n\n\
+So if you want to analyze a terminate game, the game record should be reloaded from the start. The information of the game record will not be changed.\n\n\
 When the game approaches the end or one side have an extremely advantage, Leela Zero may have the pass choice. If you want to check the relative analyze, you can put the mouse on the pass point.\n\n\
 The button with an abcus is used to calculate the result of the game. Since the dead stones may not be removed from the gameboard, the result is not exactly the true result.\n\n\
-If you changed the path of Leela Zero or the Weight file path, when you exit this program, a message box will ask you if you want to save this change.\n\n\
+If you changed the path of Leela Zero or the Weight file path, when you exit LZRobe, a message box will ask you if you want to save this change.\n\n\
 If you choose saving this change, the paths of Leela Zero and Weight file will be stored in a file named \"config.txt\".Next time you start LZRobe, it will load the paths automatically.\n\n\
 The author is trying to reduce the bugs of the program, but we are sorry that we cannot completely avoid the collapse of the program.\n\n\
 If once the program collapse while Leela Zero is running, please terminate Leela Zero with task manager lest it continue to occupy your hardware resource!\n\n\

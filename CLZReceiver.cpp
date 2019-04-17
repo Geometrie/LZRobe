@@ -27,6 +27,7 @@ wxThread::ExitCode CLZReceiver::Entry()
         {
             if (m_bRefresh && (lpstrBuffer[i] == '\r' || lpstrBuffer[i] == '\n'))
             {
+				m_lpCanvas->m_fnDrawBuffer();
 				m_lpCanvas->Refresh();
             }
             m_bRefresh = false;
@@ -42,120 +43,12 @@ wxThread::ExitCode CLZReceiver::Entry()
     return wxThread::ExitCode(0);
 }
 
-CLZReceiver::DATA_TYPE CLZReceiver::m_fnClassifyCommand(char *lpstrCommand)
-{
-    int i, len;
-    len = strlen(lpstrCommand);
-    DATA_TYPE dtType;
-    dtType = DT_DIGIT;
-    for (i = 0; i < len; ++i)
-    {
-        if (lpstrCommand[i] < '0' || lpstrCommand[i] > '9')
-        {
-            dtType = DT_RESULT;
-            break;
-        }
-    }
-    if (dtType == DT_RESULT && !((lpstrCommand[0] == 'B' || lpstrCommand[0] == 'W') && lpstrCommand[1] == '+'))
-    {
-        dtType = DT_UNKNOWN;
-    }
-    if (dtType == DT_UNKNOWN)
-    {
-        switch (len)
-        {
-        case 1:
-            if (strcmp(lpstrCommand, "=") == 0)
-            {
-                dtType = DT_EQUAL;
-            }
-            break;
-        case 2:
-            if (strcmp(lpstrCommand, "pv") == 0)
-            {
-                dtType = DT_PV;
-            }
-            else if (horizonal_coord_range(lpstrCommand[0]))
-            {
-                if (lpstrCommand[1] >= '1' && lpstrCommand[1] <= '9')
-                {
-                    dtType = DT_COORDINATE;
-                }
-            }
-            else
-            {
-                dtType = DT_UNKNOWN;
-            }
-            break;
-        case 3:
-            if (horizonal_coord_range(lpstrCommand[0]))
-            {
-                if (lpstrCommand[1] == '1' && lpstrCommand[2] >= '0' && lpstrCommand[2] <= '9')
-                {
-                    dtType = DT_COORDINATE;
-                }
-                else
-                {
-                    dtType = DT_UNKNOWN;
-                }
-            }
-            else
-            {
-                dtType = DT_UNKNOWN;
-            }
-            break;
-        case 4:
-            if (strcmp(lpstrCommand, "info") == 0)
-            {
-                dtType = DT_INFO;
-            }
-            else if (strcmp(lpstrCommand, "move") == 0)
-            {
-                dtType = DT_MOVE;
-            }
-            else if (strcmp(lpstrCommand, "pass") == 0)
-            {
-                dtType = DT_COORDINATE;
-            }
-            break;
-        case 5:
-            if (strcmp(lpstrCommand, "order") == 0)
-            {
-                dtType = DT_ORDER;
-            }
-            else if (strcmp(lpstrCommand, "prior") == 0)
-            {
-                dtType = DT_PRIOR;
-            }
-            break;
-        case 6:
-            if (strcmp(lpstrCommand, "visits") == 0)
-            {
-                dtType = DT_VISITS;
-            }
-            else if (strcmp(lpstrCommand, "resign") == 0)
-            {
-                dtType = DT_COORDINATE;
-            }
-            break;
-        case 7:
-            if (strcmp(lpstrCommand, "winrate") == 0)
-            {
-                dtType = DT_WINRATE;
-            }
-        }
-    }
-    if (len > 0 && dtType == DT_UNKNOWN)
-    {
-        dtType = DT_UNKNOWN;
-    }
-    return dtType;
-}
-
 void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
 {
     CGameBase::BasePosition bpNewMove;
     DATA_TYPE dtDataType;
+	StoneColor scLastMove;
+	scLastMove = m_lpCanvas->m_GameBoardManager.m_scTurnColor;
     bpNewMove.x = bpNewMove.y = -1;
     dtDataType = m_fnClassifyCommand(lpstrMessage);
     switch (dtDataType)
@@ -166,25 +59,40 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         case DT_VISITS:
             if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing != NULL)
             {
+				m_lpCanvas->m_AnalyzeMutex.Lock();
                 m_lpbpAnalyzing->visits = atoi(lpstrMessage);
+				m_lpCanvas->m_AnalyzeMutex.Unlock();
             }
             break;
         case DT_WINRATE:
             if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing != NULL)
             {
+				m_lpCanvas->m_AnalyzeMutex.Lock();
                 m_lpbpAnalyzing->win_rate = atoi(lpstrMessage);
+				m_lpCanvas->m_AnalyzeMutex.Unlock();
             }
             break;
         case DT_PRIOR:
             if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing != NULL)
             {
+				m_lpCanvas->m_AnalyzeMutex.Lock();
                 m_lpbpAnalyzing->prior = atoi(lpstrMessage);
+				m_lpCanvas->m_AnalyzeMutex.Unlock();
             }
             break;
+		case DT_LCB:
+            if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing != NULL)
+            {
+				m_lpCanvas->m_AnalyzeMutex.Lock();
+                m_lpbpAnalyzing->lcb = atoi(lpstrMessage);
+				m_lpCanvas->m_AnalyzeMutex.Unlock();
+            }
         case DT_ORDER:
             if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing != NULL)
             {
+				m_lpCanvas->m_AnalyzeMutex.Lock();
                 m_lpbpAnalyzing->order = atoi(lpstrMessage);
+				m_lpCanvas->m_AnalyzeMutex.Unlock();
             }
             break;
         default:
@@ -199,38 +107,27 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         switch (m_dtStatus)
         {
         case DT_EQUAL:
-			if (bpNewMove.x == 19 && bpNewMove.y == 1)
+			if (m_lpCanvas->m_GameBoardManager.m_iHandicapPutting < m_lpCanvas->m_GameBoardManager.m_nHandicap)
 			{
-				if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_BLACK_DOG))
-				{
-					m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
-					m_lpCanvas->m_GameStatusManager.m_fnSetBlackDog();
-				}
-				if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_WHITE_DOG))
-				{
-					m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
-					m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
-				}
-				if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
-				{
-					m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_ANALYZE, false);
-					m_lpCanvas->m_GameStatusManager.m_fnSetAnalyze();
-				}
+				m_lpCanvas->m_GameBoardManager.OnAddHandicap(bpNewMove.x, bpNewMove.y);
+				m_bRefresh = true;
 			}
-			if (m_lpCanvas->m_GameBoardManager.OnAddMove(bpNewMove.x, bpNewMove.y))
+			else if (m_lpCanvas->m_GameBoardManager.OnAddMove(bpNewMove.x, bpNewMove.y))
 			{
+				//if (m_lpCanvas->m_bUDPOpened)
+				//{
+				//	m_lpCanvas->m_GameStatusManager.m_bBlackEnabled = m_lpCanvas->m_GameStatusManager.m_bWhiteEnabled = false;
+				//	m_lpCanvas->m_fnDeductTime(scLastMove, true);
+				//	m_lpCanvas->m_UDPInquirer.m_fnSendMove(scLastMove, bpNewMove.x, bpNewMove.y);
+				//}
 				if (m_lpCanvas->m_GameBoardManager.m_bAlive)
 				{
 					if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))
 					{
 						m_lpCanvas->m_fnInquireMove();
 					}
-					else if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
-					{
-						m_lpCanvas->m_fnInquireAnalyze();
-					}
 				}
-				else if (bpNewMove.x == 19 && bpNewMove.y == 0)
+				else
 				{
 					if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_BLACK_DOG))
 					{
@@ -241,43 +138,55 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
 					{
 						m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
 						m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
-					}
-					if (m_lpCanvas->m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
+					} 
+					if (bpNewMove.x == nBoardSize && bpNewMove.y == 0)
 					{
-						m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_ANALYZE, false);
-						m_lpCanvas->m_GameStatusManager.m_fnSetAnalyze();
+						m_lpCanvas->m_fnInquireResult();
 					}
-					m_lpCanvas->m_fnInquireResult();
+					else 
+					if (bpNewMove.x == nBoardSize && bpNewMove.y == 1)
+					{
+						m_lpCanvas->m_fnShowResignResult();
+					}
 				}
 				m_bRefresh = true;
 			}
-			if (bpNewMove.x == 19 && bpNewMove.y == 1)
-			{
-				m_lpCanvas->m_fnShowResignResult();
-			}
+			scLastMove = m_lpCanvas->m_GameBoardManager.m_scTurnColor;
 			m_lpCanvas->m_bAcceptChange = true;
             break;
         case DT_MOVE:
-			if ((bpNewMove.x >= 0 && bpNewMove.x < 19 && bpNewMove.y >= 0 && bpNewMove.y < 19) || (bpNewMove.x == 19 && bpNewMove.y == 0))
+			m_lpCanvas->m_AnalyzeMutex.Lock();
+			if ((bpNewMove.x >= 0 && bpNewMove.x < nBoardSize && bpNewMove.y >= 0 && bpNewMove.y < nBoardSize) || (bpNewMove.x == nBoardSize && bpNewMove.y == 0))
 			{
 				m_lpbpAnalyzing = m_lpCanvas->m_GameBoardManager.m_fnPoint(bpNewMove.x, bpNewMove.y);
 				if (m_lpbpAnalyzing->visits == 0)
 				{
-					m_lpCanvas->m_GameBoardManager.m_vecAnalyzingStones.push_back(m_lpbpAnalyzing);
+					if (m_lpCanvas->m_GameBoardManager.m_lpAnalyzingEnd - m_lpCanvas->m_GameBoardManager.m_lpAnalyzingStones < 64)
+					{
+						*(m_lpCanvas->m_GameBoardManager.m_lpAnalyzingEnd) = m_lpbpAnalyzing;
+						++(m_lpCanvas->m_GameBoardManager.m_lpAnalyzingEnd);
+					}
+					else
+					{
+						m_lpbpAnalyzing = NULL;
+					}
 				}
 			}
 			else
 			{
 				m_lpbpAnalyzing = NULL;
 			}
+			m_lpCanvas->m_AnalyzeMutex.Unlock();
             break;
         case DT_PV:
             if (m_lpCanvas->m_GameBoardManager.m_bAcceptAnalyze && m_lpbpAnalyzing != NULL)
             {
 				if (m_lpbpAnalyzing->pv_len < 64)
 				{
+					m_lpCanvas->m_AnalyzeMutex.Lock();
 					m_lpbpAnalyzing->pv[m_lpbpAnalyzing->pv_len] = bpNewMove;
 					++(m_lpbpAnalyzing->pv_len);
+					m_lpCanvas->m_AnalyzeMutex.Unlock();
 				}
             }
             m_bRefresh = true;
@@ -290,7 +199,10 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
         m_lpCanvas->m_fnShowCountResult(lpstrMessage);
         break;
     case DT_PV:
-		m_lpbpAnalyzing->pv_len = 0;
+		if (m_lpbpAnalyzing != NULL)
+		{
+			m_lpbpAnalyzing->pv_len = 0;
+		}
         m_dtStatus = dtDataType;
         break;
     case DT_EQUAL:
@@ -308,3 +220,117 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
 }
 
 
+
+CLZReceiver::DATA_TYPE CLZReceiver::m_fnClassifyCommand(char *lpstrCommand)
+{
+	int i, len;
+	DATA_TYPE dtType;
+	len = strlen(lpstrCommand);
+	dtType = DT_DIGIT;
+	for (i = 0; i < len; ++i)
+	{
+		if (lpstrCommand[i] < '0' || lpstrCommand[i] > '9')
+		{
+			dtType = DT_RESULT;
+			break;
+		}
+	}
+	if (dtType == DT_RESULT && !((lpstrCommand[0] == 'B' || lpstrCommand[0] == 'W') && lpstrCommand[1] == '+'))
+	{
+		dtType = DT_UNKNOWN;
+	}
+	if (dtType == DT_UNKNOWN)
+	{
+		switch (len)
+		{
+		case 1:
+			if (strcmp(lpstrCommand, "=") == 0)
+			{
+				dtType = DT_EQUAL;
+			}
+			break;
+		case 2:
+			if (strcmp(lpstrCommand, "pv") == 0)
+			{
+				dtType = DT_PV;
+			}
+			else if (horizonal_coord_range(lpstrCommand[0]))
+			{
+				if (lpstrCommand[1] >= '1' && lpstrCommand[1] <= '9')
+				{
+					dtType = DT_COORDINATE;
+				}
+			}
+			else
+			{
+				dtType = DT_UNKNOWN;
+			}
+			break;
+		case 3:
+			if (strcmp(lpstrCommand, "lcb") == 0)
+			{
+				dtType = DT_LCB;
+			}
+			else if (horizonal_coord_range(lpstrCommand[0]))
+			{
+				if (lpstrCommand[1] == '1' && lpstrCommand[2] >= '0' && lpstrCommand[2] <= '9')
+				{
+					dtType = DT_COORDINATE;
+				}
+				else
+				{
+					dtType = DT_UNKNOWN;
+				}
+			}
+			else
+			{
+				dtType = DT_UNKNOWN;
+			}
+			break;
+		case 4:
+			if (strcmp(lpstrCommand, "info") == 0)
+			{
+				dtType = DT_INFO;
+			}
+			else if (strcmp(lpstrCommand, "move") == 0)
+			{
+				dtType = DT_MOVE;
+			}
+			else if (strcmp(lpstrCommand, "pass") == 0)
+			{
+				dtType = DT_COORDINATE;
+			}
+			break;
+		case 5:
+			if (strcmp(lpstrCommand, "order") == 0)
+			{
+				dtType = DT_ORDER;
+			}
+			else if (strcmp(lpstrCommand, "prior") == 0)
+			{
+				dtType = DT_PRIOR;
+			}
+			break;
+		case 6:
+			if (strcmp(lpstrCommand, "visits") == 0)
+			{
+				dtType = DT_VISITS;
+			}
+			else if (strcmp(lpstrCommand, "resign") == 0)
+			{
+				dtType = DT_COORDINATE;
+			}
+			break;
+		case 7:
+			if (strcmp(lpstrCommand, "winrate") == 0)
+			{
+				dtType = DT_WINRATE;
+			}
+		}
+	}
+	if (len > 0 && dtType == DT_UNKNOWN)
+	{
+		dtType = DT_UNKNOWN;
+	}
+	return dtType;
+}

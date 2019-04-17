@@ -2,36 +2,43 @@
 #define CGAMEBASE_H
 #include <string.h>
 #include <vector>
+#define STANDARD_BOARD_SIZE 19
 enum StoneColor
 {
     SC_NULL = 0,
     SC_BLACK,
     SC_WHITE,
 };
+extern int nBoardSize;
 namespace CGameBase
 {
     struct BasePosition
     {
         int x, y;
+		BasePosition()
+		{
+			x = -1;
+			y = -1;
+		}
         bool import_position(char *position_info)
         {
             bool bLegal;
             bLegal = true;
             if (strcmp(position_info, "pass") == 0)
             {
-                x = 19;
+                x = nBoardSize;
                 y = 0;
             }
 			else if (strcmp(position_info, "resign") == 0)
 			{
-				x = 19;
+				x = nBoardSize;
 				y = 1;
 			}
             else if (position_info[0] >= 'a' && position_info[0] < 'i')
             {
                 x = position_info[0] - 'a';
             }
-            else if (position_info[0] > 'i' && position_info[0] < 'u')
+            else if (position_info[0] > 'i' && position_info[0] <= 'z')
             {
                 x = position_info[0] - 'b';
             }
@@ -39,7 +46,7 @@ namespace CGameBase
             {
                 x = position_info[0] - 'A';
             }
-            else if (position_info[0] > 'I' && position_info[0] < 'U')
+            else if (position_info[0] > 'I' && position_info[0] <= 'Z')
             {
                 x = position_info[0] - 'B';
             }
@@ -47,15 +54,15 @@ namespace CGameBase
             {
                 bLegal = false;
             }
-            if (bLegal && x != 19)
+            if (bLegal && x != nBoardSize)
             {
                 if (position_info[1] > '0' && position_info[1] <= '9' && position_info[2] == '\0')
                 {
-                    y = 18 - (position_info[1] - '1');
+                    y = nBoardSize - (position_info[1] - '0');
                 }
-                else if (position_info[1] == '1' && position_info[2] >= '0' && position_info[2] <= '9' && position_info[3] == '\0')
+                else if ((position_info[1] == '1' || position_info[1] == '2') && position_info[2] >= '0' && position_info[2] <= '9' && position_info[3] == '\0')
                 {
-                    y = 9 - (position_info[2] - '0');
+                    y = nBoardSize - (position_info[1] - '0') * 10 - (position_info[2] - '0');
                 }
                 else
                 {
@@ -66,14 +73,14 @@ namespace CGameBase
         }
         bool export_position(char *position_info)
         {
-            bool bLegal = (x >= 0 && x < 19 && y >= 0 && y < 19) || (x == 19 && y == 0) || (x == 19 && y == 1);
+            bool bLegal = (x >= 0 && x < nBoardSize && y >= 0 && y < nBoardSize) || (x == nBoardSize && y == 0) || (x == nBoardSize && y == 1);
             if (bLegal)
             {
-                if (x == 19 && y == 0)
+                if (x == nBoardSize && y == 0)
                 {
                     strcpy(position_info, "pass");
                 }
-				else if (x == 19 && y == 1)
+				else if (x == nBoardSize && y == 1)
 				{
 					strcpy(position_info, "resign");
 				}
@@ -81,21 +88,21 @@ namespace CGameBase
                 {
                     if (x < 8)
                     {
-                        position_info[0] = 'a' + x;
+                        position_info[0] = 'A' + x;
                     }
                     else
                     {
-                        position_info[0] = 'b' + x;
+                        position_info[0] = 'B' + x;
                     }
-                    if (y > 9)
+                    if (nBoardSize - y < 10)
                     {
-                        position_info[1] = '9' - (y - 10);
+                        position_info[1] = '0' + (nBoardSize - y) % 10;
                         position_info[2] = '\0';
                     }
                     else
                     {
-                        position_info[1] = '1';
-                        position_info[2] = '9' - y;
+                        position_info[1] = '0' + (nBoardSize - y) / 10;
+                        position_info[2] = '0' + (nBoardSize - y) % 10;
                         position_info[3] = '\0';
                     }
                 }
@@ -105,6 +112,10 @@ namespace CGameBase
     };
     struct BaseMove: public BasePosition
     {
+		BaseMove()
+		{
+			stone_color = SC_NULL;
+		}
         StoneColor stone_color;
         bool import_move(char *move_info)
         {
@@ -151,7 +162,7 @@ namespace CGameBase
         {
             bool bLegal;
             bLegal = true;
-            if ((stone_color == SC_BLACK || stone_color == SC_WHITE) && ((x >= 0 && x < 19 && y >= 0 && y < 19) || (x == 19 && y == 0) || (x == 19 && y == 1)))
+            if ((stone_color == SC_BLACK || stone_color == SC_WHITE) && ((x >= 0 && x < nBoardSize && y >= 0 && y < nBoardSize) || (x == nBoardSize && y == 0) || (x == nBoardSize && y == 1)))
             {
                 if (stone_color == SC_WHITE)
                 {
@@ -171,10 +182,6 @@ namespace CGameBase
             return bLegal;
         }
     };
-    struct ExtendMove: public BaseMove
-    {
-        std::vector<BasePosition> vecRemoved;
-    };
     struct BoardPoint
     {
         BoardPoint()
@@ -191,12 +198,74 @@ namespace CGameBase
         int visits;
         int win_rate;
         int prior;
+		int lcb;
         int order;
 		BasePosition pv[64];
 		int pv_len;
     };
+	struct Remove
+	{
+		Remove()
+		{
+			bp = NULL;
+		}
+		BoardPoint *bp;
+		bool empty()
+		{
+			return (bp == NULL);
+		}
+		void release()
+		{
+			bp = NULL;
+		}
+	};
+    struct ExtendMove: public BaseMove
+    {
+		ExtendMove()
+		{
+			x = -1;
+			y = -1;
+			remove_data = NULL;
+			remove_len = 0;
+			step = 0;
+			branch = 0;
+			depth = 0;
+			parent = child = longer = shorter = NULL;
+		}
+		ExtendMove *parent, *child, *longer, *shorter;
+		Remove *remove_data;
+		int remove_len, step, branch, depth;
+		bool empty()
+		{
+			return (x == -1 && y == -1);
+		}
+		void release()
+		{
+			x = -1;
+			y = -1;
+			remove_data = NULL;
+			remove_len = 0;
+			step = 0;
+			branch = 0;
+			depth = 0;
+			parent = child = longer = shorter = NULL;
+		}
+		ExtendMove* search(int x, int y)
+		{
+			ExtendMove *lpem_visitor;
+			lpem_visitor = child;
+			while (lpem_visitor != NULL)
+			{
+				if (lpem_visitor->x == x && lpem_visitor->y == y)
+				{
+					break;
+				}
+				lpem_visitor = lpem_visitor->shorter;
+			}
+			return lpem_visitor;
+		}
+    };
 };
-
 
 
 
