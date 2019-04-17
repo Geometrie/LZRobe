@@ -6,25 +6,31 @@ zero.sjeng.org
 
 LZRobe can help you to play Go againt Leela Zero or analyze the Go game records with Leela Zero to improve your strength of the game.
 
-This program is written in C++ pragramming language with a GUI Library named wxWidgets.
+LZRobe is written in C++ pragramming language with a GUI Library named wxWidgets.
 
-So if you would like to compile this program, you have to download and install the wxWidgets library first.Please look up the following website:
+So if you would like to compile LZRobe, you have to download and install the wxWidgets library first.Please look up the following website:
 
 www.wxwidgets.org
 
-It is not difficult to compile this program with Visual Studio or Code::Blocks.
+It is not difficult to compile LZRobe with Visual Studio or Code::Blocks.
 
-If you try to compile this program, you should create a Win32 GUI empty project and add the files, including.h files, .cpp files, a .rc file, a .ico file and.bmp files.
+If you try to compile LZRobe, you should create a Win32 GUI empty project and add the files, including.h files, .cpp files, a .rc file, a .ico file and.bmp files.
 
 Don't forget appending include and lib dictionaries of wxWidgets in the setting of your project.
 
-Code::Blocks supports creating a wxWidgets project containing the path of wxWidgets, this maybe make it simpler to compile this program.
+Code::Blocks supports creating a wxWidgets project containing the path of wxWidgets, this maybe make it simpler to compile LZRobe.
 
-After you have compiled this program successfully, I tell you how to use this program.
+After you have compiled LZRobe successfully, I tell you how to use LZRobe.
 
-The icon of this program is a dog's head. Because the pronounciation of \"Go\" means \"dog\" in Chinese.
+The icon of LZRobe is a dog's head. Because the pronounciation of \"Go\" means \"dog\" in Chinese.
 
-Once you open this program, you will see a tool bar below the menu. All the functions of this program can be found in the tool bar.
+Once you open LZRobe, you will see a tool bar below the menu. Most of the functions of LZRobe can be found in the tool bar.
+
+New game will drop all the information of current game. A handicap game can onle be set in the file menu.
+
+LZRobe allows dragging a sgf file to the window and open it. You can also set the default open program for an sgf file as LZRobe.
+
+But if there are non-ascii chars(e.g. Chinese characters) in your file name or path, you can only open it in menu or tool bar
 
 The move turn and number of prisoners are shown in the left of the gameboard. The pass and resign choice are laid on the right of the game board. The status of engine will be shown in the status bar at the bottom of the main frame.
 
@@ -34,11 +40,19 @@ The left button of the mouse is used to put stones, while the right button is us
 
 In order to avoid a command jam cause Leela Zero collapse, retracting or jumping moves are not allowed during the waiting of the engine's opening. But putting stones on the gameboard is allowed.
 
-The program does not support multi-branch game records. So if you try to start a new game or open a new game record from the menu or tool bar, the current record will be deleted
+LZRobe support multi-branch game record. If you change the move in the original game record, there will be a tip to ask you whether add a new branch. If you save the game record, the branches can also be stored in .sgf files.
 
-If you want to save the game record, the engine must be opening, and the save menu or tool bar only save the records on the gameboard.
+In order to avoid your eye being dazzled, the game process only shows the longest chain containing the current move, where the branch points will separately become red and blue from its original colors black and white.
 
-So if you do not want to lose any game record, please go to the last step of the game before saving the game record.
+If you jump to a step containing branches, the varation of next step will be marked on the game board with upper case letters in dark purple bold font according its length. A stands for the longest branch, while the shorter the branch is, the later the letter position in the alphabet it relates.
+
+You can enter the related branch with click one letter with the left button of your mouse, while the right button of your mouse can be used to delete a branch.
+
+The sequence of the branches is dynamically preserved. If you add or delete a branch, this may affect the sequence of its parent branch.
+
+Due to the official network weights cannot support games with other board size than 19, so such games can only support opening, editing and saving game recoard. If you would like to open a game record with other board size that 19, place adjust to its related board size first.
+
+The coordinates on the game board can be hidden, several modes of coordinates can be selected. Notice that in GTP protocal, there is no letter \"I\" in the horizonal coordinate, and the order of vertical coordinates is arranged from bottom to top.
 
 There is a run button in the tool bar. You can start Leela Zero with this button.
 
@@ -76,19 +90,21 @@ In the analyzation, the points with green color are the most visited points, the
 
 The numbers at the points with green color indicates the winrate and visits. The point with highest visits is usually the best point to select.
 
+In order to avoid LZRobe collapse, please don't change the size of the window when the analyze is opened.
+
 If you put the mouse at the analyzing point, the following steps will automatically be shown, where the letters indicates the consequence.
 
-The lower case letters come first, and then the upper case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.
+The latin letters with lower case come first, and then come the greek letters with lower case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.
 
 If there are two continuous pass (one  for each side), the game will end. Leela Zero would not analyze a terminated game.
 
-So if you want to analyze a terminate game, the game record should be reloaded from the start, and the two pass steps or the resign step will be deleted, but the other moves will not be changed.
+So if you want to analyze a terminate game, the game record should be reloaded from the start. The information of the game record will not be changed.
 
 When the game approaches the end or one side have an extremely advantage, Leela Zero may have the pass choice. If you want to check the relative analyze, you can put the mouse on the pass point.
 
 The button with an abcus is used to calculate the result of the game. Since the dead stones may not be removed from the gameboard, the result is not exactly the true result.
 
-If you changed the path of Leela Zero or the Weight file path, when you exit this program, a message box will ask you if you want to save this change.
+If you changed the path of Leela Zero or the Weight file path, when you exit LZRobe, a message box will ask you if you want to save this change.
 
 If you choose saving this change, the paths of Leela Zero and Weight file will be stored in a file named \"config.txt\".Next time you start LZRobe, it will load the paths automatically.
 
