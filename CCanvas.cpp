@@ -2,19 +2,7 @@
 CCanvas::CCanvas(wxWindow *lpParent): CPainter(lpParent)
 {
     m_bShowStep = false;
-	m_lplpbmpBuffer[0] = m_lplpbmpBuffer[1] = NULL;
-}
-
-CCanvas::~CCanvas()
-{
-	int i;
-	for (i = 0; i < 2; ++i)
-	{
-		if (m_lplpbmpBuffer[i])
-		{
-			delete m_lplpbmpBuffer[i];
-		}
-	}
+	SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 
@@ -146,7 +134,6 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
         if (x >= 0 && x < nBoardSize && y >= 0 && y < nBoardSize)
         {
 			m_fnChangePosition(x, y);
-			m_fnDrawBuffer();
 			Refresh();
         }
 		else
@@ -156,7 +143,6 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
 			if (x == 0 && y == 0)
 			{
 				m_fnChangePosition(nBoardSize, 0);
-				m_fnDrawBuffer();
 				Refresh();
 			}
 			else
@@ -195,7 +181,6 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
 						if ((m_GameStatusManager.m_esCurrentEngine == ES_CLOSED || m_GameStatusManager.m_esCurrentEngine == ES_OPENED))
 						{
 							m_fnJumpTo(iNewStep);
-							m_fnDrawBuffer();
 							Refresh();
 							if (m_GameStatusManager.m_fnAnalyzing())
 							{
@@ -240,7 +225,6 @@ void CCanvas::OnRightButtonUp(wxMouseEvent &event)
 		if (lpemSearch == NULL)
 		{
 			m_fnBackward();
-			m_fnDrawBuffer();
 			Refresh();
 			if (m_GameStatusManager.m_fnAnalyzing())
 			{
@@ -252,7 +236,6 @@ void CCanvas::OnRightButtonUp(wxMouseEvent &event)
 			if (MD.ShowModal() == wxID_OK)
 			{
 				m_GameBoardManager.OnDeleteBranch(lpemSearch);
-				m_fnDrawBuffer();
 				Refresh();
 			}
 		}
@@ -260,15 +243,10 @@ void CCanvas::OnRightButtonUp(wxMouseEvent &event)
 }
 
 
-void CCanvas::m_fnDrawBuffer()
+void CCanvas::m_fnDrawBuffer(wxDC &dc)
 {
 	wxPoint ptMouse, ptClient, ptScroll;
 	int xPos, yPos, x, y;
-	wxMemoryDC dc;
-	int iWrite;
-	iWrite = 1 - m_iDraw;
-	m_lpBufferMutex[iWrite].Lock();
-	dc.SelectObject(*(m_lplpbmpBuffer[iWrite]));
 	dc.SetBackground(*wxWHITE_BRUSH);
 	dc.Clear();
 	m_fnDrawGameBoard(dc);
@@ -280,11 +258,8 @@ void CCanvas::m_fnDrawBuffer()
 	m_fnDrawProcess(dc);
 	m_fnDrawStones(dc);
 	m_fnDrawRecentMove(dc);
-	if (!m_GameStatusManager.m_fnAnalyzing())
-	{
-		m_fnDrawBranch(dc);
-	}
-	else
+	m_fnDrawBranch(dc);
+	if (m_GameStatusManager.m_fnAnalyzing())
 	{
 		ptMouse = wxGetMousePosition();
 		ptClient = GetScreenPosition();
@@ -313,41 +288,19 @@ void CCanvas::m_fnDrawBuffer()
 		}
 		m_AnalyzeMutex.Unlock();
 	}
-	dc.SelectObject(wxNullBitmap);
-	m_lpBufferMutex[iWrite].Unlock();
-	m_iDraw = iWrite;
 }
 
 void CCanvas::OnSize(wxSizeEvent &event)
 {
-	int i;
 	m_fnSetSize();
-	for (i = 0; i < 2; ++i)
-	{
-		m_lpBufferMutex[i].Lock();
-		if (m_lplpbmpBuffer[i] != NULL)
-		{
-			delete m_lplpbmpBuffer[i];
-		}
-		m_lplpbmpBuffer[i] = new wxBitmap(m_iGridSize * 40, m_iGridSize * 20);
-		m_lpBufferMutex[i].Unlock();
-	}
-	m_iDraw = 1;
-	m_fnDrawBuffer();
 }
 
 
 void CCanvas::OnPaint(wxPaintEvent&event)
 {
-    wxPaintDC dc(this);
-	wxPoint ptStart;
+    wxAutoBufferedPaintDC dc(this);
 	DoPrepareDC(dc);
-	if (m_lplpbmpBuffer[m_iDraw] != NULL)
-	{
-		m_lpBufferMutex[m_iDraw].Lock();
-		dc.DrawBitmap(*(m_lplpbmpBuffer[m_iDraw]), wxPoint(0, 0));
-		m_lpBufferMutex[m_iDraw].Unlock();
-	}
+	m_fnDrawBuffer(dc);
 }
 
 

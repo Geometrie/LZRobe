@@ -146,7 +146,6 @@ void CMainFrame::OnNew(wxCommandEvent &event)
 				}
 			}
         }
-		m_lpCanvas->m_fnDrawBuffer();
         Refresh();
     }
 }
@@ -194,7 +193,6 @@ void CMainFrame::OnHandicap(wxCommandEvent &event)
 				{
 					m_lpCanvas->m_GameBoardManager.OnSetHandicap();
 				}
-				m_lpCanvas->m_fnDrawBuffer();
 				Refresh();
 			}
 		}
@@ -226,11 +224,7 @@ void CMainFrame::OnOpen(wxCommandEvent &event)
 					m_lpCanvas->m_fnClearLZBoard();
                 }
             }
-            //ifs.open(OpenFileDialog.GetPath().char_str());
-            //m_lpCanvas->m_GameBoardManager.OnReadSGF(ifs);
-            //ifs.close();
 			m_fnOpenSGF(OpenFileDialog.GetPath().char_str());
-			m_lpCanvas->m_fnDrawBuffer();
             Refresh();
             if (m_lpLZProcess->m_bAlive)
             {
@@ -263,11 +257,7 @@ void CMainFrame::OnDropFile(wxDropFilesEvent &event)
 					m_lpCanvas->m_fnClearLZBoard();
 				}
 			}
-			//ifs.open(wxstrFile.char_str());
-			//m_lpCanvas->m_GameBoardManager.OnReadSGF(ifs);
-			//ifs.close();
 			m_fnOpenSGF(wxstrFile.char_str());
-			m_lpCanvas->m_fnDrawBuffer();
 			Refresh();
 			if (m_lpLZProcess->m_bAlive)
 			{
@@ -297,7 +287,6 @@ void CMainFrame::OnSave(wxCommandEvent &event)
 void CMainFrame::OnShowStep(wxCommandEvent &event)
 {
     m_lpCanvas->m_bShowStep = !m_lpCanvas->m_bShowStep;
-	m_lpCanvas->m_fnDrawBuffer();
     Refresh();
 }
 
@@ -310,7 +299,6 @@ void CMainFrame::OnSetGameboardColor(wxCommandEvent &event)
 	{
 		wxclrdata = CD.GetColourData();
 		m_lpCanvas->m_brGameBoard.SetColour(wxclrdata.GetColour());
-		m_lpCanvas->m_fnDrawBuffer();
 		Refresh();
 	}
 }
@@ -319,31 +307,26 @@ void CMainFrame::OnSetGameboardColor(wxCommandEvent &event)
 void CMainFrame::OnHideCoord(wxCommandEvent &event)
 {
 	m_lpCanvas->m_ctBoardTick = CT_NULL;
-	m_lpCanvas->m_fnDrawBuffer();
 	Refresh();
 }
 void CMainFrame::OnSetNetCoord(wxCommandEvent &event)
 {
 	m_lpCanvas->m_ctBoardTick = CT_NET;
-	m_lpCanvas->m_fnDrawBuffer();
 	Refresh();
 }
 void CMainFrame::OnSetNumCoord(wxCommandEvent &event)
 {
 	m_lpCanvas->m_ctBoardTick = CT_NUM;
-	m_lpCanvas->m_fnDrawBuffer();
 	Refresh();
 }
 void CMainFrame::OnSetSGFCoord(wxCommandEvent &event)
 {
 	m_lpCanvas->m_ctBoardTick = CT_SGF;
-	m_lpCanvas->m_fnDrawBuffer();
 	Refresh();
 }
 void CMainFrame::OnSetGTPCoord(wxCommandEvent &event)
 {
 	m_lpCanvas->m_ctBoardTick = CT_GTP;
-	m_lpCanvas->m_fnDrawBuffer();
 	Refresh();
 }
 
@@ -352,7 +335,6 @@ void CMainFrame::OnBackward(wxCommandEvent &event)
 	if (m_lpCanvas->m_GameStatusManager.m_fnBothAuthorized() && (m_lpCanvas->m_GameStatusManager.m_esCurrentEngine == ES_CLOSED || m_lpCanvas->m_GameStatusManager.m_esCurrentEngine == ES_OPENED))
 	{
 		m_lpCanvas->m_fnBackward();
-		m_lpCanvas->m_fnDrawBuffer();
 		Refresh();
 		if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
 		{
@@ -366,7 +348,6 @@ void CMainFrame::OnForward(wxCommandEvent &event)
 	if (m_lpCanvas->m_GameStatusManager.m_fnBothAuthorized())
 	{
 		m_lpCanvas->m_fnForward();
-		m_lpCanvas->m_fnDrawBuffer();
 		Refresh();
 		if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
 		{
@@ -525,7 +506,6 @@ void CMainFrame::OnBoardSize(wxCommandEvent &event)
 			nBoardSize = int(nNewSize);
 			m_lpCanvas->m_GameBoardManager.m_fnChangeSize();
 			m_lpCanvas->m_fnSetSize();
-			m_lpCanvas->m_fnDrawBuffer();
 			m_lpCanvas->Refresh();
 		}
 	}

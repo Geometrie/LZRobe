@@ -27,7 +27,6 @@ wxThread::ExitCode CLZReceiver::Entry()
         {
             if (m_bRefresh && (lpstrBuffer[i] == '\r' || lpstrBuffer[i] == '\n'))
             {
-				m_lpCanvas->m_fnDrawBuffer();
 				m_lpCanvas->Refresh();
             }
             m_bRefresh = false;
@@ -114,12 +113,6 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
 			}
 			else if (m_lpCanvas->m_GameBoardManager.OnAddMove(bpNewMove.x, bpNewMove.y))
 			{
-				//if (m_lpCanvas->m_bUDPOpened)
-				//{
-				//	m_lpCanvas->m_GameStatusManager.m_bBlackEnabled = m_lpCanvas->m_GameStatusManager.m_bWhiteEnabled = false;
-				//	m_lpCanvas->m_fnDeductTime(scLastMove, true);
-				//	m_lpCanvas->m_UDPInquirer.m_fnSendMove(scLastMove, bpNewMove.x, bpNewMove.y);
-				//}
 				if (m_lpCanvas->m_GameBoardManager.m_bAlive)
 				{
 					if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))
