@@ -313,6 +313,7 @@ void CCanvas::m_fnDrawBuffer()
 		}
 		m_AnalyzeMutex.Unlock();
 	}
+	dc.SelectObject(wxNullBitmap);
 	m_lpBufferMutex[iWrite].Unlock();
 	m_iDraw = iWrite;
 }
