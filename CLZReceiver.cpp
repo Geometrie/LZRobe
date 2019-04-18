@@ -142,7 +142,6 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
 				}
 				m_bRefresh = true;
 			}
-			scLastMove = m_lpCanvas->m_GameBoardManager.m_scTurnColor;
 			m_lpCanvas->m_bAcceptChange = true;
             break;
         case DT_MOVE:
