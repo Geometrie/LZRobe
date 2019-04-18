@@ -46,8 +46,6 @@ void CLZReceiver::m_fnApplyMessage(char *lpstrMessage)
 {
     CGameBase::BasePosition bpNewMove;
     DATA_TYPE dtDataType;
-	StoneColor scLastMove;
-	scLastMove = m_lpCanvas->m_GameBoardManager.m_scTurnColor;
     bpNewMove.x = bpNewMove.y = -1;
     dtDataType = m_fnClassifyCommand(lpstrMessage);
     switch (dtDataType)
