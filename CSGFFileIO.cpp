@@ -46,10 +46,13 @@ void CSGFFileIO::OnReadSGF(std::ifstream &ifs)
 			bLegal = m_fnApplyData(lpstrMessage, ctCommand);
 			bCommand = true;
 			break;
+        case ';':
+            i = 0;
+            break;
 		default:
 			if (bCommand)
 			{
-				if ((c == ';') || (c >= 'A' && c <= 'Z'))
+				if (c >= 'A' && c <= 'Z')
 				{
 					lpstrBuffer[i] = c;
 					++i;
@@ -213,9 +216,17 @@ CSGFFileIO::COMMAND_TYPE CSGFFileIO::m_fnClassifyCommand(char *lpstrCommand)
 		{
 			ctType = CT_NAME;
 		}
-		else if (lpstrCommand[1] = 'C')
+		else if (lpstrCommand[0] == 'C')
 		{
 			ctType = CT_COMMENT;
+		}
+		else if (lpstrCommand[0] == 'B')
+		{
+			ctType = CT_BLACK_MOVE;
+		}
+		else if (lpstrCommand[0] == 'W')
+		{
+			ctType = CT_WHITE_MOVE;
 		}
 		break;
 	case 2:
@@ -234,14 +245,6 @@ CSGFFileIO::COMMAND_TYPE CSGFFileIO::m_fnClassifyCommand(char *lpstrCommand)
 		else if (strcmp(lpstrCommand, "AB") == 0)
 		{
 			ctType = CT_ADD_BLACK;
-		}
-		else if (strcmp(lpstrCommand, ";B") == 0)
-		{
-			ctType = CT_BLACK_MOVE;
-		}
-		else if (strcmp(lpstrCommand, ";W") == 0)
-		{
-			ctType = CT_WHITE_MOVE;
 		}
 		break;
 	default:
