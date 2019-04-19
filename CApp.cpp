@@ -6,7 +6,7 @@ bool CApp::OnInit()
     m_lpFrame->SetIcon(wxICON(MAIN_ICON));
 	if (argc > 1)
 	{
-		if (argv[1].length() > 0 && strcmp((char*)(argv[1].char_str()) + argv[1].length() - 4, ".sgf") == 0)
+		if (argv[1].length() > 0 && strcmp(strrchr(argv[1], '.') , ".sgf") == 0)
 		{
 			m_lpFrame->m_fnOpenSGF(argv[1].char_str());
 		}

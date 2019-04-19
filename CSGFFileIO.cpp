@@ -46,9 +46,9 @@ void CSGFFileIO::OnReadSGF(std::ifstream &ifs)
 			bLegal = m_fnApplyData(lpstrMessage, ctCommand);
 			bCommand = true;
 			break;
-        case ';':
-            i = 0;
-            break;
+		case ';':
+			i = 0;
+			break;
 		default:
 			if (bCommand)
 			{
@@ -168,7 +168,7 @@ void CSGFFileIO::OnWriteSGF(std::ofstream &ofs)
 			{
 				ofs << ";B" << '[' << char('a' + lpemVisitor->x) << char('a' + lpemVisitor->y) << ']';
 			}
-			else if(lpemVisitor->stone_color == SC_WHITE)
+			else if (lpemVisitor->stone_color == SC_WHITE)
 			{
 				ofs << ";W" << '[' << char('a' + lpemVisitor->x) << char('a' + lpemVisitor->y) << ']';
 			}
@@ -212,21 +212,20 @@ CSGFFileIO::COMMAND_TYPE CSGFFileIO::m_fnClassifyCommand(char *lpstrCommand)
 	switch (len)
 	{
 	case 1:
-		if (lpstrCommand[0] == 'N')
+		switch (lpstrCommand[0])
 		{
+		case 'N':
 			ctType = CT_NAME;
-		}
-		else if (lpstrCommand[0] == 'C')
-		{
+			break;
+		case 'C':
 			ctType = CT_COMMENT;
-		}
-		else if (lpstrCommand[0] == 'B')
-		{
+			break;
+		case 'B':
 			ctType = CT_BLACK_MOVE;
-		}
-		else if (lpstrCommand[0] == 'W')
-		{
+			break;
+		case 'W':
 			ctType = CT_WHITE_MOVE;
+			break;
 		}
 		break;
 	case 2:
@@ -315,7 +314,7 @@ void CSGFFileIO::m_fnConvertCoord(char *lpstrCommand, int &x, int &y)
 		{
 			x = lpstrCommand[0] - 'a';
 		}
-		else if(lpstrCommand[0] >= 'A' && lpstrCommand[0] < 'A' + nBoardSize)
+		else if (lpstrCommand[0] >= 'A' && lpstrCommand[0] < 'A' + nBoardSize)
 		{
 			x = lpstrCommand[0] - 'A';
 		}

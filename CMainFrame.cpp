@@ -245,7 +245,7 @@ void CMainFrame::OnDropFile(wxDropFilesEvent &event)
     std::ifstream ifs;
 	wxString wxstrFile;
 	wxstrFile = *(event.GetFiles());
-	if (wxstrFile.length() > 4 && strcmp((char*)(wxstrFile.char_str()) + wxstrFile.length() - 4, ".sgf") == 0)
+	if (wxstrFile.length() > 4 && strcmp(strrchr((char*)(wxstrFile.char_str()), '.'), ".sgf") == 0)
 	{
 		if ((m_lpCanvas->m_GameBoardManager.m_emBlankMove.depth == 0 && m_lpCanvas->m_GameBoardManager.m_iHandicapPutting == 0) || MD.ShowModal() == wxID_OK)
 		{
