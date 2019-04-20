@@ -1,4 +1,4 @@
-Welcome to try LZRobe! This is a software that provides a graphical user interface of the computer go software Leela Zero.
+"Welcome to try LZRobe! This is a software that provides a graphical user interface of the computer go software Leela Zero.
 
 If you're interested in more information about Leela Zero, please browse the following website:
 
@@ -22,15 +22,13 @@ Code::Blocks supports creating a wxWidgets project containing the path of wxWidg
 
 After you have compiled LZRobe successfully, I tell you how to use LZRobe.
 
-The icon of LZRobe is a dog's head. Because the pronounciation of \"Go\" means \"dog\" in Chinese.
+The icon of LZRobe is a dog's head. Because the pronounciation of \"Go\" sounds like \"dog\" in Chinese.
 
 Once you open LZRobe, you will see a tool bar below the menu. Most of the functions of LZRobe can be found in the tool bar.
 
-New game will drop all the information of current game. A handicap game can onle be set in the file menu.
+New game will drop all the information of current game. A handicap game can only be set in the file menu.
 
 LZRobe allows dragging a sgf file to the window and open it. You can also set the default open program for an sgf file as LZRobe.
-
-But if there are non-ascii chars(e.g. Chinese characters) in your file name or path, you can only open it in menu or tool bar
 
 The move turn and number of prisoners are shown in the left of the gameboard. The pass and resign choice are laid on the right of the game board. The status of engine will be shown in the status bar at the bottom of the main frame.
 
@@ -90,8 +88,6 @@ In the analyzation, the points with green color are the most visited points, the
 
 The numbers at the points with green color indicates the winrate and visits. The point with highest visits is usually the best point to select.
 
-In order to avoid LZRobe collapse, please don't change the size of the window when the analyze is opened.
-
 If you put the mouse at the analyzing point, the following steps will automatically be shown, where the letters indicates the consequence.
 
 The latin letters with lower case come first, and then come the greek letters with lower case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.
@@ -112,4 +108,4 @@ The author is trying to reduce the bugs of the program, but we are sorry that we
 
 If once the program collapse while Leela Zero is running, please terminate Leela Zero with task manager lest it continue to occupy your hardware resource!
 
-Thanks for reading the introduction file! Welcome to modify these code to adapt more cases!
+Thanks for reading the introduction file! Welcome to modify these code to adapt more cases!"
