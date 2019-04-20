@@ -1,4 +1,4 @@
-"Welcome to try LZRobe! This is a software that provides a graphical user interface of the computer go software Leela Zero.
+Welcome to try LZRobe! This is a software that provides a graphical user interface of the computer go software Leela Zero.
 
 If you're interested in more information about Leela Zero, please browse the following website:
 
@@ -108,4 +108,4 @@ The author is trying to reduce the bugs of the program, but we are sorry that we
 
 If once the program collapse while Leela Zero is running, please terminate Leela Zero with task manager lest it continue to occupy your hardware resource!
 
-Thanks for reading the introduction file! Welcome to modify these code to adapt more cases!"
+Thanks for reading the introduction file! Welcome to modify these code to adapt more cases!
