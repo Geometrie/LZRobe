@@ -1,9 +1,9 @@
 #include "CGameBoardManager.h"
 CGameBoardManager::CGameBoardManager()
 {
-    m_scTurnColor = SC_BLACK;
-    m_bAlive = true;
-    m_bAcceptAnalyze = true;
+	m_scTurnColor = SC_BLACK;
+	m_bAlive = true;
+	m_bAcceptAnalyze = true;
 	m_lpiPrisoners[0] = m_lpiPrisoners[1] = 0;
 	m_lpAnalyzingEnd = m_lpAnalyzingStones;
 	m_lpemCurrentMove = &m_emBlankMove;
@@ -14,7 +14,7 @@ CGameBoardManager::CGameBoardManager()
 
 CGameBoardManager::~CGameBoardManager()
 {
-    OnClearGameRecord();
+	OnClearGameRecord();
 }
 
 void CGameBoardManager::OnAddHandicap(int x, int y)
@@ -31,7 +31,7 @@ void CGameBoardManager::OnAddHandicap(int x, int y)
 
 void CGameBoardManager::OnSetHandicap()
 {
-	char *lplpcHandicap[] = {"pddp", "pddpdd", "pddpddpp", "pddpddppjj", "pddpddppdjpj", "pddpddppdjpjjj", "pddpddppdjpjjdjp", "pddpddppdjpjjdjpjj" };
+	char *lplpcHandicap[] = { "pddp", "pddpdd", "pddpddpp", "pddpddppjj", "pddpddppdjpj", "pddpddppdjpjjj", "pddpddppdjpjjdjp", "pddpddppdjpjjdjpjj" };
 	char *lpcCoordinate = lplpcHandicap[m_nHandicap - 2];
 	int x, y, i;
 	if (m_nHandicap > 1 && m_nHandicap <= 9)
@@ -49,13 +49,13 @@ void CGameBoardManager::OnSetHandicap()
 
 bool CGameBoardManager::OnTestMove(int x, int y)
 {
-    bool bLegal;
+	bool bLegal;
 	CGameBase::BoardPoint *lpbpKoMarkBackUp;
 	lpbpKoMarkBackUp = m_lpbpKoMark;
 	bLegal = m_fnIsLegalMove(m_scTurnColor, m_fnPoint(x, y));
 	m_lpbpKoMark = lpbpKoMarkBackUp;
 	m_lprmRemoveEnd = m_lprmRemove;
-    return bLegal;
+	return bLegal;
 }
 
 void CGameBoardManager::m_fnSwapShorter(CGameBase::ExtendMove *lpemKnot)
@@ -97,7 +97,7 @@ void CGameBoardManager::m_fnSwapLonger(CGameBase::ExtendMove *lpemKnot)
 
 bool CGameBoardManager::OnAddMove(int x, int y)
 {
-    bool bLegal;
+	bool bLegal;
 	CGameBase::BoardPoint *lpbpPoint, *lpbpKoMarkBackUp;
 	CGameBase::Remove *lprmRemoveVisitor;
 	CGameBase::ExtendMove *lpemLastMove, emNewMove, *lpemMoveVisitor, *lpemBranchVisitor;
@@ -148,6 +148,18 @@ bool CGameBoardManager::OnAddMove(int x, int y)
 					if (emNewMove.remove_data == NULL)
 					{
 						bLegal = false;
+					}
+					if (emNewMove.remove_len > 0)
+					{
+						switch (lpbpPoint->stone_color)
+						{
+						case SC_BLACK:
+							m_lpiPrisoners[0] += emNewMove.remove_len;
+							break;
+						case SC_WHITE:
+							m_lpiPrisoners[1] += emNewMove.remove_len;
+							break;
+						}
 					}
 				}
 				if (bLegal)
@@ -217,7 +229,7 @@ bool CGameBoardManager::OnAddMove(int x, int y)
 			}
 		}
 	}
-    return bLegal;
+	return bLegal;
 }
 bool CGameBoardManager::OnBackMove()
 {
@@ -237,6 +249,15 @@ bool CGameBoardManager::OnBackMove()
 			{
 				m_lprmRemoveVisitor->bp->stone_color = scRemovedColor;
 			}
+			switch (m_lpemCurrentMove->stone_color)
+			{
+			case SC_BLACK:
+				m_lpiPrisoners[0] -= m_lpemCurrentMove->remove_len;
+				break;
+			case SC_WHITE:
+				m_lpiPrisoners[1] -= m_lpemCurrentMove->remove_len;
+				break;
+			}
 		}
 		m_scTurnColor = m_lpemCurrentMove->stone_color;
 		m_lpemCurrentMove = m_lpemCurrentMove->parent;
@@ -253,7 +274,7 @@ bool CGameBoardManager::OnRedoMove(CGameBase::ExtendMove *lpemMove)
 {
 	CGameBase::Remove *m_lprmRemoveVisitor, *m_lprmRemoveEnd;
 	CGameBase::BoardPoint *lpbp;
-    bool bSucceed;
+	bool bSucceed;
 	if (lpemMove == NULL)
 	{
 		lpemMove = m_lpemCurrentMove->child;
@@ -270,6 +291,15 @@ bool CGameBoardManager::OnRedoMove(CGameBase::ExtendMove *lpemMove)
 			{
 				m_lprmRemoveVisitor->bp->stone_color = SC_NULL;
 			}
+			switch (m_lpemCurrentMove->stone_color)
+			{
+			case SC_BLACK:
+				m_lpiPrisoners[0] += m_lpemCurrentMove->remove_len;
+				break;
+			case SC_WHITE:
+				m_lpiPrisoners[1] += m_lpemCurrentMove->remove_len;
+				break;
+			}
 		}
 		m_scTurnColor = opposite_color(m_lpemCurrentMove->stone_color);
 		bSucceed = true;
@@ -278,7 +308,7 @@ bool CGameBoardManager::OnRedoMove(CGameBase::ExtendMove *lpemMove)
 	{
 		bSucceed = false;
 	}
-    return bSucceed;
+	return bSucceed;
 }
 
 void CGameBoardManager::OnDeleteBranch(CGameBase::ExtendMove *lpemBranch)
@@ -374,15 +404,15 @@ void CGameBoardManager::OnClearGameRecord()
 
 void CGameBoardManager::OnClearAnalyze()
 {
-    CGameBase::BoardPoint *lpbpCurrent;
+	CGameBase::BoardPoint *lpbpCurrent;
 	CGameBase::BoardPoint **lplpbpAnalyzing;
 	for (lplpbpAnalyzing = m_lpAnalyzingStones; lplpbpAnalyzing != m_lpAnalyzingEnd; ++lplpbpAnalyzing)
 	{
 		lpbpCurrent = *lplpbpAnalyzing;
 		lpbpCurrent->pv_len = 0;
 		lpbpCurrent->visits = 0;
-        lpbpCurrent->order = -1;
-        lpbpCurrent->win_rate = -1;
+		lpbpCurrent->order = -1;
+		lpbpCurrent->win_rate = -1;
 	}
 	m_lpAnalyzingEnd = m_lpAnalyzingStones;
 }
