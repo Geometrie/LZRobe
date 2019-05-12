@@ -90,7 +90,7 @@ The numbers at the points with green color indicates the winrate and visits. The
 
 If you put the mouse at the analyzing point, the following steps will automatically be shown, where the letters indicates the consequence.
 
-The latin letters with lower case come first, and then come the greek letters with lower case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.
+The latin letters with lower case come first, and then come the greek letters with lower case. The maximum number to show of the following steps can be set with the spinbox on the right of the analyze length.
 
 If there are two continuous pass (one  for each side), the game will end. Leela Zero would not analyze a terminated game.
 
