@@ -3,7 +3,7 @@
 #include <wx/toolbar.h>
 #include <wx/menu.h>
 #include <wx/statusbr.h>
-#include "CLZInquirer.h"
+#include "CSGFFileIO.h"
 #include "International.h"
 enum
 {
@@ -43,6 +43,7 @@ public:
 	wxToolBar *m_lpToolBar;
 	wxMenu *m_lpEditMenu;
 	wxStatusBar *m_lpStatusBar;
+	wxString m_wxstrEngineName;
 	void m_fnTryToOpenEngine();
 	void m_fnEngineConfirmed();
 	void m_fnTryToCloseEngine();

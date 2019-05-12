@@ -12,6 +12,5 @@ class CLZProcess: public wxProcess
 {
 public:
     CLZProcess(wxEvtHandler *lpParent, int nId);
-    bool m_bAlive;
 };
 #endif // CLZPROCESS_H

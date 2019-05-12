@@ -1,7 +1,7 @@
 #include "CGoRuleKeeper.h"
 CGoRuleKeeper::CGoRuleKeeper()
 {
-	m_lpbpGameBoard = new CGameBase::BoardPoint[nBoardSize * nBoardSize + 2];
+	m_lpbpGameBoard = new CGameBase::BoardPoint[nBoardSize * nBoardSize + 1];
 	m_lplpbpSelectStones = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
 	m_lplpbpSelectEnd = m_lplpbpSelectStones;
 	m_lplpbpCountLiberties = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
@@ -34,7 +34,7 @@ void CGoRuleKeeper::m_fnChangeSize()
 	delete[]m_lplpbpCountLiberties;
 	delete[]m_lplpbpSelectStones;
 	delete[]m_lpbpGameBoard;
-	m_lpbpGameBoard = new CGameBase::BoardPoint[nBoardSize * nBoardSize + 2];
+	m_lpbpGameBoard = new CGameBase::BoardPoint[nBoardSize * nBoardSize + 1];
 	m_lplpbpSelectStones = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
 	m_lplpbpSelectEnd = m_lplpbpSelectStones;
 	m_lplpbpCountLiberties = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];

@@ -1,4 +1,4 @@
-#include "CPainter.h"
+ï»¿#include "CPainter.h"
 
 CPainter::CPainter(wxWindow *lpParent) : wxScrolledWindow(lpParent),
 m_fntPass(wxSize(70, 70), wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL),
@@ -112,11 +112,11 @@ void CPainter::m_fnDrawCoordinates(wxDC &dc)
 	int i;
 	wxString wxstrTick;
 	wxSize wxszStringSize;
-	char *lplpUpperLetterTick[] = { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-	char *lplpLowerLetterTick[] = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y" };
-	char *lplpNumTick[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"};
-	char *lplpNumTickReverse[] = { "25", "24", "23", "22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1" };
-	char **lplpXTick, **lplpYTick;
+	const  char *lplpUpperLetterTick[] = { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+	const char *lplpLowerLetterTick[] = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y" };
+	const char *lplpNumTick[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"};
+	const char *lplpNumTickReverse[] = { "25", "24", "23", "22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1" };
+	const char **lplpXTick, **lplpYTick;
 	lplpXTick = NULL;
 	lplpYTick = NULL;
 	switch (m_ctBoardTick)
@@ -190,12 +190,10 @@ void CPainter::m_fnDrawGameBoard(wxDC &dc)
 
 void CPainter::m_fnDrawPass(wxDC &dc)
 {
-	CGameBase::ExtendMove *lpemRecentMove;
 	wxSize szStringSize;
 	if (m_GameBoardManager.m_lpemCurrentMove != &(m_GameBoardManager.m_emBlankMove))
 	{
-		lpemRecentMove = m_GameBoardManager.m_lpemCurrentMove;
-		if (lpemRecentMove->x == nBoardSize && lpemRecentMove->y == 0)
+		if (m_GameBoardManager.m_lpemCurrentMove->x == nBoardSize && m_GameBoardManager.m_lpemCurrentMove->y == 0)
 		{
 			dc.SetFont(m_fntPass);
 			szStringSize = dc.GetTextExtent(m_wxstrPass);
@@ -430,6 +428,10 @@ void CPainter::m_fnDrawProcess(wxDC &dc)
 				dc.DrawCircle(m_iProgressGraphX + (iCurX + 1) * m_iGridSize / 2, m_iProgressGraphY + iCurY * m_iGridSize / 2, m_iGridSize / 8);
 				lpemMoveVisitor = lpemMoveVisitor->child;
 			}
+			else
+			{
+				lpemMoveVisitor = NULL;
+			}
 		}
 	}
 }
@@ -564,14 +566,18 @@ void CPainter::m_fnDrawAnalyze(wxDC &dc, int x, int y)
 	wxString wxstrMark;
 	wxSize szStringSize;
 	bool bPass;
-	char *lplpcMarks[] = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",\
-		"¦Á", "¦Â", "¦Ã", "¦Ä", "¦Å", "¦Æ", "¦Ç", "¦È", "¦É", "¦Ê", "¦Ë", "¦Ì", "¦Í", "¦Î", "¦Ï", "¦Ð", "¦Ñ", "¦Ò", "¦Ó", "¦Ô", "¦Õ", "¦Ö", "¦×", "¦Ø" };
+	const char *lplpcMarks[] = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", \
+		"o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",\
+		GRKLT_ALPHA, GRKLT_BETA, GRKLT_GAMMA, GRKLT_DELTA, GRKLT_EPSILON, GRKLT_ZETA,\
+		GRKLT_ETA, GRKLT_THETA, GRKLT_IOTA, GRKLT_KAPPA, GRKLT_LAMBDA, GRKLT_MU, \
+		GRKLT_NU, GRKLT_XI, GRKLT_OMICRON, GRKLT_PI, GRKLT_RHO, GRKLT_SIGMA, \
+		GRKLT_TAU, GRKLT_UPSILON, GRKLT_PHI, GRKLT_KI, GRKLT_PSI, GRKLT_OMEGA};
 	if (((x >= 0 && x < nBoardSize && y >= 0 && y < nBoardSize) || (x == nBoardSize && y == 0)) && m_GameBoardManager.m_fnPoint(x, y)->visits > 0)
 	{
 		lpbpLearningPoint = m_GameBoardManager.m_fnPoint(x, y);
 		if (lpbpLearningPoint->pv_len > 0)
 		{
-			nRouteLen = min(lpbpLearningPoint->pv_len, m_lpAnalyzeSlider->GetValue());
+			nRouteLen = min(lpbpLearningPoint->pv_len, m_lpAnalyzeSpinCtrl->GetValue());//min(lpbpLearningPoint->pv_len, m_lpAnalyzeSlider->GetValue());
 			dc.SetFont(m_fntStep);
 			scTest = m_GameBoardManager.m_scTurnColor;
 			lpbpTest = lpbpLearningPoint->pv;
@@ -640,9 +646,7 @@ void CPainter::m_fnDrawAnalyze(wxDC &dc, int x, int y)
 				lpbpDraw = *lplpbpAnalyzing;
 				if (lpbpDraw->visits > 0)
 				{
-					i = int(lpbpDraw - m_GameBoardManager.m_lpbpGameBoard);
-					x = i / nBoardSize;
-					y = i % nBoardSize;
+					m_GameBoardManager.m_fnCoordinate(lpbpDraw, x, y);
 					dc.SetTextForeground(*wxBLACK);
 					if (lpbpDraw->visits * 4 > iMaxVisit * 3)
 					{
@@ -682,9 +686,7 @@ void CPainter::m_fnDrawAnalyze(wxDC &dc, int x, int y)
 				lpbpDraw = *lplpbpAnalyzing;
 				if (lpbpDraw->visits > 0)
 				{
-					i = int(lpbpDraw - m_GameBoardManager.m_lpbpGameBoard);
-					x = i / nBoardSize;
-					y = i % nBoardSize;
+					m_GameBoardManager.m_fnCoordinate(lpbpDraw, x, y);
 					dc.SetTextForeground(*wxBLACK);
 					dc.SetTextBackground(wxTransparentColour);
 					if (x == nBoardSize && y == 0)

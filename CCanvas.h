@@ -1,7 +1,6 @@
 #ifndef CCANVAS_H
 #define CCANVAS_H
 #include <time.h>
-#include <wx/timer.h>
 #include "CPainter.h"
 class CCanvas: public CPainter
 {

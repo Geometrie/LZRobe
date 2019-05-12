@@ -1,6 +1,30 @@
 #ifndef INTERNATIONAL_H
 #define INTERNATIONAL_H
-//#define LANGUAGE_CHINESE_SIMPLIFIED
+#define GRKLT_ALPHA "α"
+#define GRKLT_BETA "β"
+#define GRKLT_GAMMA "γ"
+#define GRKLT_DELTA "δ"
+#define GRKLT_EPSILON "ε"
+#define GRKLT_ZETA "ζ"
+#define GRKLT_ETA "η"
+#define GRKLT_THETA "θ"
+#define GRKLT_IOTA "ι"
+#define GRKLT_KAPPA "κ"
+#define GRKLT_LAMBDA "λ"
+#define GRKLT_MU "μ"
+#define GRKLT_NU "ν"
+#define GRKLT_XI "ξ"
+#define GRKLT_OMICRON "ο"
+#define GRKLT_PI "π"
+#define GRKLT_RHO "ρ"
+#define GRKLT_SIGMA "σ"
+#define GRKLT_TAU "τ"
+#define GRKLT_UPSILON "υ"
+#define GRKLT_PHI "φ"
+#define GRKLT_KI "χ"
+#define GRKLT_PSI "ψ"
+#define GRKLT_OMEGA "ω"
+#define LANGUAGE_CHINESE_SIMPLIFIED
 #ifdef LANGUAGE_CHINESE_SIMPLIFIED
 #define STR_NEW "新对局"
 #define STR_HANDICAP "让子对局"
@@ -36,7 +60,6 @@
 #define STR_WHITE_DOG "AI执白"
 #define STR_TIME "思考时间"
 #define STR_SHOW_ANALYZE "显示分析"
-#define STR_TERMINATED_GAME "对局已经结束，需要重新加载才能显示分析，确定重新加载么？"
 #define STR_INTERVAL "刷新间隔"
 #define STR_ROUTE_LENGTH "预测长度"
 #define STR_NO_ENGINE "引擎未运行"
@@ -57,7 +80,7 @@
 #define STR_ENGINE_CLOSING "引擎正在关闭"
 #define STR_SELFPLAY "引擎正在与自己对局"
 #define STR_ANALYZING "局势分析中"
-#define STR_VERSION "当前版本：1.02 测试版"
+#define STR_VERSION "当前版本：1.03 测试版"
 #define STR_CLOSE "关闭"
 #define STR_MOVE_TURN "着子权"
 #define STR_PRISONERS "提子"
@@ -80,7 +103,6 @@ LZRobe的图标是一个狗的头像，因为围棋的英文“Go”的发音类似于中文里的“狗”。\n\n
 在你打开LZRobe以后，你会看到菜单栏下面有一个工具栏，大多数功能都可以在工具栏中找到。\n\n\
 新对局会删除当前的对局信息。让子对局只能在文件菜单栏中选取。\n\n\
 LZRobe允许用鼠标把sgf文件拖放到窗口中来打开。也可以把.sgf格式的棋谱文件的打开方式直接设置成LZRobe。\n\n\
-但如果你的棋谱文件名或者路径中有非ASCII码字符(比如汉字)，你只能用菜单或者工具栏来打开。\n\n\
 棋盘左侧显示了落子一方和提子数量，右侧有放弃一步和认输的选点。主窗口下方的状态栏会显示引擎的状态。\n\n\
 鼠标左键用来放棋子，鼠标右键用来悔棋，键盘右下的对局流程可以用来跳转到任意棋步。\n\n\
 对局流程按照从左到右的顺序蛇形排列，每一列有25手棋，想跳转到对应的棋步，使用鼠标左键点相应的位置即可。\n\n\
@@ -110,9 +132,8 @@ LZRobe支持多分支棋谱，如果你改变了原来棋谱中的下法，会有提示让你选择是否增加新的
 例如，你把这个数字认成了50，那分析结果会在1秒内刷新两次。\n\n\
 在分析过程中，绿点的颜色是搜索最多的点，其次是蓝点，黄点和红点的搜索较少。\n\n\
 彩色点上的数字表示胜率和搜索数。搜索数最多的点通常是最好的选点。\n\n\
-为了防止程序崩溃，在分析棋谱的时候，请不要随意改变窗口大小。\n\n\
 如果你把鼠标放到正在分析的点上，这个点下面的分析步数将会自动显示，上面有字母表示顺序。\n\n\
-首先是小写英文字母，然后是小写希腊字母。显示的最大步数可以用“预测长度”标签右边的滑杆来设置。\n\n\
+首先是小写英文字母，然后是小写希腊字母。显示的最大步数可以用“预测长度”标签右边的数字框来设置。\n\n\
 如果有连续两手放弃(双方各一手)或者一方认输，则棋局结束，LeelaZero不会对结束的棋局做分析。\n\n\
 如果你想分析已结束的棋局，需要从头加载，棋谱的信息不会改变。\n\n\
 在对局接近结束或者一方占有绝对的优势的时候，LeeaZero可能会有放弃的步的选点，查看这个选点的分析可以把鼠标放在放弃选项的选点上。\n\n\
@@ -156,7 +177,6 @@ LZRobe支持多分支棋谱，如果你改变了原来棋谱中的下法，会有提示让你选择是否增加新的
 #define STR_WHITE_DOG "AI plays white"
 #define STR_TIME "think time"
 #define STR_SHOW_ANALYZE "show analyze"
-#define STR_TERMINATED_GAME "The game has terminated. Would you like to reload it for analyzing?"
 #define STR_INTERVAL "refresh interval"
 #define STR_ROUTE_LENGTH "analyze length"
 #define STR_NO_ENGINE "no engine"
@@ -178,7 +198,7 @@ LZRobe支持多分支棋谱，如果你改变了原来棋谱中的下法，会有提示让你选择是否增加新的
 #define STR_ENGINE_CLOSING "Engine is closing"
 #define STR_SELFPLAY "Engine is playing against itself"
 #define STR_ANALYZING "Analyzinng"
-#define STR_VERSION "Current version: 1.02 beta"
+#define STR_VERSION "Current version: 1.03 beta"
 #define STR_CLOSE "Close"
 #define STR_MOVE_TURN "Move Turn"
 #define STR_PRISONERS "Prisoners"
@@ -199,9 +219,8 @@ Code::Blocks supports creating a wxWidgets project containing the path of wxWidg
 After you have compiled LZRobe successfully, I tell you how to use LZRobe.\n\n\
 The icon of LZRobe is a dog's head. Because the pronounciation of \"Go\" sounds like \"dog\" in Chinese.\n\n\
 Once you open LZRobe, you will see a tool bar below the menu. Most of the functions of LZRobe can be found in the tool bar.\n\n\
-New game will drop all the information of current game. A handicap game can onle be set in the file menu.\n\n\
+New game will drop all the information of current game. A handicap game can only be set in the file menu.\n\n\
 LZRobe allows dragging a sgf file to the window and open it. You can also set the default open program for an sgf file as LZRobe.\n\n\
-But if there are non-ascii chars(e.g. Chinese characters) in your file name or path, you can only open it in menu or tool bar\n\n\
 The move turn and number of prisoners are shown in the left of the gameboard. The pass and resign choice are laid on the right of the game board. The status of engine will be shown in the status bar at the bottom of the main frame.\n\n\
 The game process are arranged from left to right with a wandering snake shape, where every column contains 25 steps. If you would like to jump to one step, you can click its related position with left button of your mouse.\n\n\
 The left button of the mouse is used to put stones, while the right button is used to undo a move. The game progress on the bottom right of the gameboard can be used to jump to any step.\n\n\
@@ -231,9 +250,8 @@ The frequency can be set with the spinbox on the right of the \"refresh interval
 For example, if you set the number as 50, the analyze result will refresh twice in one second.\n\n\
 In the analyzation, the points with green color are the most visited points, then come the blue points. The yellow and red points are less visited.\n\n\
 The numbers at the points with green color indicates the winrate and visits. The point with highest visits is usually the best point to select.\n\n\
-In order to avoid LZRobe collapse, please don't change the size of the window when the analyze is opened.\n\n\
 If you put the mouse at the analyzing point, the following steps will automatically be shown, where the letters indicates the consequence.\n\n\
-The latin letters with lower case come first, and then come the greek letters with lower case. The maximum number to show of the following steps can be set with the slider on the right of the analyze length.\n\n\
+The latin letters with lower case come first, and then come the greek letters with lower case. The maximum number to show of the following steps can be set with the spinbox on the right of the analyze length.\n\n\
 If there are two continuous pass (one  for each side), the game will end. Leela Zero would not analyze a terminated game.\n\n\
 So if you want to analyze a terminate game, the game record should be reloaded from the start. The information of the game record will not be changed.\n\n\
 When the game approaches the end or one side have an extremely advantage, Leela Zero may have the pass choice. If you want to check the relative analyze, you can put the mouse on the pass point.\n\n\

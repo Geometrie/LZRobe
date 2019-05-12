@@ -24,12 +24,12 @@ namespace CGameBase
         {
             bool bLegal;
             bLegal = true;
-            if (strcmp(position_info, "pass") == 0)
+            if (strcmp(position_info, "pass") == 0 || strcmp(position_info, "Pass") == 0 || strcmp(position_info, "PASS") == 0)
             {
                 x = nBoardSize;
                 y = 0;
             }
-			else if (strcmp(position_info, "resign") == 0)
+			else if (strcmp(position_info, "resign") == 0 || strcmp(position_info, "Resign") == 0 || strcmp(position_info, "RESIGN") == 0)
 			{
 				x = nBoardSize;
 				y = 1;

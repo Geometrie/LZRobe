@@ -34,87 +34,49 @@ void CCanvas::m_fnShowCountResult(char *lpstrMessage)
 
 bool CCanvas::m_fnChangePosition(int x, int y)
 {
-	bool bChanged = false;
-	StoneColor scLastMove;
 	CGameBase::ExtendMove *lpemSearch;
-	if (m_GameBoardManager.m_lpemCurrentMove->child == NULL)
+	wxMessageDialog MD(this, _(STR_ADD_BRANCH_INQUIRY), _(STR_TIP), wxOK | wxCANCEL);
+	bool bChanged = false;
+	if (m_GameBoardManager.DoublePass(x, y))
 	{
-		scLastMove = m_GameBoardManager.m_scTurnColor;
-		if (m_GameBoardManager.OnAddMove(x, y))
+		if (m_GameStatusManager.m_esCurrentEngine == ES_OPENED)
 		{
-			m_fnResetAnalyze();
-			m_fnSendMoveInfo(m_GameBoardManager.m_lpemCurrentMove);
-			if (m_GameBoardManager.m_bAlive)
-			{
-				if (m_GameStatusManager.m_fnInquireAI(m_GameBoardManager.m_scTurnColor))
-				{
-					m_fnInquireMove();
-				}
-				else if (m_GameStatusManager.m_fnAnalyzing())
-				{
-					m_fnInquireAnalyze();
-				}
-			}
-			else if (x == nBoardSize && y == 0)
-			{
-				if (m_GameStatusManager.m_lpToolBar->GetToolState(ID_BLACK_DOG))
-				{
-					m_GameStatusManager.m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
-					m_GameStatusManager.m_fnSetBlackDog();
-				}
-				if (m_GameStatusManager.m_lpToolBar->GetToolState(ID_WHITE_DOG))
-				{
-					m_GameStatusManager.m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
-					m_GameStatusManager.m_fnSetWhiteDog();
-				}
-				if (m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
-				{
-					m_GameStatusManager.m_lpToolBar->ToggleTool(ID_ANALYZE, false);
-					m_GameStatusManager.m_fnSetAnalyze();
-				}
-				m_fnInquireResult();
-			}
-			bChanged = true;
+			m_fnLZInquireResult();
+			m_fnLZExecuteFirstInquire();
 		}
 	}
-	else
+	else if (m_GameBoardManager.Resign(x, y))
+	{
+		m_fnShowResignResult();
+	}
+	else if(m_GameBoardManager.OnTestMove(x, y))
 	{
 		lpemSearch = m_GameBoardManager.m_lpemCurrentMove->search(x, y);
-		if (lpemSearch != NULL)
+		if (m_GameBoardManager.m_lpemCurrentMove->child == NULL || lpemSearch != NULL || MD.ShowModal() == wxID_OK)
 		{
-			m_fnForward(lpemSearch);
-			if (m_GameStatusManager.m_fnAnalyzing())
+			if (m_GameStatusManager.m_esCurrentEngine == ES_OPENED)
 			{
-				m_fnInquireAnalyze();
-			}
-			bChanged = true;
-		}
-		else
-		{
-			if (m_GameBoardManager.OnTestMove(x, y))
-			{
-				wxMessageDialog MD(this, _(STR_ADD_BRANCH_INQUIRY), _(STR_TIP), wxOK | wxCANCEL);
-				if (MD.ShowModal() == wxID_OK)
+				if (m_GameStatusManager.m_fnAnalyzing())
 				{
-					if (!m_GameBoardManager.m_bAlive)
-					{
-						m_fnClearLZBoard();
-						m_fnAppendGameRecord();
-						m_GameBoardManager.m_bAlive = true;
-					}
-					if (m_GameBoardManager.OnAddMove(x, y))
-					{
-						m_fnResetAnalyze();
-						m_fnSendMoveInfo(m_GameBoardManager.m_lpemCurrentMove);
-						if (m_GameStatusManager.m_fnAnalyzing())
-						{
-							m_fnInquireAnalyze();
-						}
-						bChanged = true;
-					}
+					m_GameBoardManager.OnClearAnalyze();
+					m_fnLZAppendMove(m_GameBoardManager.m_scTurnColor, x, y);
+					m_fnLZInquireAnalyze();
 				}
+				else
+				{
+					m_fnLZAppendMove(m_GameBoardManager.m_scTurnColor, x, y);
+				}
+				m_GameBoardManager.OnAddMove(x, y);
+				Refresh();
+				m_fnLZExecuteFirstInquire();
+			}
+			else
+			{
+				m_GameBoardManager.OnAddMove(x, y);
+				Refresh();
 			}
 		}
+		bChanged = true;
 	}
 	return bChanged;
 }
@@ -123,7 +85,7 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
 {
 	wxPoint ptMouse, ptScroll;
     int x, y, xPos, yPos, iNewStep;
-    if (m_bAcceptChange && m_GameStatusManager.m_fnUserAuthorized(m_GameBoardManager.m_scTurnColor))
+    if (m_GameStatusManager.m_fnUserAuthorized(m_GameBoardManager.m_scTurnColor))
     {
         ptMouse = event.GetPosition();
 		ptScroll = GetViewStart();
@@ -134,7 +96,6 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
         if (x >= 0 && x < nBoardSize && y >= 0 && y < nBoardSize)
         {
 			m_fnChangePosition(x, y);
-			Refresh();
         }
 		else
 		{
@@ -143,7 +104,6 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
 			if (x == 0 && y == 0)
 			{
 				m_fnChangePosition(nBoardSize, 0);
-				Refresh();
 			}
 			else
 			{
@@ -151,25 +111,7 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
 				y = (yPos - m_iNoMoveLogoY + m_iGridSize / 2) / m_iGridSize;
 				if (x == 0 && y == 0)
 				{
-					if (m_fnChangePosition(nBoardSize, 1))
-					{
-						if (m_GameStatusManager.m_lpToolBar->GetToolState(ID_BLACK_DOG))
-						{
-							m_GameStatusManager.m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
-							m_GameStatusManager.m_fnSetBlackDog();
-						}
-						if (m_GameStatusManager.m_lpToolBar->GetToolState(ID_WHITE_DOG))
-						{
-							m_GameStatusManager.m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
-							m_GameStatusManager.m_fnSetWhiteDog();
-						}
-						if (m_GameStatusManager.m_lpToolBar->GetToolState(ID_ANALYZE))
-						{
-							m_GameStatusManager.m_lpToolBar->ToggleTool(ID_ANALYZE, false);
-							m_GameStatusManager.m_fnSetAnalyze();
-						}
-						m_fnShowResignResult();
-					}
+					m_fnChangePosition(nBoardSize, 1);
 				}
 				else if (m_GameStatusManager.m_fnBothAuthorized())
 				{
@@ -178,13 +120,28 @@ void CCanvas::OnLeftButtonUp(wxMouseEvent &event)
 					if ((x > 0 && y >= 0 && y < 25) || (x == 0 && y == 0))
 					{
 						iNewStep = (x - 1) * 25 + 13 + (x % 2 * 2 - 1) * (y - 12);
-						if ((m_GameStatusManager.m_esCurrentEngine == ES_CLOSED || m_GameStatusManager.m_esCurrentEngine == ES_OPENED))
+						if (iNewStep >= 0 && iNewStep <= m_GameBoardManager.m_lpemCurrentMove->step + m_GameBoardManager.m_lpemCurrentMove->depth)
 						{
-							m_fnJumpTo(iNewStep);
-							Refresh();
-							if (m_GameStatusManager.m_fnAnalyzing())
+							if (m_GameStatusManager.m_esCurrentEngine == ES_OPENED)
 							{
-								m_fnInquireAnalyze();
+								if (m_GameStatusManager.m_fnAnalyzing())
+								{
+									m_GameBoardManager.OnClearAnalyze();
+									m_fnLZJumpTo(iNewStep);
+									m_fnLZInquireAnalyze();
+								}
+								else
+								{
+									m_fnLZJumpTo(iNewStep);
+								}
+								m_GameBoardManager.OnJumpTo(iNewStep);
+								Refresh();
+								m_fnLZExecuteFirstInquire();
+							}
+							else
+							{
+								m_GameBoardManager.OnJumpTo(iNewStep);
+								Refresh();
 							}
 						}
 					}
@@ -209,7 +166,7 @@ void CCanvas::OnRightButtonUp(wxMouseEvent &event)
 		x = (xPos - m_iBoardLeft + m_iBoardUnitSize / 2) / m_iBoardUnitSize;
 		y = (yPos - m_iBoardTop + m_iBoardUnitSize / 2) / m_iBoardUnitSize;
 		lpemSearch = NULL;
-		if (x >= 0 && x <= nBoardSize && y >= 0 && y <= nBoardSize)
+		if (x >= 0 && x < nBoardSize && y >= 0 && y < nBoardSize || (x == nBoardSize && y == 0))
 		{
 			lpemSearch = m_GameBoardManager.m_lpemCurrentMove->search(x, y);
 		}
@@ -224,11 +181,29 @@ void CCanvas::OnRightButtonUp(wxMouseEvent &event)
 		}
 		if (lpemSearch == NULL)
 		{
-			m_fnBackward();
-			Refresh();
-			if (m_GameStatusManager.m_fnAnalyzing())
+			if (m_GameBoardManager.m_lpemCurrentMove->parent != NULL)
 			{
-				m_fnInquireAnalyze();
+				if (m_GameStatusManager.m_esCurrentEngine == ES_OPENED)
+				{
+					if (m_GameStatusManager.m_fnAnalyzing())
+					{
+						m_GameBoardManager.OnClearAnalyze();
+						m_fnLZBackward();
+						m_fnLZInquireAnalyze();
+					}
+					else
+					{
+						m_fnLZBackward();
+					}
+					m_GameBoardManager.OnBackMove();
+					Refresh();
+					m_fnLZExecuteFirstInquire();
+				}
+				else
+				{
+					m_GameBoardManager.OnBackMove();
+					Refresh();
+				}
 			}
 		}
 		else

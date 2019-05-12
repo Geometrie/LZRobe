@@ -2,7 +2,6 @@
 CGameBoardManager::CGameBoardManager()
 {
 	m_scTurnColor = SC_BLACK;
-	m_bAlive = true;
 	m_bAcceptAnalyze = true;
 	m_lpiPrisoners[0] = m_lpiPrisoners[1] = 0;
 	m_lpAnalyzingEnd = m_lpAnalyzingStones;
@@ -31,8 +30,8 @@ void CGameBoardManager::OnAddHandicap(int x, int y)
 
 void CGameBoardManager::OnSetHandicap()
 {
-	char *lplpcHandicap[] = { "pddp", "pddpdd", "pddpddpp", "pddpddppjj", "pddpddppdjpj", "pddpddppdjpjjj", "pddpddppdjpjjdjp", "pddpddppdjpjjdjpjj" };
-	char *lpcCoordinate = lplpcHandicap[m_nHandicap - 2];
+	const char *lplpcHandicap[] = { "pddp", "pddpdd", "pddpddpp", "pddpddppjj", "pddpddppdjpj", "pddpddppdjpjjj", "pddpddppdjpjjdjp", "pddpddppdjpjjdjpjj" };
+	const char *lpcCoordinate = lplpcHandicap[m_nHandicap - 2];
 	int x, y, i;
 	if (m_nHandicap > 1 && m_nHandicap <= 9)
 	{
@@ -46,6 +45,15 @@ void CGameBoardManager::OnSetHandicap()
 	m_scTurnColor = SC_WHITE;
 }
 
+void CGameBoardManager::OnClearHandicap()
+{
+	while (m_iHandicapPutting > 0)
+	{
+		--m_iHandicapPutting;
+		m_lplpbpHandicap[m_iHandicapPutting]->stone_color = SC_NULL;
+	}
+}
+
 
 bool CGameBoardManager::OnTestMove(int x, int y)
 {
@@ -55,6 +63,7 @@ bool CGameBoardManager::OnTestMove(int x, int y)
 	bLegal = m_fnIsLegalMove(m_scTurnColor, m_fnPoint(x, y));
 	m_lpbpKoMark = lpbpKoMarkBackUp;
 	m_lprmRemoveEnd = m_lprmRemove;
+	bLegal = true;
 	return bLegal;
 }
 
@@ -102,131 +111,114 @@ bool CGameBoardManager::OnAddMove(int x, int y)
 	CGameBase::Remove *lprmRemoveVisitor;
 	CGameBase::ExtendMove *lpemLastMove, emNewMove, *lpemMoveVisitor, *lpemBranchVisitor;
 	int iBranchDepth;
-	if (x == nBoardSize)
+	bLegal = true;
+	lpemBranchVisitor = m_lpemCurrentMove->search(x, y);
+	if (lpemBranchVisitor != NULL)
 	{
-		if (y == 1)
-		{
-			m_bAlive = false;
-		}
-		else if (y == 0)
-		{
-			if (m_lpemCurrentMove->x == nBoardSize && m_lpemCurrentMove->y == 0)
-			{
-				m_bAlive = false;
-			}
-		}
+		OnRedoMove(lpemBranchVisitor);
 		bLegal = true;
 	}
-	if (m_bAlive)
+	else
 	{
-		lpemBranchVisitor = m_lpemCurrentMove->search(x, y);
-		if (lpemBranchVisitor != NULL)
+		lpbpPoint = m_fnPoint(x, y);
+		lpbpKoMarkBackUp = m_lpbpKoMark;
+		bLegal = m_fnIsLegalMove(m_scTurnColor, lpbpPoint);
+		if (bLegal)
 		{
-			OnRedoMove(lpemBranchVisitor);
-			bLegal = true;
-		}
-		else
-		{
-			lpbpPoint = m_fnPoint(x, y);
-			lpbpKoMarkBackUp = m_lpbpKoMark;
-			bLegal = m_fnIsLegalMove(m_scTurnColor, lpbpPoint);
-			if (bLegal)
+			lpbpPoint->stone_color = m_scTurnColor;
+			emNewMove.stone_color = m_scTurnColor;
+			emNewMove.x = x;
+			emNewMove.y = y;
+			m_scTurnColor = opposite_color(m_scTurnColor);
+			if (m_lprmRemove != m_lprmRemoveEnd)
 			{
-				lpbpPoint->stone_color = m_scTurnColor;
-				emNewMove.stone_color = m_scTurnColor;
-				emNewMove.x = x;
-				emNewMove.y = y;
-				m_scTurnColor = opposite_color(m_scTurnColor);
-				if (m_lprmRemove != m_lprmRemoveEnd)
+				for (lprmRemoveVisitor = m_lprmRemove; lprmRemoveVisitor != m_lprmRemoveEnd; ++lprmRemoveVisitor)
 				{
-					for (lprmRemoveVisitor = m_lprmRemove; lprmRemoveVisitor != m_lprmRemoveEnd; ++lprmRemoveVisitor)
+					lprmRemoveVisitor->bp->stone_color = SC_NULL;
+				}
+				emNewMove.remove_len = int(m_lprmRemoveEnd - m_lprmRemove);
+				emNewMove.remove_data = m_rmplRemoved.m_fnWriteData(m_lprmRemove, emNewMove.remove_len);
+				if (emNewMove.remove_data == NULL)
+				{
+					bLegal = false;
+				}
+				if (emNewMove.remove_len > 0)
+				{
+					switch (lpbpPoint->stone_color)
 					{
-						lprmRemoveVisitor->bp->stone_color = SC_NULL;
-					}
-					emNewMove.remove_len = int(m_lprmRemoveEnd - m_lprmRemove);
-					emNewMove.remove_data = m_rmplRemoved.m_fnWriteData(m_lprmRemove, emNewMove.remove_len);
-					if (emNewMove.remove_data == NULL)
-					{
-						bLegal = false;
-					}
-					if (emNewMove.remove_len > 0)
-					{
-						switch (lpbpPoint->stone_color)
-						{
-						case SC_BLACK:
-							m_lpiPrisoners[0] += emNewMove.remove_len;
-							break;
-						case SC_WHITE:
-							m_lpiPrisoners[1] += emNewMove.remove_len;
-							break;
-						}
+					case SC_BLACK:
+						m_lpiPrisoners[0] += emNewMove.remove_len;
+						break;
+					case SC_WHITE:
+						m_lpiPrisoners[1] += emNewMove.remove_len;
+						break;
 					}
 				}
-				if (bLegal)
+			}
+			if (bLegal)
+			{
+				m_lprmRemoveEnd = m_lprmRemove;
+				lpemLastMove = m_lpemCurrentMove;
+				m_lpemCurrentMove = m_emplGameRecords.m_fnWriteData(&emNewMove, 1);
+				if (m_lpemCurrentMove == NULL)
 				{
-					m_lprmRemoveEnd = m_lprmRemove;
-					lpemLastMove = m_lpemCurrentMove;
-					m_lpemCurrentMove = m_emplGameRecords.m_fnWriteData(&emNewMove, 1);
-					if (m_lpemCurrentMove == NULL)
+					m_lpbpKoMark = lpbpKoMarkBackUp;
+					if (emNewMove.remove_len > 0)
 					{
-						m_lpbpKoMark = lpbpKoMarkBackUp;
-						if (emNewMove.remove_len > 0)
-						{
-							m_rmplRemoved.m_fnDropData(emNewMove.remove_data, emNewMove.remove_len);
-						}
-					}
-					else
-					{
-						m_lpemCurrentMove->parent = lpemLastMove;
-						m_lpemCurrentMove->step = lpemLastMove->step + 1;
-						if (lpemLastMove->child == NULL)
-						{
-							lpemLastMove->child = m_lpemCurrentMove;
-						}
-						else
-						{
-							lpemBranchVisitor = lpemLastMove->child;
-							while (lpemBranchVisitor->shorter != NULL)
-							{
-								lpemBranchVisitor = lpemBranchVisitor->shorter;
-							}
-							lpemBranchVisitor->shorter = m_lpemCurrentMove;
-							m_lpemCurrentMove->longer = lpemBranchVisitor;
-						}
-						++(lpemLastMove->branch);
-						lpemMoveVisitor = m_lpemCurrentMove;
-						while (lpemMoveVisitor->parent != NULL)
-						{
-							while (lpemMoveVisitor->longer != NULL && lpemMoveVisitor->longer->depth < lpemMoveVisitor->depth)
-							{
-								m_fnSwapLonger(lpemMoveVisitor);
-							}
-							while (lpemMoveVisitor->parent->child->longer != NULL)
-							{
-								lpemMoveVisitor->parent->child = lpemMoveVisitor->parent->child->longer;
-							}
-							iBranchDepth = lpemMoveVisitor->depth + 1;
-							if (iBranchDepth > lpemMoveVisitor->parent->depth)
-							{
-								lpemMoveVisitor->parent->depth = iBranchDepth;
-								lpemMoveVisitor = lpemMoveVisitor->parent;
-							}
-							else
-							{
-								lpemMoveVisitor = &m_emBlankMove;
-							}
-						}
+						m_rmplRemoved.m_fnDropData(emNewMove.remove_data, emNewMove.remove_len);
 					}
 				}
 				else
 				{
-					m_lpbpKoMark = lpbpKoMarkBackUp;
+					m_lpemCurrentMove->parent = lpemLastMove;
+					m_lpemCurrentMove->step = lpemLastMove->step + 1;
+					if (lpemLastMove->child == NULL)
+					{
+						lpemLastMove->child = m_lpemCurrentMove;
+					}
+					else
+					{
+						lpemBranchVisitor = lpemLastMove->child;
+						while (lpemBranchVisitor->shorter != NULL)
+						{
+							lpemBranchVisitor = lpemBranchVisitor->shorter;
+						}
+						lpemBranchVisitor->shorter = m_lpemCurrentMove;
+						m_lpemCurrentMove->longer = lpemBranchVisitor;
+					}
+					++(lpemLastMove->branch);
+					lpemMoveVisitor = m_lpemCurrentMove;
+					while (lpemMoveVisitor->parent != NULL)
+					{
+						while (lpemMoveVisitor->longer != NULL && lpemMoveVisitor->longer->depth < lpemMoveVisitor->depth)
+						{
+							m_fnSwapLonger(lpemMoveVisitor);
+						}
+						while (lpemMoveVisitor->parent->child->longer != NULL)
+						{
+							lpemMoveVisitor->parent->child = lpemMoveVisitor->parent->child->longer;
+						}
+						iBranchDepth = lpemMoveVisitor->depth + 1;
+						if (iBranchDepth > lpemMoveVisitor->parent->depth)
+						{
+							lpemMoveVisitor->parent->depth = iBranchDepth;
+							lpemMoveVisitor = lpemMoveVisitor->parent;
+						}
+						else
+						{
+							lpemMoveVisitor = &m_emBlankMove;
+						}
+					}
 				}
 			}
 			else
 			{
 				m_lpbpKoMark = lpbpKoMarkBackUp;
 			}
+		}
+		else
+		{
+			m_lpbpKoMark = lpbpKoMarkBackUp;
 		}
 	}
 	return bLegal;
@@ -311,6 +303,18 @@ bool CGameBoardManager::OnRedoMove(CGameBase::ExtendMove *lpemMove)
 	return bSucceed;
 }
 
+void CGameBoardManager::OnJumpTo(int iNewStep)
+{
+	while (m_lpemCurrentMove->step < iNewStep)
+	{
+		OnRedoMove();
+	}
+	while (m_lpemCurrentMove->step > iNewStep)
+	{
+		OnBackMove();
+	}
+}
+
 void CGameBoardManager::OnDeleteBranch(CGameBase::ExtendMove *lpemBranch)
 {
 	std::queue<CGameBase::ExtendMove*> qulpemQueue;
@@ -393,7 +397,6 @@ void CGameBoardManager::OnClearGameRecord()
 	m_emBlankMove.release();
 	m_lpemCurrentMove = &(m_emBlankMove);
 	m_scTurnColor = SC_BLACK;
-	m_bAlive = true;
 	m_bAcceptAnalyze = true;
 	m_lpiPrisoners[0] = m_lpiPrisoners[1] = 0;
 	m_lpAnalyzingEnd = m_lpAnalyzingStones;
@@ -406,6 +409,7 @@ void CGameBoardManager::OnClearAnalyze()
 {
 	CGameBase::BoardPoint *lpbpCurrent;
 	CGameBase::BoardPoint **lplpbpAnalyzing;
+	m_bAcceptAnalyze = false;
 	for (lplpbpAnalyzing = m_lpAnalyzingStones; lplpbpAnalyzing != m_lpAnalyzingEnd; ++lplpbpAnalyzing)
 	{
 		lpbpCurrent = *lplpbpAnalyzing;

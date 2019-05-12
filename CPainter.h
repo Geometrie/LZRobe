@@ -7,8 +7,8 @@
 #include <wx/dcclient.h>
 #include <wx/dcbuffer.h>
 #include <wx/msgdlg.h>
-#include <wx/slider.h>
-#include "CGameStatusManager.h"//"CUDPInquirer.h"
+#include <wx/spinctrl.h>
+#include "CLZInquirer.h"
 #ifndef min
 #define min(a, b) (((a) < (b))?(a):(b))
 #endif
@@ -52,7 +52,6 @@ class CPainter: public wxScrolledWindow, public CLZInquirer
 public:
 	CPainter(wxWindow *lpParent);
 	clock_t m_ctTimeTick;
-	CGameStatusManager m_GameStatusManager;
 	bool m_bShowStep;
 	COORDINATE_TYPE m_ctBoardTick;
 	int m_iGridSize, m_iBoardUnitSize;
@@ -62,7 +61,7 @@ public:
 	int m_iPrisonerTipX, m_iPrisonerTipY, m_lpiWrappedStonesX[2], m_iWrappedStonesY, m_iPrisonerRadius, m_iPrisonerNumY;
 	int m_iPassTipX, m_iResignTipX, m_iNoMoveTipY, m_iTipArrowTop, m_iTipArrowBottom, m_iNoMoveLogoY;
 	int m_iProcessTipX, m_iProcessTipY, m_iProgressGraphX, m_iProgressGraphY;
-	wxSlider *m_lpAnalyzeSlider;
+	wxSpinCtrl *m_lpAnalyzeSpinCtrl;//wxSlider *m_lpAnalyzeSlider;
 	wxFont m_fntPass, m_fntStep, m_fntAnalyze, m_fntTip, m_fntBranch;
 	wxColour m_clrLightRed, m_clrLightYellow, m_clrLightBlue, m_clrLightGreen, m_clrMagenta;
 	wxBrush m_brLightRed, m_brLightYellow, m_brLightBlue, m_brLightGreen, m_brGameBoard;

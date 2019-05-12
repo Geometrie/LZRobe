@@ -1,0 +1,3 @@
+D:\ToolLibs\leela-zero-0.17-win64\leelaz.exe
+D:\ToolLibs\leela-zero-0.17-win64\networks\d42f950a8a9c82af5859e8698a5395c348c474708a7ada989d6af42d14e81b3f.gz
+--cpu-only

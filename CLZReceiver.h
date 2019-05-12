@@ -1,6 +1,6 @@
 #ifndef CLZRECEIVER_H
 #define CLZRECEIVER_H
-#include <wx/thread.h>
+#include <sstream>
 #include "CCanvas.h"
 class CLZReceiver: public wxThread
 {
@@ -9,12 +9,17 @@ public:
     virtual wxThread::ExitCode Entry();
     CCanvas *m_lpCanvas;
     wxInputStream *m_lpInputStream;
-    bool m_bKeepLoop, m_bRefresh;
-    CGameBase::BoardPoint *m_lpbpAnalyzing;
+    bool m_bKeepLoop;
 protected:
+	enum SEPARATE_TYPE
+	{
+		ST_NO_SEPARATE,
+		ST_SPACE,
+		ST_ENTER,
+	};
     enum DATA_TYPE
     {
-        DT_UNKNOWN,
+        DT_NULL,
         DT_RESULT,
         DT_EQUAL,
         DT_COORDINATE,
@@ -26,10 +31,14 @@ protected:
         DT_PRIOR,
 		DT_LCB,
         DT_ORDER,
-        DT_PV
+        DT_PV,
     };
-    DATA_TYPE m_dtStatus;
-    void m_fnApplyMessage(char *lpstrMessage);
+	DATA_TYPE m_dtStatus;
+	CGameBase::BoardPoint *m_lpbpAnalyzing;
+	void m_fnRefresh();
+	void m_fnResponse();
+	void m_fnApplyCoordinate(char *lpstrMessage);
+	void m_fnApplyDigit(char *lpstrMessage);
     DATA_TYPE m_fnClassifyCommand(char *lpstrCommand);
 };
 #endif // CLZRECEIVER_H

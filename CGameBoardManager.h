@@ -12,13 +12,23 @@ public:
 	int m_nHandicap, m_iHandicapPutting;
 	CGameBase::ExtendMove *m_lpemCurrentMove, m_emBlankMove;
     int m_lpiPrisoners[2];
-    bool m_bAlive, m_bAcceptAnalyze;
+    bool m_bAcceptAnalyze;
 	void OnAddHandicap(int x, int y);
 	void OnSetHandicap();
+	void OnClearHandicap();
     bool OnTestMove(int x, int y);
+	bool DoublePass(int x, int y)
+	{
+		return (x == nBoardSize && y == 0 && m_lpemCurrentMove->x == nBoardSize && m_lpemCurrentMove->y == 0);
+	}
+	bool Resign(int x, int y)
+	{
+		return (x == nBoardSize && y == 1);
+	}
     bool OnAddMove(int x, int y);
     bool OnBackMove();
     bool OnRedoMove(CGameBase::ExtendMove *lpemMove = NULL);
+	void OnJumpTo(int iNewStep);
     void OnDeleteBranch(CGameBase::ExtendMove *lpemBranch);
     void OnClearGameRecord();
 	void OnClearAnalyze();

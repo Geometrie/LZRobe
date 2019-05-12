@@ -139,6 +139,7 @@ void CSGFFileIO::OnWriteSGF(std::ofstream &ofs)
 {
 	int i, x, y;
 	CGameBase::ExtendMove *lpemVisitor, *lpemRetrospector;
+	lpemRetrospector = NULL;
 	std::stack<CGameBase::ExtendMove*> stklpemStack;
 	ofs << '(';
 	ofs << "SZ[" << nBoardSize << ']';
@@ -303,7 +304,7 @@ void CSGFFileIO::m_fnConvertCoord(char *lpstrCommand, int &x, int &y)
 {
 	int len;
 	len = int(strlen(lpstrCommand));
-	if (len == 0)
+	if (len == 0 || (nBoardSize < 20 && lpstrCommand[0] == 't' && lpstrCommand[1] == 't'))
 	{
 		x = nBoardSize;
 		y = 0;
