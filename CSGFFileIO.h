@@ -1,5 +1,6 @@
 #ifndef CSGFFILEIO_H
 #define CSGFFILEIO_H
+#include <stdlib.h>
 #include <fstream>
 #include "CGameBoardManager.h"
 class CSGFFileIO: public CGameBoardManager
