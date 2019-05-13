@@ -1,6 +1,5 @@
 #ifndef CLZRECEIVER_H
 #define CLZRECEIVER_H
-#include <sstream>
 #include "CCanvas.h"
 class CLZReceiver: public wxThread
 {
