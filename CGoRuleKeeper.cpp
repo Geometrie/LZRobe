@@ -11,6 +11,7 @@ CGoRuleKeeper::CGoRuleKeeper()
 	m_lplpbpNeighbour = new CGameBase::BoardPoint*[nBoardSize * nBoardSize - 1];
 	m_lplpbpNeighbourEnd = m_lplpbpNeighbour;
 	m_lpbpKoMark = NULL;
+	m_bTerritoryMarked = false;
 	m_emplGameRecords.init(nBoardSize * nBoardSize * 4);
 	m_rmplRemoved.init(nBoardSize * nBoardSize * 4);
 }
@@ -52,7 +53,7 @@ void CGoRuleKeeper::m_fnSelectStoneBlock(CGameBase::BoardPoint *lpbpSeed)
 {
 	std::queue<CGameBase::BoardPoint*> qubpQueue;
 	CGameBase::BoardPoint *lpbpTest, **lplpbpVisitor;
-	int i, xSeed, ySeed, xTest, yTest;;
+	int i, xSeed, ySeed, xTest, yTest;
 	qubpQueue.push(lpbpSeed);
 	lpbpSeed->mark += 1;
 	*m_lplpbpSelectEnd = lpbpSeed;
@@ -124,6 +125,7 @@ bool CGoRuleKeeper::m_fnIsLegalMove(StoneColor sc, CGameBase::BoardPoint *lpbpPo
 	int i, xCenter, yCenter, xNeighbour, yNeighbour, nLiberty;
 	bool bLegal;
 	CGameBase::BoardPoint *lpbpNeighbour, **lplpbpBlockVisitor;
+	m_lprmRemoveEnd = m_lprmRemove;
 	m_fnCoordinate(lpbpPosition, xCenter, yCenter);
 	if (xCenter == nBoardSize && (yCenter == 0 || yCenter == 1))
 	{
@@ -203,4 +205,121 @@ bool CGoRuleKeeper::m_fnIsLegalMove(StoneColor sc, CGameBase::BoardPoint *lpbpPo
 		m_lpbpKoMark = NULL;
 	}
 	return bLegal;
+}
+
+void CGoRuleKeeper::m_fnMarkTerritory()
+{
+	std::queue<CGameBase::BoardPoint*> qubpQueue;
+	CGameBase::BoardPoint *lpbpTest, *lpbpSeed;
+	int i, xSeed, ySeed, xTest, yTest;
+	for (xSeed = 0; xSeed < nBoardSize; ++xSeed)
+	{
+		for (ySeed = 0; ySeed < nBoardSize; ++ySeed)
+		{
+			lpbpSeed = m_fnPoint(xSeed, ySeed);
+			if (lpbpSeed->stone_color == SC_BLACK || lpbpSeed->stone_color == SC_WHITE)
+			{
+				qubpQueue.push(lpbpSeed);
+			}
+		}
+	}
+	while (!qubpQueue.empty())
+	{
+		lpbpSeed = qubpQueue.front();
+		qubpQueue.pop();
+		m_fnCoordinate(lpbpSeed, xSeed, ySeed);
+		for (i = 0; i < 4; ++i)
+		{
+			xTest = xSeed + (1 - i % 2) * (1 - (i / 2) * 2);
+			yTest = ySeed + (i % 2) * (1 - (i / 2) * 2);
+			if (xTest >= 0 && xTest < nBoardSize && yTest >= 0 && yTest < nBoardSize)
+			{
+				lpbpTest = m_fnPoint(xTest, yTest);
+				switch (lpbpSeed->stone_color)
+				{
+				case SC_BLACK:
+				case SC_BLK_TER:
+					switch (lpbpTest->stone_color)
+					{
+					case SC_NULL:
+						lpbpTest->stone_color = SC_BLK_TER;
+						qubpQueue.push(lpbpTest);
+						break;
+					case SC_WHT_TER:
+						lpbpTest->stone_color = SC_COM_TER;
+						qubpQueue.push(lpbpTest);
+						break;
+					}
+					break;
+				case SC_WHITE:
+				case SC_WHT_TER:
+					switch (lpbpTest->stone_color)
+					{
+					case SC_NULL:
+						lpbpTest->stone_color = SC_WHT_TER;
+						qubpQueue.push(lpbpTest);
+						break;
+					case SC_BLK_TER:
+						lpbpTest->stone_color = SC_COM_TER;
+						qubpQueue.push(lpbpTest);
+						break;
+					}
+					break;
+				case SC_COM_TER:
+					switch (lpbpTest->stone_color)
+					{
+					case SC_NULL:
+					case SC_BLK_TER:
+					case SC_WHT_TER:
+						lpbpTest->stone_color = SC_COM_TER;
+						qubpQueue.push(lpbpTest);
+						break;
+					}
+					break;
+				}
+			}
+		}
+	}
+	m_bTerritoryMarked = true;
+}
+
+int CGoRuleKeeper::m_fnTerritoryComp()
+{
+	int iTerritory;
+	CGameBase::BoardPoint *lpbpVisitor, *lpbpGameBoardEnd;
+	lpbpGameBoardEnd = m_lpbpGameBoard + nBoardSize * nBoardSize;
+	iTerritory = 0;
+	for (lpbpVisitor = m_lpbpGameBoard; lpbpVisitor != lpbpGameBoardEnd; ++lpbpVisitor)
+	{
+		switch (lpbpVisitor->stone_color)
+		{
+		case SC_BLACK:
+		case SC_BLK_TER:
+			++iTerritory;
+			break;
+		case SC_WHITE:
+		case SC_WHT_TER:
+			--iTerritory;
+			break;
+		}
+	}
+	return iTerritory;
+}
+
+void CGoRuleKeeper::m_fnClearTerritoryMark()
+{
+	CGameBase::BoardPoint *lpbpVisitor, *lpbpGameBoardEnd;
+	m_bTerritoryMarked = false;
+	lpbpGameBoardEnd = m_lpbpGameBoard + nBoardSize * nBoardSize;
+	for (lpbpVisitor = m_lpbpGameBoard; lpbpVisitor != lpbpGameBoardEnd; ++lpbpVisitor)
+	{
+		switch (lpbpVisitor->stone_color)
+		{
+		case SC_BLK_TER:
+		case SC_WHT_TER:
+		case SC_COM_TER:
+			lpbpVisitor->stone_color = SC_NULL;
+			break;
+		}
+	}
 }

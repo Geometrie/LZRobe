@@ -41,6 +41,7 @@ public:
 	CGameStatusManager();
 	EngineStatus m_esCurrentEngine;
 	wxToolBar *m_lpToolBar;
+	wxSpinCtrl *m_lpAnalyzeSpinCtrl;
 	wxMenu *m_lpEditMenu;
 	wxStatusBar *m_lpStatusBar;
 	wxString m_wxstrEngineName;

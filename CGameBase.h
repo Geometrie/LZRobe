@@ -6,8 +6,11 @@
 enum StoneColor
 {
     SC_NULL = 0,
-    SC_BLACK,
-    SC_WHITE,
+    SC_BLACK = 1,
+    SC_WHITE = 2,
+	SC_BLK_TER = 4,
+	SC_WHT_TER = 8,
+	SC_COM_TER = 12
 };
 extern int nBoardSize;
 namespace CGameBase
@@ -124,11 +127,11 @@ namespace CGameBase
             bLegal = true;
             if ((move_info[0] == 'w' || move_info[0] == 'W')&&move_info[1] == ' ')
             {
-                stone_color = SC_BLACK;
+                stone_color = SC_WHITE;
             }
             else if ((move_info[0] == 'b' || move_info[0] == 'B') && move_info[1] == ' ')
             {
-                stone_color = SC_WHITE;
+                stone_color = SC_BLACK;
             }
             else
             {

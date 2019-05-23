@@ -15,7 +15,7 @@ enum INQUIRE_TYPE
 	IT_PLAY,
 	IT_GEN_MOVE,
 	IT_BACKWARD,
-	IT_RESULT,
+//	IT_RESULT,
 	IT_ANALYZE,
 	IT_INTERRUPT,
 	IT_QUIT
@@ -49,7 +49,7 @@ struct InquireInfo
 class CLZInquirer
 {
 public:
-	CGameStatusManager m_GameStatusManager;
+	CGameStatusManager *m_lpGameStatusManager;
 	wxOutputStream *m_lpOutputStream;
 	int m_iThinkingTime, m_iAnalyzeInterval;
 	CSGFFileIO m_GameBoardManager;
@@ -57,6 +57,10 @@ public:
 	bool m_bOccupied;
 	wxMutex m_OccupyMutex;
 	CLZInquirer();
+	~CLZInquirer()
+	{
+		delete m_lpGameStatusManager;
+	}
 	void m_fnLZApplyInquire(InquireInfo *lpiiInquireInfo);
 	void m_fnReleaseInquire();
 	void m_fnLZExecuteFirstInquire();
@@ -67,7 +71,7 @@ public:
 	void m_fnLZSetHandicap();
 	void m_fnLZAppendMove(StoneColor scColor, int x, int y);
 	void m_fnLZInquireMove(StoneColor scColor);
-	void m_fnLZInquireResult();
+	//void m_fnLZInquireResult();
 	void m_fnLZInquireAnalyze();
 	void m_fnLZReloadGameRecord();
 	void m_fnLZJumpTo(int iNewStep);

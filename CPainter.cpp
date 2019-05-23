@@ -479,6 +479,35 @@ void CPainter::m_fnDrawStones(wxDC &dc)
 	}
 }
 
+void CPainter::m_fnDrawTerritory(wxDC &dc)
+{
+	CGameBase::BoardPoint *lpbpVisitor, *lpbpGameBoardEnd;
+	int x, y;
+	lpbpGameBoardEnd = m_GameBoardManager.m_lpbpGameBoard + nBoardSize * nBoardSize;
+	for (lpbpVisitor = m_GameBoardManager.m_lpbpGameBoard; lpbpVisitor != lpbpGameBoardEnd; ++lpbpVisitor)
+	{
+		m_GameBoardManager.m_fnCoordinate(lpbpVisitor, x, y);
+		switch (lpbpVisitor->stone_color)
+		{
+		case SC_BLACK:
+			dc.DrawBitmap(m_bmpScaledBlackStone, m_iBoardLeft + x * m_iBoardUnitSize - m_iBoardUnitSize / 2, m_iBoardTop + y * m_iBoardUnitSize - m_iBoardUnitSize / 2, true);
+			break;
+		case SC_WHITE:
+			dc.DrawBitmap(m_bmpScaledWhiteStone, m_iBoardLeft + x * m_iBoardUnitSize - m_iBoardUnitSize / 2, m_iBoardTop + y * m_iBoardUnitSize - m_iBoardUnitSize / 2, true);
+			break;
+		case SC_BLK_TER:
+			dc.SetBrush(*wxBLACK_BRUSH);
+			dc.DrawRectangle(m_iBoardLeft + x * m_iBoardUnitSize - m_iBoardUnitSize / 4, m_iBoardTop + y * m_iBoardUnitSize - m_iBoardUnitSize / 4, m_iBoardUnitSize / 2, m_iBoardUnitSize / 2);
+			break;
+		case SC_WHT_TER:
+			dc.SetPen(*wxBLACK_PEN);
+			dc.SetBrush(*wxWHITE_BRUSH);
+			dc.DrawRectangle(m_iBoardLeft + x * m_iBoardUnitSize - m_iBoardUnitSize / 4, m_iBoardTop + y * m_iBoardUnitSize - m_iBoardUnitSize / 4, m_iBoardUnitSize / 2, m_iBoardUnitSize / 2);
+			break;
+		}
+	}
+}
+
 void CPainter::m_fnDrawBranch(wxDC &dc)
 {
 	CGameBase::ExtendMove *lpemBranchVisitor;
@@ -577,7 +606,7 @@ void CPainter::m_fnDrawAnalyze(wxDC &dc, int x, int y)
 		lpbpLearningPoint = m_GameBoardManager.m_fnPoint(x, y);
 		if (lpbpLearningPoint->pv_len > 0)
 		{
-			nRouteLen = min(lpbpLearningPoint->pv_len, m_lpAnalyzeSpinCtrl->GetValue());//min(lpbpLearningPoint->pv_len, m_lpAnalyzeSlider->GetValue());
+			nRouteLen = min(lpbpLearningPoint->pv_len, m_lpGameStatusManager->m_lpAnalyzeSpinCtrl->GetValue());//min(lpbpLearningPoint->pv_len, m_lpAnalyzeSlider->GetValue());
 			dc.SetFont(m_fntStep);
 			scTest = m_GameBoardManager.m_scTurnColor;
 			lpbpTest = lpbpLearningPoint->pv;

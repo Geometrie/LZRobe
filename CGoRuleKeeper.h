@@ -13,6 +13,7 @@ public:
 	CGameBase::Remove *m_lprmRemove, *m_lprmRemoveEnd;
 	CGameBase::BoardPoint *m_lpbpKoMark;
 	StoneColor m_scTurnColor;
+	bool m_bTerritoryMarked;
 	static StoneColor opposite_color(StoneColor original_color)
 	{
 		StoneColor image_color;
@@ -46,6 +47,9 @@ public:
 	void m_fnSelectStoneBlock(CGameBase::BoardPoint *lpbpSeed);
 	int m_fnCountLiberty();
 	bool m_fnIsLegalMove(StoneColor sc, CGameBase::BoardPoint *lpbpPosition);
+	void m_fnMarkTerritory();
+	int m_fnTerritoryComp();
+	void m_fnClearTerritoryMark();
 private:
 	CGameBase::BoardPoint **m_lplpbpSelectStones, **m_lplpbpSelectEnd;
 	CGameBase::BoardPoint **m_lplpbpCountLiberties, **m_lplpbpCountEnd;

@@ -63,7 +63,6 @@ bool CGameBoardManager::OnTestMove(int x, int y)
 	bLegal = m_fnIsLegalMove(m_scTurnColor, m_fnPoint(x, y));
 	m_lpbpKoMark = lpbpKoMarkBackUp;
 	m_lprmRemoveEnd = m_lprmRemove;
-	bLegal = true;
 	return bLegal;
 }
 
@@ -104,12 +103,81 @@ void CGameBoardManager::m_fnSwapLonger(CGameBase::ExtendMove *lpemKnot)
 
 }
 
+
+CGameBase::ExtendMove* CGameBoardManager::m_fnExecuteMove(int x, int y)
+{
+	CGameBase::BoardPoint *lpbpPoint, *lpbpKoMarkBackUp;
+	CGameBase::Remove *lprmRemoveVisitor;
+	CGameBase::ExtendMove emNewMove;
+	CGameBase::ExtendMove *lpemNewMove;
+	lpbpPoint = m_fnPoint(x, y);
+	lpbpKoMarkBackUp = m_lpbpKoMark;
+	if (m_fnIsLegalMove(m_scTurnColor, lpbpPoint))
+	{
+		emNewMove.stone_color = m_scTurnColor;
+		emNewMove.x = x;
+		emNewMove.y = y;
+		if (m_lprmRemove != m_lprmRemoveEnd)
+		{
+			emNewMove.remove_len = int(m_lprmRemoveEnd - m_lprmRemove);
+			emNewMove.remove_data = m_rmplRemoved.m_fnWriteData(m_lprmRemove, emNewMove.remove_len);
+			if (emNewMove.remove_data == NULL)
+			{
+				m_lpbpKoMark = lpbpKoMarkBackUp;
+				lpemNewMove = NULL;
+			}
+			else
+			{
+				lpemNewMove = m_emplGameRecords.m_fnWriteData(&emNewMove, 1);
+			}
+		}
+		else
+		{
+			lpemNewMove = m_emplGameRecords.m_fnWriteData(&emNewMove, 1);
+		}
+		if (lpemNewMove != NULL)
+		{
+			lpbpPoint->stone_color = m_scTurnColor;
+			m_scTurnColor = opposite_color(m_scTurnColor);
+			if (emNewMove.remove_data != NULL)
+			{
+				for (lprmRemoveVisitor = m_lprmRemove; lprmRemoveVisitor != m_lprmRemoveEnd; ++lprmRemoveVisitor)
+				{
+					lprmRemoveVisitor->bp->stone_color = SC_NULL;
+				}
+				switch (lpbpPoint->stone_color)
+				{
+				case SC_BLACK:
+					m_lpiPrisoners[0] += emNewMove.remove_len;
+					break;
+				case SC_WHITE:
+					m_lpiPrisoners[1] += emNewMove.remove_len;
+					break;
+				}
+			}
+		}
+		else
+		{
+			m_lpbpKoMark = lpbpKoMarkBackUp;
+			if (emNewMove.remove_data != NULL)
+			{
+				m_rmplRemoved.m_fnDropData(emNewMove.remove_data, emNewMove.remove_len);
+			}
+		}
+	}
+	else
+	{
+		m_lpbpKoMark = lpbpKoMarkBackUp;
+		lpemNewMove = NULL;
+	}
+	m_lprmRemoveEnd = m_lprmRemove;
+	return lpemNewMove;
+}
+
 bool CGameBoardManager::OnAddMove(int x, int y)
 {
 	bool bLegal;
-	CGameBase::BoardPoint *lpbpPoint, *lpbpKoMarkBackUp;
-	CGameBase::Remove *lprmRemoveVisitor;
-	CGameBase::ExtendMove *lpemLastMove, emNewMove, *lpemMoveVisitor, *lpemBranchVisitor;
+	CGameBase::ExtendMove *lpemLastMove, *lpemMoveVisitor, *lpemBranchVisitor;
 	int iBranchDepth;
 	bLegal = true;
 	lpemBranchVisitor = m_lpemCurrentMove->search(x, y);
@@ -120,112 +188,62 @@ bool CGameBoardManager::OnAddMove(int x, int y)
 	}
 	else
 	{
-		lpbpPoint = m_fnPoint(x, y);
-		lpbpKoMarkBackUp = m_lpbpKoMark;
-		bLegal = m_fnIsLegalMove(m_scTurnColor, lpbpPoint);
-		if (bLegal)
+		lpemLastMove = m_lpemCurrentMove;
+		m_lpemCurrentMove = m_fnExecuteMove(x, y);
+		if (m_lpemCurrentMove != NULL)
 		{
-			lpbpPoint->stone_color = m_scTurnColor;
-			emNewMove.stone_color = m_scTurnColor;
-			emNewMove.x = x;
-			emNewMove.y = y;
-			m_scTurnColor = opposite_color(m_scTurnColor);
-			if (m_lprmRemove != m_lprmRemoveEnd)
+			m_lpemCurrentMove->parent = lpemLastMove;
+			m_lpemCurrentMove->step = lpemLastMove->step + 1;
+			if (lpemLastMove->child == NULL)
 			{
-				for (lprmRemoveVisitor = m_lprmRemove; lprmRemoveVisitor != m_lprmRemoveEnd; ++lprmRemoveVisitor)
-				{
-					lprmRemoveVisitor->bp->stone_color = SC_NULL;
-				}
-				emNewMove.remove_len = int(m_lprmRemoveEnd - m_lprmRemove);
-				emNewMove.remove_data = m_rmplRemoved.m_fnWriteData(m_lprmRemove, emNewMove.remove_len);
-				if (emNewMove.remove_data == NULL)
-				{
-					bLegal = false;
-				}
-				if (emNewMove.remove_len > 0)
-				{
-					switch (lpbpPoint->stone_color)
-					{
-					case SC_BLACK:
-						m_lpiPrisoners[0] += emNewMove.remove_len;
-						break;
-					case SC_WHITE:
-						m_lpiPrisoners[1] += emNewMove.remove_len;
-						break;
-					}
-				}
-			}
-			if (bLegal)
-			{
-				m_lprmRemoveEnd = m_lprmRemove;
-				lpemLastMove = m_lpemCurrentMove;
-				m_lpemCurrentMove = m_emplGameRecords.m_fnWriteData(&emNewMove, 1);
-				if (m_lpemCurrentMove == NULL)
-				{
-					m_lpbpKoMark = lpbpKoMarkBackUp;
-					if (emNewMove.remove_len > 0)
-					{
-						m_rmplRemoved.m_fnDropData(emNewMove.remove_data, emNewMove.remove_len);
-					}
-				}
-				else
-				{
-					m_lpemCurrentMove->parent = lpemLastMove;
-					m_lpemCurrentMove->step = lpemLastMove->step + 1;
-					if (lpemLastMove->child == NULL)
-					{
-						lpemLastMove->child = m_lpemCurrentMove;
-					}
-					else
-					{
-						lpemBranchVisitor = lpemLastMove->child;
-						while (lpemBranchVisitor->shorter != NULL)
-						{
-							lpemBranchVisitor = lpemBranchVisitor->shorter;
-						}
-						lpemBranchVisitor->shorter = m_lpemCurrentMove;
-						m_lpemCurrentMove->longer = lpemBranchVisitor;
-					}
-					++(lpemLastMove->branch);
-					lpemMoveVisitor = m_lpemCurrentMove;
-					while (lpemMoveVisitor->parent != NULL)
-					{
-						while (lpemMoveVisitor->longer != NULL && lpemMoveVisitor->longer->depth < lpemMoveVisitor->depth)
-						{
-							m_fnSwapLonger(lpemMoveVisitor);
-						}
-						while (lpemMoveVisitor->parent->child->longer != NULL)
-						{
-							lpemMoveVisitor->parent->child = lpemMoveVisitor->parent->child->longer;
-						}
-						iBranchDepth = lpemMoveVisitor->depth + 1;
-						if (iBranchDepth > lpemMoveVisitor->parent->depth)
-						{
-							lpemMoveVisitor->parent->depth = iBranchDepth;
-							lpemMoveVisitor = lpemMoveVisitor->parent;
-						}
-						else
-						{
-							lpemMoveVisitor = &m_emBlankMove;
-						}
-					}
-				}
+				lpemLastMove->child = m_lpemCurrentMove;
 			}
 			else
 			{
-				m_lpbpKoMark = lpbpKoMarkBackUp;
+				lpemBranchVisitor = lpemLastMove->child;
+				while (lpemBranchVisitor->shorter != NULL)
+				{
+					lpemBranchVisitor = lpemBranchVisitor->shorter;
+				}
+				lpemBranchVisitor->shorter = m_lpemCurrentMove;
+				m_lpemCurrentMove->longer = lpemBranchVisitor;
 			}
+			++(lpemLastMove->branch);
+			lpemMoveVisitor = m_lpemCurrentMove;
+			while (lpemMoveVisitor->parent != NULL)
+			{
+				while (lpemMoveVisitor->longer != NULL && lpemMoveVisitor->longer->depth < lpemMoveVisitor->depth)
+				{
+					m_fnSwapLonger(lpemMoveVisitor);
+				}
+				while (lpemMoveVisitor->parent->child->longer != NULL)
+				{
+					lpemMoveVisitor->parent->child = lpemMoveVisitor->parent->child->longer;
+				}
+				iBranchDepth = lpemMoveVisitor->depth + 1;
+				if (iBranchDepth > lpemMoveVisitor->parent->depth)
+				{
+					lpemMoveVisitor->parent->depth = iBranchDepth;
+					lpemMoveVisitor = lpemMoveVisitor->parent;
+				}
+				else
+				{
+					lpemMoveVisitor = &m_emBlankMove;
+				}
+			}
+			bLegal = true;
 		}
 		else
 		{
-			m_lpbpKoMark = lpbpKoMarkBackUp;
+			bLegal = false;
 		}
 	}
 	return bLegal;
 }
+
 bool CGameBoardManager::OnBackMove()
 {
-	CGameBase::Remove *m_lprmRemoveVisitor, *m_lprmRemoveEnd;
+	CGameBase::Remove *lprmRemoveVisitor, *lprmRemoveEnd;
 	CGameBase::BoardPoint *lpbp;
 	StoneColor scRemovedColor;
 	bool bSucceed;
@@ -236,10 +254,10 @@ bool CGameBoardManager::OnBackMove()
 		lpbp->stone_color = SC_NULL;
 		if (m_lpemCurrentMove->remove_len > 0)
 		{
-			m_lprmRemoveEnd = m_lpemCurrentMove->remove_data + m_lpemCurrentMove->remove_len;
-			for (m_lprmRemoveVisitor = m_lpemCurrentMove->remove_data; m_lprmRemoveVisitor != m_lprmRemoveEnd; ++m_lprmRemoveVisitor)
+			lprmRemoveEnd = m_lpemCurrentMove->remove_data + m_lpemCurrentMove->remove_len;
+			for (lprmRemoveVisitor = m_lpemCurrentMove->remove_data; lprmRemoveVisitor != lprmRemoveEnd; ++lprmRemoveVisitor)
 			{
-				m_lprmRemoveVisitor->bp->stone_color = scRemovedColor;
+				lprmRemoveVisitor->bp->stone_color = scRemovedColor;
 			}
 			switch (m_lpemCurrentMove->stone_color)
 			{
@@ -262,10 +280,36 @@ bool CGameBoardManager::OnBackMove()
 	return bSucceed;
 }
 
+
+void CGameBoardManager::m_fnExcuteRedo(CGameBase::ExtendMove *lpemMove)
+{
+	CGameBase::BoardPoint *lpbp;
+	CGameBase::Remove *lprmRemoveVisitor, *lprmRemoveEnd;
+	m_lpemCurrentMove = lpemMove;
+	lpbp = m_fnPoint(m_lpemCurrentMove->x, m_lpemCurrentMove->y);
+	lpbp->stone_color = m_lpemCurrentMove->stone_color;
+	if (m_lpemCurrentMove->remove_len > 0)
+	{
+		lprmRemoveEnd = m_lpemCurrentMove->remove_data + m_lpemCurrentMove->remove_len;
+		for (lprmRemoveVisitor = m_lpemCurrentMove->remove_data; lprmRemoveVisitor != lprmRemoveEnd; ++lprmRemoveVisitor)
+		{
+			lprmRemoveVisitor->bp->stone_color = SC_NULL;
+		}
+		switch (m_lpemCurrentMove->stone_color)
+		{
+		case SC_BLACK:
+			m_lpiPrisoners[0] += m_lpemCurrentMove->remove_len;
+			break;
+		case SC_WHITE:
+			m_lpiPrisoners[1] += m_lpemCurrentMove->remove_len;
+			break;
+		}
+	}
+	m_scTurnColor = opposite_color(m_lpemCurrentMove->stone_color);
+}
+
 bool CGameBoardManager::OnRedoMove(CGameBase::ExtendMove *lpemMove)
 {
-	CGameBase::Remove *m_lprmRemoveVisitor, *m_lprmRemoveEnd;
-	CGameBase::BoardPoint *lpbp;
 	bool bSucceed;
 	if (lpemMove == NULL)
 	{
@@ -273,27 +317,7 @@ bool CGameBoardManager::OnRedoMove(CGameBase::ExtendMove *lpemMove)
 	}
 	if (lpemMove != NULL)
 	{
-		m_lpemCurrentMove = lpemMove;
-		lpbp = m_fnPoint(m_lpemCurrentMove->x, m_lpemCurrentMove->y);
-		lpbp->stone_color = m_lpemCurrentMove->stone_color;
-		if (m_lpemCurrentMove->remove_len > 0)
-		{
-			m_lprmRemoveEnd = m_lpemCurrentMove->remove_data + m_lpemCurrentMove->remove_len;
-			for (m_lprmRemoveVisitor = m_lpemCurrentMove->remove_data; m_lprmRemoveVisitor != m_lprmRemoveEnd; ++m_lprmRemoveVisitor)
-			{
-				m_lprmRemoveVisitor->bp->stone_color = SC_NULL;
-			}
-			switch (m_lpemCurrentMove->stone_color)
-			{
-			case SC_BLACK:
-				m_lpiPrisoners[0] += m_lpemCurrentMove->remove_len;
-				break;
-			case SC_WHITE:
-				m_lpiPrisoners[1] += m_lpemCurrentMove->remove_len;
-				break;
-			}
-		}
-		m_scTurnColor = opposite_color(m_lpemCurrentMove->stone_color);
+		m_fnExcuteRedo(lpemMove);
 		bSucceed = true;
 	}
 	else
@@ -302,6 +326,7 @@ bool CGameBoardManager::OnRedoMove(CGameBase::ExtendMove *lpemMove)
 	}
 	return bSucceed;
 }
+
 
 void CGameBoardManager::OnJumpTo(int iNewStep)
 {

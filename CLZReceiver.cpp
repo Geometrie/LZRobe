@@ -33,8 +33,8 @@ wxThread::ExitCode CLZReceiver::Entry()
 		{
 			*lpstrNewLine = '\0';
 		}
-		m_lpCanvas->m_GameStatusManager.m_wxstrEngineName = wxString(lpstrBuffer + i);
-		m_lpCanvas->m_GameStatusManager.m_fnEngineConfirmed();
+		m_lpCanvas->m_lpGameStatusManager->m_wxstrEngineName = wxString(lpstrBuffer + i);
+		m_lpCanvas->m_lpGameStatusManager->m_fnEngineConfirmed();
 		m_lpCanvas->m_fnReleaseInquire();
 		m_lpCanvas->m_fnLZReloadGameRecord();
 		m_lpCanvas->m_fnLZExecuteFirstInquire();
@@ -98,7 +98,7 @@ wxThread::ExitCode CLZReceiver::Entry()
 			switch (dtDataType)
 			{
 			case DT_RESULT:
-				m_lpCanvas->m_fnShowCountResult(lpstrMessage);
+				m_lpCanvas->m_fnShowCountResult();
 				m_lpCanvas->m_fnReleaseInquire();
 				m_lpCanvas->m_fnLZExecuteFirstInquire();
 				m_dtStatus = DT_NULL;
@@ -213,11 +213,11 @@ void CLZReceiver::m_fnResponse()
 		break;
 	case IT_PLAY:
 		m_lpCanvas->m_fnReleaseInquire();
-		if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))
+		if (m_lpCanvas->m_lpGameStatusManager->m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))
 		{
 			m_lpCanvas->m_fnLZInquireMove(m_lpCanvas->m_GameBoardManager.m_scTurnColor);
 		}
-		if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
+		if (m_lpCanvas->m_lpGameStatusManager->m_fnAnalyzing())
 		{
 			m_lpCanvas->m_fnLZInquireAnalyze();
 		}
@@ -225,7 +225,7 @@ void CLZReceiver::m_fnResponse()
 		m_dtStatus = DT_NULL;
 		break;
 	case IT_BACKWARD:
-		if (m_lpCanvas->m_GameStatusManager.m_fnAnalyzing())
+		if (m_lpCanvas->m_lpGameStatusManager->m_fnAnalyzing())
 		{
 			m_lpCanvas->m_fnLZInquireAnalyze();
 		}
@@ -266,25 +266,25 @@ void CLZReceiver::m_fnApplyCoordinate(char *lpstrMessage)
 			m_lpCanvas->m_fnReleaseInquire();
 			if (m_lpCanvas->m_GameBoardManager.DoublePass(bpNew.x, bpNew.y))
 			{
-				m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
-				m_lpCanvas->m_GameStatusManager.m_fnSetBlackDog();
-				m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
-				m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
+				m_lpCanvas->m_lpGameStatusManager->m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
+				m_lpCanvas->m_lpGameStatusManager->m_fnSetBlackDog();
+				m_lpCanvas->m_lpGameStatusManager->m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
+				m_lpCanvas->m_lpGameStatusManager->m_fnSetWhiteDog();
 				m_lpCanvas->m_fnLZReloadGameRecord();
 			}
 			else if (m_lpCanvas->m_GameBoardManager.Resign(bpNew.x, bpNew.y))
 			{
 				m_lpCanvas->m_fnShowResignResult();
-				m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
-				m_lpCanvas->m_GameStatusManager.m_fnSetBlackDog();
-				m_lpCanvas->m_GameStatusManager.m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
-				m_lpCanvas->m_GameStatusManager.m_fnSetWhiteDog();
+				m_lpCanvas->m_lpGameStatusManager->m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);
+				m_lpCanvas->m_lpGameStatusManager->m_fnSetBlackDog();
+				m_lpCanvas->m_lpGameStatusManager->m_lpToolBar->ToggleTool(ID_WHITE_DOG, false);
+				m_lpCanvas->m_lpGameStatusManager->m_fnSetWhiteDog();
 				m_lpCanvas->m_fnLZReloadGameRecord();
 			}
 			else
 			{
 				m_lpCanvas->m_GameBoardManager.OnAddMove(bpNew.x, bpNew.y);
-				if (m_lpCanvas->m_GameStatusManager.m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))
+				if (m_lpCanvas->m_lpGameStatusManager->m_fnInquireAI(m_lpCanvas->m_GameBoardManager.m_scTurnColor))
 				{
 					m_lpCanvas->m_fnLZInquireMove(m_lpCanvas->m_GameBoardManager.m_scTurnColor);
 				}

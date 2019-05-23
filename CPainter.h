@@ -61,7 +61,6 @@ public:
 	int m_iPrisonerTipX, m_iPrisonerTipY, m_lpiWrappedStonesX[2], m_iWrappedStonesY, m_iPrisonerRadius, m_iPrisonerNumY;
 	int m_iPassTipX, m_iResignTipX, m_iNoMoveTipY, m_iTipArrowTop, m_iTipArrowBottom, m_iNoMoveLogoY;
 	int m_iProcessTipX, m_iProcessTipY, m_iProgressGraphX, m_iProgressGraphY;
-	wxSpinCtrl *m_lpAnalyzeSpinCtrl;//wxSlider *m_lpAnalyzeSlider;
 	wxFont m_fntPass, m_fntStep, m_fntAnalyze, m_fntTip, m_fntBranch;
 	wxColour m_clrLightRed, m_clrLightYellow, m_clrLightBlue, m_clrLightGreen, m_clrMagenta;
 	wxBrush m_brLightRed, m_brLightYellow, m_brLightBlue, m_brLightGreen, m_brGameBoard;
@@ -79,6 +78,7 @@ protected:
 	void m_fnDrawNoMoveChoice(wxDC &dc);
 	void m_fnDrawProcess(wxDC &dc);
 	void m_fnDrawStones(wxDC &dc);
+	void m_fnDrawTerritory(wxDC &dc);
 	void m_fnDrawRecentMove(wxDC &dc);
 	void m_fnDrawBranch(wxDC &dc);
 	void m_fnDrawAnalyze(wxDC &dc, int x, int y);

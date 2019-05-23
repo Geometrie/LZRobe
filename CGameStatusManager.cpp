@@ -29,7 +29,7 @@ void CGameStatusManager::m_fnEngineConfirmed()
 		m_lpToolBar->EnableTool(ID_BLACK_DOG, true);
 		m_lpToolBar->EnableTool(ID_WHITE_DOG, true);
 		m_lpToolBar->EnableTool(ID_ANALYZE, true);
-		m_lpToolBar->EnableTool(ID_FINAL_SCORE, true);
+		//m_lpToolBar->EnableTool(ID_FINAL_SCORE, true);
 		m_lpStatusBar->SetStatusText(m_wxstrEngineName + wxString(STR_ENGINE_AVAILABLE));
 		m_esCurrentEngine = ES_OPENED;
 	}
@@ -61,7 +61,7 @@ void CGameStatusManager::m_fnTryToCloseEngine()
 		m_lpToolBar->EnableTool(ID_BLACK_DOG, false);
 		m_lpToolBar->EnableTool(ID_WHITE_DOG, false);
 		m_lpToolBar->EnableTool(ID_ANALYZE, false);
-		m_lpToolBar->EnableTool(ID_FINAL_SCORE, false);
+		//m_lpToolBar->EnableTool(ID_FINAL_SCORE, false);
 		m_lpStatusBar->SetStatusText(STR_ENGINE_CLOSING);
 		m_esCurrentEngine = ES_WAITING_CLOSE;
 	}

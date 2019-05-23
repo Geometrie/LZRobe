@@ -33,6 +33,8 @@ public:
     void OnClearGameRecord();
 	void OnClearAnalyze();
 protected:
+	CGameBase::ExtendMove* m_fnExecuteMove(int x, int y);
+	void m_fnExcuteRedo(CGameBase::ExtendMove *lpemMove);
 	void m_fnSwapShorter(CGameBase::ExtendMove *lpemKnot);
 	void m_fnSwapLonger(CGameBase::ExtendMove *lpemKnot);
 };

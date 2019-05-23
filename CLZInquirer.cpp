@@ -1,6 +1,7 @@
 #include "CLZInquirer.h"
 CLZInquirer::CLZInquirer()
 {
+	m_lpGameStatusManager = new CGameStatusManager;
 	m_lpOutputStream = NULL;
 	m_bOccupied = false;
 }
@@ -56,11 +57,11 @@ void CLZInquirer::m_fnLZApplyInquire(InquireInfo *lpiiInquireInfo)
 		case IT_BACKWARD:
 			m_lpOutputStream->Write("undo\n", 5);
 			break;
-		case IT_RESULT:
-			m_lpOutputStream->Write("final_score\n", 12);
-			break;
+		//case IT_RESULT:
+		//	m_lpOutputStream->Write("final_score\n", 12);
+		//	break;
 		case IT_ANALYZE:
-			if (m_GameStatusManager.m_fnAnalyzing())
+			if (m_lpGameStatusManager->m_fnAnalyzing())
 			{
 				wxstrCommand = wxString::Format(wxString("lz-analyze %d\n"), m_iAnalyzeInterval);
 				m_lpOutputStream->Write(wxstrCommand.char_str(), wxstrCommand.length());
@@ -175,12 +176,12 @@ void CLZInquirer::m_fnLZInquireMove(StoneColor scColor)
 	m_quiiLZInquireQueue.push(iiInquire);
 }
 
-void CLZInquirer::m_fnLZInquireResult()
-{
-	InquireInfo iiInquire;
-	iiInquire.itInquireType = IT_RESULT;
-	m_quiiLZInquireQueue.push(iiInquire);
-}
+//void CLZInquirer::m_fnLZInquireResult()
+//{
+//	InquireInfo iiInquire;
+//	iiInquire.itInquireType = IT_RESULT;
+//	m_quiiLZInquireQueue.push(iiInquire);
+//}
 
 
 void CLZInquirer::m_fnLZInquireAnalyze()

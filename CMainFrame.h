@@ -15,7 +15,7 @@ public:
     CMainFrame(const wxString &title, wxSize init_size);
     wxMenu *m_lpFileMenu, *m_lpViewMenu, *m_lpCoordMenu, *m_lpEditMenu, *m_lpHelpMenu;//, *m_lpLinkMenu
     wxToolBar *m_lpToolBar;
-    wxSpinCtrl *m_lpTimeSpinCtrl, *m_lpIntervalSpinCtrl, *m_lpAnalyzeSpinControl;
+	wxSpinCtrl *m_lpTimeSpinCtrl, *m_lpIntervalSpinCtrl, *m_lpAnalyzeSpinCtrl;
 	//wxSlider *m_lpAnalyzeSlider;
 	wxStatusBar *m_lpStatusBar;
     CCanvas *m_lpCanvas;
