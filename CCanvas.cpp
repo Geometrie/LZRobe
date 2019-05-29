@@ -2,7 +2,6 @@
 CCanvas::CCanvas(wxWindow *lpParent): CPainter(lpParent)
 {
     m_bShowStep = false;
-	//SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 
@@ -87,6 +86,10 @@ bool CCanvas::m_fnChangePosition(int x, int y)
 				m_GameBoardManager.OnAddMove(x, y);
 				Refresh();
 				m_fnLZExecuteFirstInquire();
+				if (m_lpGameStatusManager->m_fnAnalyzing())
+				{
+					m_fnLZExecuteFirstInquire();
+				}
 			}
 			else
 			{
@@ -118,6 +121,10 @@ void CCanvas::m_fnForward()
 			m_GameBoardManager.OnRedoMove();
 			Refresh();
 			m_fnLZExecuteFirstInquire();
+			if (m_lpGameStatusManager->m_fnAnalyzing())
+			{
+				m_fnLZExecuteFirstInquire();
+			}
 		}
 		else
 		{
@@ -146,6 +153,10 @@ void CCanvas::m_fnBackward()
 			m_GameBoardManager.OnBackMove();
 			Refresh();
 			m_fnLZExecuteFirstInquire();
+			if (m_lpGameStatusManager->m_fnAnalyzing())
+			{
+				m_fnLZExecuteFirstInquire();
+			}
 		}
 		else
 		{
@@ -375,8 +386,6 @@ void CCanvas::OnSize(wxSizeEvent &event)
 
 void CCanvas::OnPaint(wxPaintEvent&event)
 {
-    //wxAutoBufferedPaintDC dc(this);
-	//wxPaintDC dc(this);
 	wxBufferedPaintDC dc(this);
 	DoPrepareDC(dc);
 	m_fnDrawBuffer(dc);

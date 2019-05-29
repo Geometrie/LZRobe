@@ -82,7 +82,7 @@
 #define STR_ENGINE_CLOSING "引擎正在关闭"
 #define STR_SELFPLAY "引擎正在与自己对局"
 #define STR_ANALYZING "局势分析中"
-#define STR_VERSION "当前版本：1.03 测试版"
+#define STR_VERSION "当前版本：1.03"
 #define STR_CLOSE "关闭"
 #define STR_MOVE_TURN "着子权"
 #define STR_PRISONERS "提子"

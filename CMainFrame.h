@@ -13,10 +13,9 @@ class CMainFrame: public wxFrame
 {
 public:
     CMainFrame(const wxString &title, wxSize init_size);
-    wxMenu *m_lpFileMenu, *m_lpViewMenu, *m_lpCoordMenu, *m_lpEditMenu, *m_lpHelpMenu;//, *m_lpLinkMenu
+    wxMenu *m_lpFileMenu, *m_lpViewMenu, *m_lpCoordMenu, *m_lpEditMenu, *m_lpHelpMenu;
     wxToolBar *m_lpToolBar;
 	wxSpinCtrl *m_lpTimeSpinCtrl, *m_lpIntervalSpinCtrl, *m_lpAnalyzeSpinCtrl;
-	//wxSlider *m_lpAnalyzeSlider;
 	wxStatusBar *m_lpStatusBar;
     CCanvas *m_lpCanvas;
     CLZReceiver *m_lpLZReceiver;

@@ -3,7 +3,6 @@ CLZInquirer::CLZInquirer()
 {
 	m_lpGameStatusManager = new CGameStatusManager;
 	m_lpOutputStream = NULL;
-	m_bOccupied = false;
 }
 
 void CLZInquirer::m_fnLZApplyInquire(InquireInfo *lpiiInquireInfo)
@@ -57,21 +56,11 @@ void CLZInquirer::m_fnLZApplyInquire(InquireInfo *lpiiInquireInfo)
 		case IT_BACKWARD:
 			m_lpOutputStream->Write("undo\n", 5);
 			break;
-		//case IT_RESULT:
-		//	m_lpOutputStream->Write("final_score\n", 12);
-		//	break;
 		case IT_ANALYZE:
 			if (m_lpGameStatusManager->m_fnAnalyzing())
 			{
 				wxstrCommand = wxString::Format(wxString("lz-analyze %d\n"), m_iAnalyzeInterval);
 				m_lpOutputStream->Write(wxstrCommand.char_str(), wxstrCommand.length());
-			}
-			else
-			{
-				while (!m_quiiLZInquireQueue.empty() && m_quiiLZInquireQueue.front().itInquireType == IT_ANALYZE)
-				{
-					m_quiiLZInquireQueue.pop();
-				}
 			}
 			break;
 		case IT_INTERRUPT:
@@ -87,11 +76,10 @@ void CLZInquirer::m_fnLZApplyInquire(InquireInfo *lpiiInquireInfo)
 void CLZInquirer::m_fnReleaseInquire()
 {
 	m_OccupyMutex.Lock();
-	if (!m_quiiLZInquireQueue.empty())
+	if (!m_quiiLZWaitingQueue.empty())
 	{
-		m_quiiLZInquireQueue.pop();
+		m_quiiLZWaitingQueue.pop();
 	}
-	m_bOccupied = false;
 	m_OccupyMutex.Unlock();
 }
 
@@ -99,7 +87,7 @@ void CLZInquirer::m_fnReleaseInquire()
 void CLZInquirer::m_fnLZExecuteFirstInquire()
 {
 	m_OccupyMutex.Lock();
-	if (!(m_bOccupied || m_quiiLZInquireQueue.empty()))
+	if (!m_quiiLZInquireQueue.empty() && m_quiiLZWaitingQueue.size() < 2)
 	{
 		while (m_quiiLZInquireQueue.front().itInquireType == IT_ANALYZE && m_quiiLZInquireQueue.size() > 1)
 		{
@@ -109,11 +97,9 @@ void CLZInquirer::m_fnLZExecuteFirstInquire()
 			}
 			m_quiiLZInquireQueue.pop();
 		}
-		if (m_quiiLZInquireQueue.front().itInquireType != IT_ANALYZE)
-		{
-			m_bOccupied = true;
-		}
-		m_fnLZApplyInquire(&(m_quiiLZInquireQueue.front()));
+		m_quiiLZWaitingQueue.push(m_quiiLZInquireQueue.front());
+		m_quiiLZInquireQueue.pop();
+		m_fnLZApplyInquire(&(m_quiiLZWaitingQueue.back()));
 	}
 	m_OccupyMutex.Unlock();
 }
@@ -175,14 +161,6 @@ void CLZInquirer::m_fnLZInquireMove(StoneColor scColor)
 	iiInquire.scColor = scColor;
 	m_quiiLZInquireQueue.push(iiInquire);
 }
-
-//void CLZInquirer::m_fnLZInquireResult()
-//{
-//	InquireInfo iiInquire;
-//	iiInquire.itInquireType = IT_RESULT;
-//	m_quiiLZInquireQueue.push(iiInquire);
-//}
-
 
 void CLZInquirer::m_fnLZInquireAnalyze()
 {

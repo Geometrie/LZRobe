@@ -185,10 +185,15 @@ void CLZReceiver::m_fnRefresh()
 
 void CLZReceiver::m_fnResponse()
 {
-	switch (m_lpCanvas->m_quiiLZInquireQueue.front().itInquireType)
+	switch (m_lpCanvas->m_quiiLZWaitingQueue.front().itInquireType)//(m_lpCanvas->m_quiiLZInquireQueue.front().itInquireType)
 	{
 	case IT_ANALYZE:
 		m_lpCanvas->m_fnReleaseInquire();
+		if (!m_lpCanvas->m_quiiLZInquireQueue.empty())
+		{
+			m_lpCanvas->m_GameBoardManager.OnClearAnalyze();
+			m_lpCanvas->m_fnLZExecuteFirstInquire();
+		}
 		m_dtStatus = DT_NULL;
 		break;
 	case IT_CLEAR_BOARD:
@@ -256,14 +261,14 @@ void CLZReceiver::m_fnApplyCoordinate(char *lpstrMessage)
 			m_lpCanvas->m_GameBoardManager.OnAddHandicap(bpNew.x, bpNew.y);
 			if (m_lpCanvas->m_GameBoardManager.m_iHandicapPutting == m_lpCanvas->m_GameBoardManager.m_nHandicap)
 			{
-				m_lpCanvas->m_fnReleaseInquire();
+				m_lpCanvas->m_quiiLZWaitingQueue.pop();//m_lpCanvas->m_fnReleaseInquire();
 				m_fnRefresh();
 				m_lpCanvas->m_fnLZExecuteFirstInquire();
 				m_dtStatus = DT_NULL;
 			}
 			break;
 		case IT_GEN_MOVE:
-			m_lpCanvas->m_fnReleaseInquire();
+			m_lpCanvas->m_quiiLZWaitingQueue.pop();//m_lpCanvas->m_fnReleaseInquire();
 			if (m_lpCanvas->m_GameBoardManager.DoublePass(bpNew.x, bpNew.y))
 			{
 				m_lpCanvas->m_lpGameStatusManager->m_lpToolBar->ToggleTool(ID_BLACK_DOG, false);

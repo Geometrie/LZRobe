@@ -7,7 +7,6 @@
 #include <wx/dcclient.h>
 #include <wx/dcbuffer.h>
 #include <wx/msgdlg.h>
-#include <wx/spinctrl.h>
 #include "CLZInquirer.h"
 #ifndef min
 #define min(a, b) (((a) < (b))?(a):(b))

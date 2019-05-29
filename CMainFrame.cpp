@@ -69,11 +69,10 @@ void CMainFrame::m_fnSetupToolBar()
 	m_lpToolBar->AddSeparator();
 	lpStaticText = new wxStaticText(m_lpToolBar, wxID_ANY, _(STR_ROUTE_LENGTH));
 	m_lpToolBar->AddControl(lpStaticText, _(""));
-	m_lpAnalyzeSpinCtrl = new wxSpinCtrl(m_lpToolBar, wxID_ANY, _(""), wxDefaultPosition, wxSize(50, 25), wxSP_ARROW_KEYS, 2, 50, 16);//m_lpAnalyzeSlider = new wxSlider(m_lpToolBar, wxID_ANY, 16, 2, 50, wxDefaultPosition, wxSize(150, 25), wxSL_VALUE_LABEL);
+	m_lpAnalyzeSpinCtrl = new wxSpinCtrl(m_lpToolBar, wxID_ANY, _(""), wxDefaultPosition, wxSize(50, 25), wxSP_ARROW_KEYS, 2, 50, 16);
 	m_lpToolBar->AddControl(m_lpAnalyzeSpinCtrl, _(""));
 	m_lpToolBar->AddSeparator();
     m_lpToolBar->AddTool(ID_FINAL_SCORE, _(""), wxBITMAP(SCORE_BMP), wxBITMAP(SCORE_DISABLE_BMP), wxITEM_NORMAL, _(STR_RESULT));
-    //m_lpToolBar->EnableTool(ID_FINAL_SCORE, false);
     m_lpToolBar->Realize();
     SetToolBar(m_lpToolBar);
 }
@@ -345,63 +344,11 @@ void CMainFrame::OnBackward(wxCommandEvent &event)
 {
 	m_lpCanvas->m_fnBackward();
 }
-//{
-//	if (m_lpCanvas->m_lpGameStatusManager->m_fnBothAuthorized() && m_lpCanvas->m_GameBoardManager.m_lpemCurrentMove->parent != NULL)
-//	{
-//		if (m_lpCanvas->m_lpGameStatusManager->m_esCurrentEngine == ES_OPENED)
-//		{
-//			if (m_lpCanvas->m_lpGameStatusManager->m_fnAnalyzing())
-//			{
-//				m_lpCanvas->m_GameBoardManager.OnClearAnalyze();
-//				m_lpCanvas->m_fnLZBackward();
-//				m_lpCanvas->m_fnLZInquireAnalyze();
-//			}
-//			else
-//			{
-//				m_lpCanvas->m_fnLZBackward();
-//			}
-//			m_lpCanvas->m_GameBoardManager.OnBackMove();
-//			Refresh();
-//			m_lpCanvas->m_fnLZExecuteFirstInquire();
-//		}
-//		else
-//		{
-//			m_lpCanvas->m_GameBoardManager.OnBackMove();
-//			Refresh();
-//		}
-//	}
-//}
 
 void CMainFrame::OnForward(wxCommandEvent &event)
 {
 	m_lpCanvas->m_fnForward();
 }
-//{
-//	if (m_lpCanvas->m_lpGameStatusManager->m_fnBothAuthorized() && m_lpCanvas->m_GameBoardManager.m_lpemCurrentMove->child != NULL)
-//	{
-//		if (m_lpCanvas->m_lpGameStatusManager->m_esCurrentEngine == ES_OPENED)
-//		{
-//			if (m_lpCanvas->m_lpGameStatusManager->m_fnAnalyzing())
-//			{
-//				m_lpCanvas->m_GameBoardManager.OnClearAnalyze();
-//				m_lpCanvas->m_fnLZForward();
-//				m_lpCanvas->m_fnLZInquireAnalyze();
-//			}
-//			else
-//			{
-//				m_lpCanvas->m_fnLZForward();
-//			}
-//			m_lpCanvas->m_GameBoardManager.OnRedoMove();
-//			Refresh();
-//			m_lpCanvas->m_fnLZExecuteFirstInquire();
-//		}
-//		else
-//		{
-//			m_lpCanvas->m_GameBoardManager.OnRedoMove();
-//			Refresh();
-//		}
-//	}
-//}
 
 void CMainFrame::OnSelectEngine(wxCommandEvent &event)
 {
@@ -454,7 +401,7 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
 			{
 				m_lpCanvas->m_quiiLZInquireQueue.front() = iiInquire;
 			}
-			m_lpCanvas->m_fnLZApplyInquire(&iiInquire);
+			m_lpCanvas->m_fnLZExecuteFirstInquire();
         }
     }
     else if (nBoardSize == STANDARD_BOARD_SIZE)
@@ -514,8 +461,6 @@ void CMainFrame::OnLeelaZero(wxCommandEvent &event)
 void CMainFrame::OnScore(wxCommandEvent &event)
 {
 	m_lpCanvas->m_fnShowCountResult();
- //   m_lpCanvas->m_fnLZInquireResult();
-	//m_lpCanvas->m_fnLZExecuteFirstInquire();
 }
 
 void CMainFrame::OnExtraPara(wxCommandEvent &event)
@@ -694,6 +639,10 @@ void CMainFrame::OnLZProcessExit(wxProcessEvent &event)
 	while (!m_lpCanvas->m_quiiLZInquireQueue.empty())
 	{
 		m_lpCanvas->m_quiiLZInquireQueue.pop();
+	}
+	while (!m_lpCanvas->m_quiiLZWaitingQueue.empty())
+	{
+		m_lpCanvas->m_quiiLZWaitingQueue.pop();
 	}
 	if (m_lpCanvas->m_lpGameStatusManager->m_esCurrentEngine == ES_WAITING_OPEN)
 	{

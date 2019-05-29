@@ -15,7 +15,6 @@ enum INQUIRE_TYPE
 	IT_PLAY,
 	IT_GEN_MOVE,
 	IT_BACKWARD,
-//	IT_RESULT,
 	IT_ANALYZE,
 	IT_INTERRUPT,
 	IT_QUIT
@@ -54,7 +53,7 @@ public:
 	int m_iThinkingTime, m_iAnalyzeInterval;
 	CSGFFileIO m_GameBoardManager;
 	std::queue<InquireInfo> m_quiiLZInquireQueue;
-	bool m_bOccupied;
+	std::queue<InquireInfo> m_quiiLZWaitingQueue;
 	wxMutex m_OccupyMutex;
 	CLZInquirer();
 	~CLZInquirer()
@@ -71,7 +70,6 @@ public:
 	void m_fnLZSetHandicap();
 	void m_fnLZAppendMove(StoneColor scColor, int x, int y);
 	void m_fnLZInquireMove(StoneColor scColor);
-	//void m_fnLZInquireResult();
 	void m_fnLZInquireAnalyze();
 	void m_fnLZReloadGameRecord();
 	void m_fnLZJumpTo(int iNewStep);

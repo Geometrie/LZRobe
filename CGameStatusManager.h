@@ -3,6 +3,7 @@
 #include <wx/toolbar.h>
 #include <wx/menu.h>
 #include <wx/statusbr.h>
+#include <wx/spinctrl.h>
 #include "CSGFFileIO.h"
 #include "International.h"
 enum
